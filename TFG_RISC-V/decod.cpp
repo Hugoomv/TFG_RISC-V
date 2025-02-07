@@ -136,8 +136,12 @@ void decod::decoding() {
 //	puede ayudar a depurar	cout << INST << endl;
 		if (INST.I == 0x0000006f) {	// Saltar sobre la misma dirección es la forma de terminar el programa
 			jump = jump;			// este breakpoint para que la simulación no continue
-			printf("%.0lf\t%d\n", tiempo, *numInst);
+			printf("Tiempo: %.0lf\t Numero de instrucciones: %d\n", tiempo, *numInst);
+			printf("Valor de x10 = %d\n",(int)regs[10]);
+			if((int)regs[10] == 0) printf("La ejecucion es correcta\n");
+			// inpeccionar x10 (a10) y comprobar que vale 0 para ejecucion correcta
 			sc_stop();
+			
 		}
 
 		jalOffset.bit(20) = I.bit(31);

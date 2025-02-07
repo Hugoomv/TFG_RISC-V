@@ -73,7 +73,7 @@ void alu::registro(){
 
 
 }
-
+/*
 // COMPLETELY SEGMENTED 
 void alu::mul() { // REV - visibility ??
 	// REV - WRONG PLACE
@@ -81,7 +81,7 @@ void alu::mul() { // REV - visibility ??
 	short pipelineTargetRegisterMUL[latencyMUL];
 	bool pipelineValidityMUL[latencyMUL];
 
-	/*
+	
 	resultMUL.write( pipelineResultsMul[0] );
 	targetMUL.write( pipelineTargetResgisterMUL[0] );
 	validMUL.write(pipelineValidityMUL[0]);
@@ -96,7 +96,7 @@ void alu::mul() { // REV - visibility ??
 	pipelineResultsMUL[latencyMUL - 1] = inputMUL.read();		// inputMUL - ???
 	pipelineTargetRegisterMUL[latencyMUL - 1] = regMUL.read();
 	pipelineValidityMUL[latencyMUL - 1] = validMUL.read();
-	*/
+	
 
 
 	// REV-----------Pointers implementation--------------
@@ -116,4 +116,4 @@ void alu::mul() { // REV - visibility ??
 	p_first = (p_first + 1) % latencyMUL;
 	p_last = (p_last + 1) % latencyMUL;
 
-}
+}*/
