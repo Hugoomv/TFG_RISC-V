@@ -29,6 +29,8 @@ public:
 		instAlu = new alu("instAlu");
 		instDataMem = new dataMem("instDataMem");
 
+		instMul = new mul("instMul");
+
 
 		instFetch->clk(clk);
 		instFetch->rst(rst);
@@ -62,6 +64,14 @@ public:
 		instDataMem->I(iXM);
 		instDataMem->instOut(iMW);
 
+		instDecod->fbEx();
+
+
+		instMul->clk(clk);
+		instMul->rst(rst);
+		instMul->I();
+		instMul->instOut();
+
 
 		MEM = new mem; 
 		instFetch->MEM = MEM; 
@@ -76,6 +86,7 @@ private:
 	decod* instDecod;
 	alu* instAlu;
 	dataMem* instDataMem;
+	mul* instMul;
 
 	mem* MEM; 
 
