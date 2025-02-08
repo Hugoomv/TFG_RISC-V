@@ -4,9 +4,9 @@
 // COMPLETELY SEGMENTED
 void mul::multiplication() { 
 
+	sc_int<32> A, B;
 	sc_uint<5> opCode;
 	double tiempo;
-	char nem[7];
 
 	tiempo = sc_time_stamp().to_double() / 1000.0;
 
@@ -17,46 +17,36 @@ void mul::multiplication() {
 	} else {
 		
 		INST = I.read();
+
+		A = INST.opA;
+		B = INST.opB;
 		opCode = INST.aluOp;
-		
-		if (opCode == MUL) {
 
-			strcpy(nem, "mul");
+		double pipelineResultsMul[latencyMul] = {};
+		//short pipelineTargetRegisterMul[latencyMul];
+		bool pipelineValidityMul[latencyMul] = {};
 
-			double pipelineResultsMul[latencyMul];
-			short pipelineTargetRegisterMul[latencyMul];
-			bool pipelineValidityMul[latencyMul];
+		resultMul.write(pipelineResultsMul[0]);
+		//targetMul.write(pipelineTargetRegisterMul[0]); // REV??
+		validMul.write(pipelineValidityMul[0]);
 
-
-			resultMul.write(pipelineResultsMul[0]);
-			targetMul.write(pipelineTargetRegisterMul[0]);
-			validMul.write(pipelineValidityMul[0]);
-
-			// Loop to shift pipeline content
-			for (int i = 0; i < latencyMul - 1; i++) {
-				pipelineResultsMul[i] = pipelineResultsMul[i + 1];
-				pipelineTargetRegisterMul[i] = pipelineTargetRegisterMul[i + 1];
-				pipelineValidityMul[i] = pipelineValidityMul[i + 1];
-			}
-
-			pipelineResultsMul[latencyMul - 1] = inputMul.read();		// inputMUL - ???
-			pipelineTargetRegisterMul[latencyMul - 1] = regMul.read();
-			pipelineValidityMul[latencyMul - 1] = validMul.read();
-
-			if (!strcmp(INST.desc, "ALU"))
-				strcpy(INST.desc, nem);
-			else
-				if (!strcmp(INST.desc, "ALUinm")) {
-					strcpy(INST.desc, nem);
-					strcat(INST.desc, "i");
-				}
-			INST.aluOut = resultMul.read();
-
-			instOut.write(INST);
-
-		} else {
-			// Do nothing - no mul
+		// Loop to shift pipeline content 
+		// Pos 0: exit
+		// Pos latencyMul-1: new_element
+		for (int i = 0; i < latencyMul - 1; i++) {
+			pipelineResultsMul[i] = pipelineResultsMul[i + 1];
+			//pipelineTargetRegisterMul[i] = pipelineTargetRegisterMul[i + 1];
+			pipelineValidityMul[i] = pipelineValidityMul[i + 1];
 		}
+
+		pipelineResultsMul[latencyMul - 1] = ((sc_int<32>)A) * ((sc_int<32>)B);
+		//pipelineTargetRegisterMul[latencyMul - 1] = regMul.read();
+		pipelineValidityMul[latencyMul - 1] = true;
+
+		strcpy(INST.desc, "mul");
+		INST.aluOut = resultMul.read();
+
+		instOut.write(INST);
 
 	} 
 	

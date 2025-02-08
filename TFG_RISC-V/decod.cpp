@@ -91,8 +91,13 @@ void decod::decoding() {
 	case 4: //	Arithmetic with inmediate
 		if(I==0x13)
 			strcpy(INST.desc, "nop");
-		else
-			strcpy(INST.desc, "ALUinm"); 
+		else if(opCode == MUL) {
+			strcpy(INST.desc, "MUL");
+		}
+		else {
+			strcpy(INST.desc, "ALUinm");
+		}
+
 		inm12 = I(31, 20);
 		if (inm12 == -1616)
 			inm12 = inm12; 
@@ -105,7 +110,12 @@ void decod::decoding() {
 		uRs1 = true;
 		break;
 	case 12: //	Arithmetic with registers
-		strcpy(INST.desc, "ALU"); 
+		if (opCode == MUL) {
+			strcpy(INST.desc, "MUL");
+		}
+		else {
+			strcpy(INST.desc, "ALU");
+		}
 		C_opA = (rs1);
 		C_opB  = (rs2);
 		C_rd  = (I(11, 7));		preWrite = true;

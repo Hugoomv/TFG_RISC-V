@@ -65,11 +65,10 @@ public:
 		instDataMem->I(iXM);
 		instDataMem->instOut(iMW);
 
-
 		instMul->clk(clk);
 		instMul->rst(rst);
 		instMul->I(iDX);
-		instMul->instOut(iMW);
+		instMul->instOut(iXM);
 
 
 		MEM = new mem; 
