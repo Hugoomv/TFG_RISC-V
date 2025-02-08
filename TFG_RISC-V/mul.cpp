@@ -14,6 +14,7 @@ void mul::multiplication() {
 	if (rst.read()) {
 
 		resultMul.write(0);
+		targetMul.write(0);
 		validMul.write(0);
 
 	} else {
@@ -47,6 +48,7 @@ void mul::multiplication() {
 
 		if (!strcmp(INST.desc, "MUL")) {
 			pipelineValidityMul[latencyMul - 1] = true;
+			cout << "mul: True" << endl; // REV
 		}
 		else {
 			pipelineValidityMul[latencyMul - 1] = false;
