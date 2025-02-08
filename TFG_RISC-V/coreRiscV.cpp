@@ -43,7 +43,9 @@ int coreRiscV::leeELF(FILE* elf) {
 	fseek(elf, FH.e_shoff, 0);				// carga de las sections
 	for (j = 0; j < FH.e_shnum; ++j) {
 		fread(&SH[j], 1, FH.e_shentsize, elf);
-	//	cout << SH[j].sh_addr << " " << SH[j].sh_flags << endl; 
+		#if DEBUG
+			cout << SH[j].sh_addr << " " << SH[j].sh_flags << endl; 
+		#endif
 	}
 
 	for (j = 0; j < FH.e_shnum; ++j) {

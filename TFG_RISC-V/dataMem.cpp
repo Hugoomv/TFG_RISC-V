@@ -43,12 +43,16 @@ void dataMem::registro(){
 					break;
 		case 2:		if (BH & 3)
 						cerr << "Acceso de lectura de palabra desalineado @" << address << endl;
-//	DEBUG			printf("[%06x] -> %08x   @ %.0lf \n", address.to_int(), SW.to_int(), sc_time_stamp().to_double() / 1000.0);
+					#if	DEBUG			
+						printf("dataMem.cpp - Case 2: [%06x] -> %08x   @ %.0lf \n", address.to_int(), SW.to_int(), sc_time_stamp().to_double() / 1000.0); 
+					#endif
 					INST.dataOut = SW; ;			break;		// lee una palabra
 
 		case 4:		byte = SW(8 * BH + 7, 8 * BH);			// lee un byte unsigned
 					INST.dataOut =  (sc_int<32>)((sc_uint<8>)byte);
-//  DEBUG			cout << hex << "lbu " << (sc_int<32>)((sc_uint<8>)byte) << " @" << address << " -> " << INST.rd << "  " << INST.address << endl;
+					#if  DEBUG
+						cout << hex << "lbu " << (sc_int<32>)((sc_uint<8>)byte) << " @" << address << " -> " << INST.rd << "  " << INST.address << endl;
+					#endif
 					break;
 		case 5:		if (BH & 1)
 						cerr << "Acceso de lectura de media palabra desalineado @" << address << endl;
@@ -65,7 +69,9 @@ void dataMem::registro(){
 		case 10:	if (BH & 3)									// escribe una palabra
 						cerr << "Acceso escritura lectura de palabra desalineado @" << address << endl;
 
-// DEBUG			printf("[%06x] <- %08x   @ %.0lf \n", address.to_int(), dataWrite.to_int(), sc_time_stamp().to_double() / 1000.0);
+					#if DEBUG			
+						printf("dataMem.cpp - Case 10: [%06x] <- %08x   @ %.0lf \n", address.to_int(), dataWrite.to_int(), sc_time_stamp().to_double() / 1000.0);
+					#endif
 					MEM->writeWord(address, dataWrite);		break;
 		case 15:	INST.dataOut = INST.aluOut;
 					break;

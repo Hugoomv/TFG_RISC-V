@@ -1,5 +1,6 @@
-#include"decod.h"
-#include"alu.h"			// alu opCodes are defined there
+#include "decod.h"
+#include "alu.h"			// alu opCodes are defined there
+#include "config.h"
 
 
 void decod::registros(){		// este método implementa el banco de registros
@@ -17,8 +18,10 @@ void decod::registros(){		// este método implementa el banco de registros
 
 			if (target) {
 				regs[target] = backInst.dataOut;
-//	DEBUG	printf("%2d <- %08x   @ %.0lf \n", target, regs[target].to_int(), sc_time_stamp().to_double()/1000.0);
-//				printf("%2d <- %08x   @ %.0lf   -  %08x \n", target, regs[target].to_int(), sc_time_stamp().to_double() / 1000.0, backInst.address.to_int());
+			#if DEBUG	
+				printf("decod.cpp: %2d <- %08x   @ %.0lf \n", target, regs[target].to_int(), sc_time_stamp().to_double()/1000.0);
+				printf("decod.cpp: %2d <- %08x   @ %.0lf   -  %08x \n", target, regs[target].to_int(), sc_time_stamp().to_double() / 1000.0, backInst.address.to_int());
+			#endif
 			}
 		}
 		INST.rd = C_rd;			INST.wReg = C_wReg;
