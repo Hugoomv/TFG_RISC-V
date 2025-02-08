@@ -14,6 +14,10 @@ public:
 	sc_in< sc_uint<32> >   	PCin;
 	sc_in< instruction >   	fbEx, fbMem, fbWB;
 
+	sc_in <bool >	validMul;
+	sc_in <sc_int<32>> resultMul;
+	sc_in <short> targetMul;
+
 	sc_out<instruction>		instOut; 
 
 	sc_out<bool>			hazard, bubble;

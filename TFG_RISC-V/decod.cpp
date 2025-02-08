@@ -11,17 +11,26 @@ void decod::registros(){		// este método implementa el banco de registros
 	if (rst.read()) {
 		for(int i=0; i<32; ++i)	regs[i] = 0;
 	}else{
-		backInst = fbWB.read();
 
-		if(backInst.wReg){
-			int target = backInst.rd;
+		if (validMul.read()) { // MUL
+			int target = targetMul.read();
 
 			if (target) {
-				regs[target] = backInst.dataOut;
-			#if DEBUG	
-				printf("decod.cpp: %2d <- %08x   @ %.0lf \n", target, regs[target].to_int(), sc_time_stamp().to_double()/1000.0);
-				printf("decod.cpp: %2d <- %08x   @ %.0lf   -  %08x \n", target, regs[target].to_int(), sc_time_stamp().to_double() / 1000.0, backInst.address.to_int());
-			#endif
+				regs[target] = resultMul.read();
+			}
+		} else {
+			backInst = fbWB.read();
+
+			if (backInst.wReg) {
+				int target = backInst.rd;
+
+				if (target) {
+					regs[target] = backInst.dataOut;
+#if DEBUG	
+					printf("decod.cpp: %2d <- %08x   @ %.0lf \n", target, regs[target].to_int(), sc_time_stamp().to_double() / 1000.0);
+					printf("decod.cpp: %2d <- %08x   @ %.0lf   -  %08x \n", target, regs[target].to_int(), sc_time_stamp().to_double() / 1000.0, backInst.address.to_int());
+#endif
+				}
 			}
 		}
 		INST.rd = C_rd;			INST.wReg = C_wReg;

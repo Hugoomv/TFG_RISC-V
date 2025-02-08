@@ -68,7 +68,13 @@ public:
 		instMul->clk(clk);
 		instMul->rst(rst);
 		instMul->I(iDX);
-		instMul->instOut(iXM);
+		instMul->resultMul(resultMul);
+		instMul->targetMul(targetMul);
+		instMul->validMul(validMul);
+
+		instDecod->resultMul(resultMul);
+		instDecod->targetMul(targetMul);
+		instDecod->validMul(validMul);
 
 
 		MEM = new mem; 
@@ -91,7 +97,11 @@ private:
 	sc_signal< sc_uint<32> >	PC_DecodFetch, PC_FetchDecod;
 	sc_signal< bool >			hazard, bubble;
 
-	sc_signal < instruction >	iFD, iDX, iXM, iMW; 
+	sc_signal < instruction >	iFD, iDX, iXM, iMW;
+
+	sc_signal <bool>			validMul;
+	sc_signal <sc_int<32>>		resultMul;
+	sc_signal <short>			targetMul;
 /*	sc_signal< sc_int<32> >		wbValue, opA, opB, rs2_DescodAlu, rs2_AluDataMem;
 	sc_signal< sc_uint<5> >		mRegEX, mRegMem, mRegWB;
 	sc_signal<bool>				wRegEX, wRegMem, wRegWB;

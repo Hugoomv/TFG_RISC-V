@@ -1,10 +1,10 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define latencyMul 2
+#define latencyMul 1
 
 #define BENCHMARKS 0
 
-#define DEBUG 1
+#define DEBUG 0
 
 #endif 

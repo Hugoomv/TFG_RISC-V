@@ -12,7 +12,9 @@ public:
 	sc_in<bool> clk, rst;
 	sc_in<instruction> I;
 
-	sc_out<instruction> instOut;
+	sc_out<sc_int<32>>	resultMul;
+	sc_out<short>		targetMul;
+	sc_out<bool>		validMul;
 
 	void multiplication();
 
@@ -31,13 +33,6 @@ public:
 	}
 
 private:
-
-	sc_signal<sc_uint<32>> resultMul;
-	sc_signal<sc_uint<32>> targetMul;
-	sc_signal<sc_uint<32>> regMul;
-	sc_signal<sc_uint<32>> inputMul;
-
-	sc_signal<bool> validMul;
 
 	instruction INST;
 
