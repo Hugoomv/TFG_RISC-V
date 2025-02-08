@@ -1,7 +1,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define latencyMul 1
+#define latencyMul 2
 
 #define BENCHMARKS 0
 
