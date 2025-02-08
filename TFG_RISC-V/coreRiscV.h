@@ -8,6 +8,7 @@
 #include "alu.h"
 #include "dataMem.h"
 #include "mem.h"
+#include "mul.h"
 #include "structsRV.h"
 
 SC_MODULE(coreRiscV) {
@@ -64,13 +65,11 @@ public:
 		instDataMem->I(iXM);
 		instDataMem->instOut(iMW);
 
-		instDecod->fbEx();
-
 
 		instMul->clk(clk);
 		instMul->rst(rst);
-		instMul->I();
-		instMul->instOut();
+		instMul->I(iDX);
+		instMul->instOut(iMW);
 
 
 		MEM = new mem; 
