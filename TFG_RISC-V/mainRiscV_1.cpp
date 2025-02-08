@@ -8,6 +8,10 @@
 
 int sc_main(int nargs, char* vargs[]) {
 
+	// Ignore deprecated alerts
+	sc_core::sc_report_handler::set_actions("/IEEE_Std_1666/deprecated",
+		sc_core::SC_DO_NOTHING);
+
 	sc_clock clk("clk", 1); // ciclo de 1 ns
 	sc_signal <bool> rst;
 	FILE* elf; 
