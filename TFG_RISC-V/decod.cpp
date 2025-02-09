@@ -105,6 +105,7 @@ void decod::decoding() {
 			strcpy(INST.desc, "nop");
 		else if(opCode == MUL) {
 			strcpy(INST.desc, "MUL");
+			cout << "Decod - mul" << endl; // REV
 		}
 		else {
 			strcpy(INST.desc, "ALUinm");
@@ -124,6 +125,7 @@ void decod::decoding() {
 	case 12: //	Arithmetic with registers
 		if (opCode == MUL) {
 			strcpy(INST.desc, "MUL");
+			cout << "Decod - mul" << endl; // REV
 		}
 		else {
 			strcpy(INST.desc, "ALU");

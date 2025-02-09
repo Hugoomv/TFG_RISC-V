@@ -54,9 +54,6 @@ void mul::multiplication() {
 			pipelineValidityMul[latencyMul - 1] = false;
 		}
 		
-
-		strcpy(INST.desc, "mul");
-		INST.aluOut = resultMul.read();
 	} 
 	
 

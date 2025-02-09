@@ -3,7 +3,7 @@
 
 #define latencyMul 2
 
-#define BENCHMARKS 0
+#define BENCHMARKS 1
 
 #define DEBUG 0
 
