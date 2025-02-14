@@ -48,6 +48,12 @@ void alu::registro(){
 		case SRA: 	strcpy(nem, "sra");
 					res = ((sc_int<32>)A) >> B ; break;			// check
 
+		case MUL:	strcpy(nem, "mul");
+			res = ((sc_int<32>)A) * ((sc_int<32>)B); break;
+
+		case MULHU:	strcpy(nem, "mulhu");
+			res = ((sc_int<32>)A) * ((sc_int<32>)B); break;
+
 		default: cerr << "Error at the ALU, unknown ALU opcode " << opCode << endl;
 					exit(-1);
 		};
