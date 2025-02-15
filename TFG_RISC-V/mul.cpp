@@ -9,13 +9,23 @@ void mul::multiplication() {
 	short target;
 	double tiempo;
 
+	double pipelineResultsMul[latencyMul] = {};			// multiplication results
+	short pipelineTargetRegisterMul[latencyMul] = {};	// target = reg
+	bool pipelineValidityMul[latencyMul] = {};			// 1 if value is not thrash
+
 	tiempo = sc_time_stamp().to_double() / 1000.0;
 
 	if (rst.read()) {
 
-		resultMul.write(0);
-		targetMul.write(0);
-		validMul.write(0);
+		instOut.write(INST); // NOP
+
+		// empty pipeline
+		for (int i = 0; i < latencyMul; i++) {
+			pipelineResultsMul[i] = 0;
+			pipelineTargetRegisterMul[i] = 0;
+			pipelineValidityMul[i] = 0;
+		}
+
 
 	} else {
 		
@@ -26,13 +36,10 @@ void mul::multiplication() {
 		target = INST.rd;
 		opCode = INST.aluOp;
 
-		double pipelineResultsMul[latencyMul] = {};			// multiplication results
-		short pipelineTargetRegisterMul[latencyMul] = {};	// target = reg
-		bool pipelineValidityMul[latencyMul] = {};			// 1 if value is not thrash
+		INST.dataOut = INST.aluOut = pipelineResultsMul[0]; // = INST.dataOut ??
+		INST.rd = pipelineTargetRegisterMul[0];
+		INST.wReg = pipelineValidityMul[0];
 
-		resultMul.write(pipelineResultsMul[0]);
-		targetMul.write(pipelineTargetRegisterMul[0]); 
-		validMul.write(pipelineValidityMul[0]);
 
 		// Loop to shift pipeline content 
 		// Pos 0: exit
@@ -43,17 +50,21 @@ void mul::multiplication() {
 			pipelineValidityMul[i] = pipelineValidityMul[i + 1];
 		}
 
-		pipelineResultsMul[latencyMul - 1] = ((sc_int<32>)A) * ((sc_int<32>)B);
-		pipelineTargetRegisterMul[latencyMul - 1] = target;
+		if (opCode == MUL) {
 
-		if (!strcmp(INST.desc, "MUL")) {
+			pipelineResultsMul[latencyMul - 1] = ((sc_int<32>)A) * ((sc_int<32>)B);
+			pipelineTargetRegisterMul[latencyMul - 1] = target;
 			pipelineValidityMul[latencyMul - 1] = true;
-			cout << "mul: True" << endl; // REV
+
 		}
-		else {
+		else{
+			pipelineResultsMul[latencyMul - 1] = 0;
+			pipelineTargetRegisterMul[latencyMul - 1] = target;
 			pipelineValidityMul[latencyMul - 1] = false;
 		}
-		
+
+		instOut.write(INST);
+
 	} 
 	
 

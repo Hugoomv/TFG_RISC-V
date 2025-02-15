@@ -51,7 +51,7 @@ void dataMem::registro(){
 		case 4:		byte = SW(8 * BH + 7, 8 * BH);			// lee un byte unsigned
 					INST.dataOut =  (sc_int<32>)((sc_uint<8>)byte);
 					#if  DEBUG
-						cout << hex << "lbu " << (sc_int<32>)((sc_uint<8>)byte) << " @" << address << " -> " << INST.rd << "  " << INST.address << endl;
+						cout << "dataMem.cpp" hex << "lbu " << (sc_int<32>)((sc_uint<8>)byte) << " @" << address << " -> " << INST.rd << "  " << INST.address << endl;
 					#endif
 					break;
 		case 5:		if (BH & 1)

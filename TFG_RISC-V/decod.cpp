@@ -12,11 +12,18 @@ void decod::registros(){		// este método implementa el banco de registros
 		for(int i=0; i<32; ++i)	regs[i] = 0;
 	}else{
 
-		if (validMul.read()) { // MUL
-			int target = targetMul.read();
+		// In case of receiving from MEM and MUL, MUL will be written and MEM ignored -- REV
+		backInst = fbMul.read();
+
+		if (backInst.wReg) {
+			int target = backInst.rd;
 
 			if (target) {
-				regs[target] = resultMul.read();
+				regs[target] = backInst.dataOut;
+#if DEBUG	
+				printf("decod.cpp: %2d <- %08x   @ %.0lf \n", target, regs[target].to_int(), sc_time_stamp().to_double() / 1000.0);
+				printf("decod.cpp: %2d <- %08x   @ %.0lf   -  %08x \n", target, regs[target].to_int(), sc_time_stamp().to_double() / 1000.0, backInst.address.to_int());
+#endif
 			}
 		} else {
 			backInst = fbWB.read();
@@ -101,11 +108,9 @@ void decod::decoding() {
 		break;
 
 	case 4: //	Arithmetic with inmediate
-		if(I==0x13)
+		if(I==0x13){
 			strcpy(INST.desc, "nop");
-		else if(opCode == MUL) {
-			strcpy(INST.desc, "MUL");
-			cout << "Decod - mul" << endl; // REV
+		
 		}
 		else {
 			strcpy(INST.desc, "ALUinm");
@@ -123,17 +128,15 @@ void decod::decoding() {
 		uRs1 = true;
 		break;
 	case 12: //	Arithmetic with registers
-		if (opCode == MUL) {
-			strcpy(INST.desc, "MUL");
-			cout << "Decod - mul" << endl; // REV
-		}
-		else {
-			strcpy(INST.desc, "ALU");
-		}
+		strcpy(INST.desc, "ALU");
+		
 		C_opA = (rs1);
 		C_opB  = (rs2);
 		C_rd  = (I(11, 7));		preWrite = true;
 		preAlu.bit(4) = I.bit(25);	preAlu.bit(3) = I.bit(30);		preAlu(2, 0) = I(14, 12);	// supports M-extensin
+		if (preAlu == 16) { // MUL AQUI
+			
+		}
 		uRs1 = true;	uRs2 = true;
 		break;
 

@@ -12,15 +12,14 @@ public:
 	sc_in<bool> clk, rst;
 	sc_in<instruction> I;
 
-	sc_out<sc_int<32>>	resultMul;
-	sc_out<short>		targetMul;
-	sc_out<bool>		validMul;
+	sc_out<instruction> instOut;
 
 	void multiplication();
 
 	SC_CTOR(mul) {
 		cout << "mul: " << name() << endl;
 
+		// NOP
 		INST.address = 0xffffffff;	INST.I = 0x13;	INST.aluOp = 0; INST.memOp = 15;
 		INST.rs1 = INST.rs2 = INST.rd = 0x1f; 
 		INST.wReg = false;
@@ -38,8 +37,6 @@ private:
 
 };
 
-
 #define MUL 16
-
 
 #endif
