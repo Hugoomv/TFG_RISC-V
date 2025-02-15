@@ -37,6 +37,4 @@ private:
 
 };
 
-#define MUL 16
-
 #endif

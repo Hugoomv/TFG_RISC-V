@@ -50,7 +50,7 @@ void alu::registro(){
 
 		case MUL:	// Does nothing - NOP 
 					break;			
-		case MULHU:		// Does nothing - NOP 	 
+		case MULHU:	// Does nothing - NOP 	 
 					break;
 
 		default: cerr << "Error at the ALU, unknown ALU opcode " << opCode << endl;

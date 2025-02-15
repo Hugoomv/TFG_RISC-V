@@ -6,11 +6,6 @@
 
 using namespace std;
 
-// Parameters 
-#define latencyMUL 2
-#define latencySQRT 1
-#define latencyDIV 1
-
 struct f_header {
 	unsigned int magic;
 	unsigned char ei_class, ei_data, ei_version, ei_osabi, ei_abiversion, ei_pad0;
@@ -53,7 +48,6 @@ inline void sc_trace(sc_trace_file* tf, const instruction& inst, const string& n
 }
 
 
-
 struct memSeg;
 
 struct memSeg {
@@ -61,8 +55,6 @@ struct memSeg {
 	unsigned int* mem;
 	struct memSeg* next;
 };
-
-
 
 
 #endif
