@@ -134,9 +134,24 @@ void decod::decoding() {
 		C_opB  = (rs2);
 		C_rd  = (I(11, 7));		preWrite = true;
 		preAlu.bit(4) = I.bit(25);	preAlu.bit(3) = I.bit(30);		preAlu(2, 0) = I(14, 12);	// supports M-extensin
-		if (preAlu == 16) { // MUL AQUI
-			
+		
+	
+		if (hazardContMul != 0) {
+			hazardContMul--;
+
+			switch (preAlu) {
+			case MUL:	// Wait or whatever to prevent hazard
+						// NOP
+						// Next func - optimiz comp??
+						hazardContMul = latencyMUL;
+						break;
+
+			case MULHU:	// Wait or whatever to prevent hazard
+						hazardContMul = latencyMULHU;
+						break;
+			}
 		}
+
 		uRs1 = true;	uRs2 = true;
 		break;
 

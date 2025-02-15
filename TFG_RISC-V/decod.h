@@ -51,6 +51,8 @@ private:
 	sc_uint<4> 	C_memOp;
 	sc_int<32> 	C_opA, C_opB, C_rs2;
 
+	short		hazardContMul = 0;
+
 	double tiempo;
 
 };
