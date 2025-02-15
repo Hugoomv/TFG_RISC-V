@@ -1,10 +1,11 @@
 #include "mul.h"
+#include "alu.h"
 
 
 // COMPLETELY SEGMENTED
 void mul::multiplication() { 
 
-	sc_int<32> A, B;
+	sc_int<32> A, B, res;
 	sc_uint<5> opCode;
 	short target;
 	double tiempo;
@@ -55,7 +56,15 @@ void mul::multiplication() {
 			pipelineResultsMul[latencyMul - 1] = ((sc_int<32>)A) * ((sc_int<32>)B);
 			pipelineTargetRegisterMul[latencyMul - 1] = target;
 			pipelineValidityMul[latencyMul - 1] = true;
+			strcpy(INST.desc, "mul");
 
+		}
+		else if (opCode == MULHU){
+			res = A(15, 0) * B(15, 0);
+			pipelineResultsMul[latencyMul - 1] = res(31, 16);
+			pipelineTargetRegisterMul[latencyMul - 1] = target;
+			pipelineValidityMul[latencyMul - 1] = true;
+			strcpy(INST.desc,"mulhu");
 		}
 		else{
 			pipelineResultsMul[latencyMul - 1] = 0;

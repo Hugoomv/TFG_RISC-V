@@ -50,9 +50,8 @@ void alu::registro(){
 
 		case MUL:	// Does nothing - NOP 
 					break;			
-		case MULHU:	strcpy(nem, "mul");
-			res = A(15, 0) * B(15, 0);
-			res = res(31, 16);			 break;
+		case MULHU:		// Does nothing - NOP 	 
+					break;
 
 		default: cerr << "Error at the ALU, unknown ALU opcode " << opCode << endl;
 					exit(-1);
