@@ -10,10 +10,6 @@ void mul::multiplication() {
 	short target;
 	double tiempo;
 
-	double pipelineResultsMul[latencyMUL] = {};			// multiplication results
-	short pipelineTargetRegisterMul[latencyMUL] = {};	// target = reg
-	bool pipelineValidityMul[latencyMUL] = {};			// 1 if value is not thrash
-
 	tiempo = sc_time_stamp().to_double() / 1000.0;
 
 	if (rst.read()) {

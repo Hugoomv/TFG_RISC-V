@@ -35,6 +35,10 @@ private:
 
 	instruction INST;
 
+	double pipelineResultsMul[latencyMUL] = {};			// multiplication results
+	short pipelineTargetRegisterMul[latencyMUL] = {};	// target = reg
+	bool pipelineValidityMul[latencyMUL] = {};			// 1 if value is not thrash
+
 };
 
 #endif

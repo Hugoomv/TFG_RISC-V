@@ -12,6 +12,9 @@ void decod::registros(){		// este método implementa el banco de registros
 		for(int i=0; i<32; ++i)	regs[i] = 0;
 	}else{
 
+		//printf("%08x   %08x   %s   \n",INST.address.to_int(), INST.I.to_int(), INST.desc);
+
+
 		// In case of receiving from MEM and MUL, MUL will be written and MEM ignored -- REV
 		backInst = fbMul.read();
 
@@ -110,7 +113,6 @@ void decod::decoding() {
 	case 4: //	Arithmetic with inmediate
 		if(I==0x13){
 			strcpy(INST.desc, "nop");
-		
 		}
 		else {
 			strcpy(INST.desc, "ALUinm");
@@ -135,7 +137,8 @@ void decod::decoding() {
 		C_rd  = (I(11, 7));		preWrite = true;
 		preAlu.bit(4) = I.bit(25);	preAlu.bit(3) = I.bit(30);		preAlu(2, 0) = I(14, 12);	// supports M-extensin
 		
-	
+
+		/*
 		if (hazardContMul != 0) {
 			hazardContMul--;
 
@@ -150,7 +153,7 @@ void decod::decoding() {
 						hazardContMul = latencyMULHU;
 						break;
 			}
-		}
+		}*/
 
 		uRs1 = true;	uRs2 = true;
 		break;
@@ -180,7 +183,8 @@ void decod::decoding() {
 			jump = jump;			// este breakpoint para que la simulación no continue
 			printf("Tiempo: %.0lf\t Numero de instrucciones: %d\n", tiempo, *numInst);
 			printf("Valor de x10 = %d\n",(int)regs[10]);
-			if((int)regs[10] == 0) printf("La ejecucion es correcta\n");
+			if ((int)regs[10] == 0) printf("La ejecucion es correcta\n");
+			else printf("Parece que ha habido algun error\n");
 			// inpeccionar x10 (a10) y comprobar que vale 0 para ejecucion correcta
 			sc_stop();
 			
