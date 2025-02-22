@@ -14,7 +14,6 @@ void decod::registros(){		// este método implementa el banco de registros
 
 		//printf("%08x   %08x   %s   \n",INST.address.to_int(), INST.I.to_int(), INST.desc);
 
-
 		// In case of receiving from MEM and MUL, MUL will be written and MEM ignored -- REV
 		backInst = fbMul.read();
 
@@ -47,6 +46,13 @@ void decod::registros(){		// este método implementa el banco de registros
 		INST.opA = C_opA;		INST.opB = C_opB;
 		INST.val2 = C_rs2;
 		INST.aluOp = C_aluOp;	INST.memOp = C_memOp;
+
+		//if(INST.wReg && (INST.opA < 0 || INST.opB < 0) && INST.rd == 10)
+			//printf("Decod \t%d - %d(%s): %d[%d] op %d[%d] =>_[%d] --MemOp = %d\n", (int)INST.wReg, (int)INST.aluOp, INST.desc, (int)INST.opA, (int)INST.rs1, (int)INST.opB, (int)INST.rs2, (int)INST.rd, (int)INST.memOp);
+
+		
+		//printf("Decod \t%d\n",(int)regs[10]);
+
 
 	}
 
@@ -130,7 +136,9 @@ void decod::decoding() {
 		uRs1 = true;
 		break;
 	case 12: //	Arithmetic with registers
+		
 		strcpy(INST.desc, "ALU");
+		
 		
 		C_opA = (rs1);
 		C_opB  = (rs2);

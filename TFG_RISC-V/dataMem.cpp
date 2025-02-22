@@ -81,6 +81,10 @@ void dataMem::registro(){
 
 
 		instOut.write(INST);
+
+		if (INST.wReg && (int)INST.dataOut < 0 && (int)INST.rd == 10)
+			printf("\nDataMem\t%d - %d(%s): %d[%d] op %d[%d] =>%d[%d]\n\n", (int)INST.wReg, (int)INST.aluOp, INST.desc, (int)INST.opA, (int)INST.rs1, (int)INST.opB, (int)INST.rs2, (int)INST.dataOut, (int)INST.rd);
+
 	
 	}
 
