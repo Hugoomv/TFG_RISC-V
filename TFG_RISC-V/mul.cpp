@@ -20,9 +20,7 @@ void mul::multiplication() {
 
 		// empty pipeline
 		for (int i = 0; i < latencyMUL; i++) {
-			pipelineResultsMul[i] = 0;
-			pipelineTargetRegisterMul[i] = 0;
-			pipelineValidityMul[i] = 0;
+			pipeline[i] = createNOP();
 		}
 
 
@@ -36,73 +34,38 @@ void mul::multiplication() {
 		target = INST.rd;
 		opCode = INST.aluOp;
 
-		bool flagNOP = false;
+		// Output
+		instOut.write(pipeline[0]);
 
-		// Prepare output
-		INST.dataOut = INST.aluOut = pipelineResultsMul[0]; // = INST.dataOut ??
-		INST.rd = pipelineTargetRegisterMul[0];
-		INST.wReg = pipelineValidityMul[0];
-
-
+		
 		// Loop to shift pipeline content 
 		// Pos 0: exit
 		// Pos latencyMUL-1: newElement
 		for (int i = 0; i < latencyMUL - 1; i++) {
-			pipelineResultsMul[i] = pipelineResultsMul[i + 1];
-			pipelineTargetRegisterMul[i] = pipelineTargetRegisterMul[i + 1];
-			pipelineValidityMul[i] = pipelineValidityMul[i + 1];
+			pipeline[i] = pipeline[i + 1];
 		}
 
+		// New instruction
+		pipeline[latencyMUL - 1] = INST;
+
+
+		// Operate
 		switch (opCode)
 		{
 		case MUL:
-			pipelineResultsMul[latencyMUL - 1] = ((sc_int<32>)A) * ((sc_int<32>)B);
-			strcpy(INST.desc, "mul");
+			pipeline[latencyMUL - 1].aluOut = pipeline[latencyMUL -1].dataOut = ((sc_int<32>)A) * ((sc_int<32>)B);
+			strcpy(pipeline[latencyMUL - 1].desc, "mul");
 			break;
 
 		case MULHU:
 			res = A(15, 0) * B(15, 0);
-			pipelineResultsMul[latencyMUL - 1] = res(31, 16);
-			strcpy(INST.desc, "mulhu");
+			pipeline[latencyMUL - 1].aluOut = pipeline[latencyMUL - 1].dataOut = res(31, 16);
+			strcpy(pipeline[latencyMUL - 1].desc, "mulhu");
 			break;
 
 		default:
-			pipelineResultsMul[latencyMUL - 1] = 0;
-			pipelineTargetRegisterMul[latencyMUL - 1] = 0;
-			pipelineValidityMul[latencyMUL - 1] = false;
-			flagNOP = true;
+			pipeline[latencyMUL - 1] = createNOP();
 			break;
 		}
-
-		if (pipelineValidityMul[0] == false) {
-			INST = createNOP(); // Next result not valid
-		}
-		
-		if (!flagNOP) {
-			//  Valid instruction for MUL module, pipeline will contain relevant data
-			pipelineTargetRegisterMul[latencyMUL - 1] = target;
-			pipelineValidityMul[latencyMUL - 1] = true;
-		}
-
-		instOut.write(INST);
-
 	} 
-	
-
-	// -----------Pointers implementation--------------
-	/*
-	int p_first = 0;
-	int p_last = latencyMUL - 1;
-
-	resultMul.write(pipelineResultsMul[p_first]);
-	targetMul.write(pipelineTargetRegisterMul[p_first]);
-	validMul.write(pipelineValidityMul[p_first]);
-
-	pipelineResultsMul[p_last] = inputMul.read();				// inputMUL - ??? rev
-	pipelineTargetRegisterMul[p_last] = regMul.read();
-	pipelineValidityMul[p_last] = validMul.read();
-
-	p_first = (p_first + 1) % latencyMUL;
-	p_last = (p_last + 1) % latencyMUL;
-	*/
 }
