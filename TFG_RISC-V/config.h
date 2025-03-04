@@ -3,6 +3,7 @@
 
 #define latencyMUL 2
 #define latencyMULHU 2
+#define pipelineSize max(latencyMUL,latencyMULHU)
 
 #define BENCHMARKS 0
 

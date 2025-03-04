@@ -73,6 +73,19 @@ public:
 
 		instDecod->fbMul(iMul);
 
+		// Hazard detection MUL
+		instDecod->rs1Out(rs1);
+		instDecod->rs2Out(rs2);
+
+		instMul->rs1In(rs1);
+		instMul->rs2In(rs2);
+
+		instMul->hzrdRs1(hzrdRs1);
+		instMul->hzrdRs2(hzrdRs2);
+
+		instDecod->hzrdRs1(hzrdRs1);
+		instDecod->hzrdRs2(hzrdRs2);
+
 
 		MEM = new mem; 
 		instFetch->MEM = MEM; 
@@ -95,6 +108,9 @@ private:
 	sc_signal< bool >			hazard, bubble;
 
 	sc_signal < instruction >	iFD, iDX, iXM, iMW, iMul;
+
+	sc_signal < sc_int<32> >	rs1, rs2;
+	sc_signal < bool >			hzrdRs1, hzrdRs2;
 
 /*	sc_signal< sc_int<32> >		wbValue, opA, opB, rs2_DescodAlu, rs2_AluDataMem;
 	sc_signal< sc_uint<5> >		mRegEX, mRegMem, mRegWB;

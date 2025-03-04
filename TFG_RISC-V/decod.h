@@ -14,10 +14,13 @@ public:
 	sc_in< sc_uint<32> >   	PCin;
 	sc_in< instruction >   	fbEx, fbMem, fbWB, fbMul;
 
-	sc_out<instruction>		instOut; 
+	sc_in < bool >			hzrdRs1, hzrdRs2;
 
+	sc_out<instruction>		instOut; 
 	sc_out<bool>			hazard, bubble;
 	sc_out< sc_uint<32> >	PCout;
+
+	sc_out< sc_int<32> >	rs1Out, rs2Out;
 
 	void decoding();
 	void registros();
@@ -33,7 +36,7 @@ public:
 		strcpy(INST.desc, "???");
 
 		SC_METHOD(decoding);
-		sensitive << fire;
+		sensitive << fire << hzrdRs1 << hzrdRs2;
 		SC_METHOD(registros);
 		sensitive << clk.pos();
 	}

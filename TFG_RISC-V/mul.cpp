@@ -19,7 +19,7 @@ void mul::multiplication() {
 		instOut.write(INST); 
 
 		// empty pipeline
-		for (int i = 0; i < latencyMUL; i++) {
+		for (int i = 0; i < pipelineSize; i++) {
 			pipeline[i] = createNOP();
 		}
 
@@ -41,31 +41,58 @@ void mul::multiplication() {
 		// Loop to shift pipeline content 
 		// Pos 0: exit
 		// Pos latencyMUL-1: newElement
-		for (int i = 0; i < latencyMUL - 1; i++) {
+		for (int i = 0; i < pipelineSize - 1; i++) {
 			pipeline[i] = pipeline[i + 1];
 		}
 
 		// New instruction
-		pipeline[latencyMUL - 1] = INST;
+		pipeline[pipelineSize - 1] = INST;
 
 
 		// Operate
 		switch (opCode)
 		{
 		case MUL:
-			pipeline[latencyMUL - 1].aluOut = pipeline[latencyMUL -1].dataOut = ((sc_int<32>)A) * ((sc_int<32>)B);
-			strcpy(pipeline[latencyMUL - 1].desc, "mul");
+			pipeline[pipelineSize - 1].aluOut = pipeline[pipelineSize -1].dataOut = ((sc_int<32>)A) * ((sc_int<32>)B);
+			strcpy(pipeline[pipelineSize - 1].desc, "mul");
 			break;
 
 		case MULHU:
 			res = A(15, 0) * B(15, 0);
-			pipeline[latencyMUL - 1].aluOut = pipeline[latencyMUL - 1].dataOut = res(31, 16);
-			strcpy(pipeline[latencyMUL - 1].desc, "mulhu");
+			pipeline[pipelineSize - 1].aluOut = pipeline[pipelineSize - 1].dataOut = res(31, 16);
+			strcpy(pipeline[pipelineSize - 1].desc, "mulhu");
 			break;
 
 		default:
-			pipeline[latencyMUL - 1] = createNOP();
+			pipeline[pipelineSize - 1] = createNOP();
 			break;
 		}
 	} 
+}
+
+void mul::hazardDetection() {
+
+	int rs1 = rs1In.read();
+	int rs2 = rs2In.read();
+
+	bool aux1 = false, 
+		 aux2 = false;
+
+	for (int i = 0; i < pipelineSize; i++) {
+
+		if (pipeline[i].wReg) {
+
+			if (rs1 == pipeline[i].rd) {
+				aux1 = true;
+			}
+
+			if (rs2 == pipeline[i].rd) {
+				aux2 = true;
+			}
+		}
+	}
+
+	hzrdRs1.write(aux1);
+	hzrdRs2.write(aux2);
+
 }

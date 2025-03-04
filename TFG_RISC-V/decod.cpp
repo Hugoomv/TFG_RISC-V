@@ -22,9 +22,9 @@ void decod::registros(){		// este método implementa el banco de registros
 
 			if (target) {
 				regs[target] = backInst.dataOut;
-#if DEBUG	
-				printf("decod.cpp: %2d <- %08x   @ %.0lf \n", target, regs[target].to_int(), sc_time_stamp().to_double() / 1000.0);
-				printf("decod.cpp: %2d <- %08x   @ %.0lf   -  %08x \n", target, regs[target].to_int(), sc_time_stamp().to_double() / 1000.0, backInst.address.to_int());
+#if 1	
+				printf("decod.cpp: M %2d <- %08x   @ %.0lf \n", target, regs[target].to_int(), sc_time_stamp().to_double() / 1000.0);
+				printf("decod.cpp: M %2d <- %08x   @ %.0lf   -  %08x \n", target, regs[target].to_int(), sc_time_stamp().to_double() / 1000.0, backInst.address.to_int());
 #endif
 			}
 		} else {
@@ -86,6 +86,10 @@ void decod::decoding() {
 	rs1 = regs[I(19, 15)];
 	rs2 = regs[I(24, 20)];
 
+	// Hazard Detection with MUL module
+	rs1Out.write(rs1);
+	rs2Out.write(rs2);
+
 	jump = false; 
 	C_rs2 = rs2;
 	preMem = 15; // nopMem
@@ -139,30 +143,11 @@ void decod::decoding() {
 		
 		strcpy(INST.desc, "ALU");
 		
-		
 		C_opA = (rs1);
 		C_opB  = (rs2);
 		C_rd  = (I(11, 7));		preWrite = true;
 		preAlu.bit(4) = I.bit(25);	preAlu.bit(3) = I.bit(30);		preAlu(2, 0) = I(14, 12);	// supports M-extensin
 		
-
-		/*
-		if (hazardContMul != 0) {
-			hazardContMul--;
-
-			switch (preAlu) {
-			case MUL:	// Wait or whatever to prevent hazard
-						// NOP
-						// Next func - optimiz comp??
-						hazardContMul = latencyMUL;
-						break;
-
-			case MULHU:	// Wait or whatever to prevent hazard
-						hazardContMul = latencyMULHU;
-						break;
-			}
-		}*/
-
 		uRs1 = true;	uRs2 = true;
 		break;
 
@@ -287,15 +272,16 @@ void decod::decoding() {
 	iM = fbMem.read();
 	iW = fbWB.read();
 
+
 	if (!INST.rs1)
 		hRs1 = false; 
 	else 
-		hRs1 = (iX.wReg && (iX.rd == INST.rs1)) || (iM.wReg && (iM.rd == INST.rs1)) || (iW.wReg && (iW.rd == INST.rs1));
+		hRs1 = (iX.wReg && (iX.rd == INST.rs1)) || (iM.wReg && (iM.rd == INST.rs1)) || (iW.wReg && (iW.rd == INST.rs1)) || hzrdRs1.read();
 
 	if (!INST.rs2)
 		hRs2 = false;
 	else
-		hRs2 = (iX.wReg && (iX.rd == INST.rs2)) || (iM.wReg && (iM.rd == INST.rs2)) || (iW.wReg && (iW.rd == INST.rs2));
+		hRs2 = (iX.wReg && (iX.rd == INST.rs2)) || (iM.wReg && (iM.rd == INST.rs2)) || (iW.wReg && (iW.rd == INST.rs2)) || hzrdRs2.read();
 
 	if ((uRs1 && hRs1) || (uRs2 && hRs2)) {		// hazard
 		hazard.write(true);

@@ -13,9 +13,16 @@ public:
 	sc_in<bool> clk, rst;
 	sc_in<instruction> I;
 
+	// Hazard detection from Decod
+	sc_in< sc_int<32> > rs1In, rs2In;
+	sc_out< bool > hzrdRs1, hzrdRs2;
+
 	sc_out<instruction> instOut;
 
+
 	void multiplication();
+
+	void hazardDetection();
 
 	SC_CTOR(mul) {
 		cout << "mul: " << name() << endl;
@@ -25,6 +32,9 @@ public:
 
 		SC_METHOD(multiplication);
 		sensitive << clk.pos();
+
+		SC_METHOD(hazardDetection);
+		sensitive << rs1In << rs2In;
 
 	}
 
