@@ -95,7 +95,7 @@ public:
 
 	}
 
-private:
+//private:
 	fetch* instFetch;
 	decod* instDecod;
 	alu* instAlu;
@@ -109,7 +109,7 @@ private:
 
 	sc_signal < instruction >	iFD, iDX, iXM, iMW, iMul;
 
-	sc_signal < sc_int<32> >	rs1, rs2;
+	sc_signal < sc_uint<5> >	rs1, rs2;
 	sc_signal < bool >			hzrdRs1, hzrdRs2;
 
 /*	sc_signal< sc_int<32> >		wbValue, opA, opB, rs2_DescodAlu, rs2_AluDataMem;

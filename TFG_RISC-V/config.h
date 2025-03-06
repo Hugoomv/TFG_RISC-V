@@ -1,8 +1,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define latencyMUL 2
-#define latencyMULHU 2
+#define latencyMUL 1
+#define latencyMULHU 1
 #define pipelineSize max(latencyMUL,latencyMULHU)
 
 #define BENCHMARKS 0

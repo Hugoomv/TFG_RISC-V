@@ -68,6 +68,7 @@ void mul::multiplication() {
 			break;
 		}
 	} 
+	fire.write(!fire.read());
 }
 
 void mul::hazardDetection() {
@@ -94,5 +95,9 @@ void mul::hazardDetection() {
 
 	hzrdRs1.write(aux1);
 	hzrdRs2.write(aux2);
+
+	if (aux1 || aux2) {
+		int i = 0;
+	}
 
 }

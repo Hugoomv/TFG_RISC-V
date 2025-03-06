@@ -4,6 +4,13 @@
 
 #include "coreRiscV.h"
 
+#define trazas 
+
+#ifdef trazas
+#include <sysc/tracing/sc_vcd_trace.h>
+#endif
+
+
 #if BENCHMARKS
 	
 int sc_main(int nargs, char* vargs[]) {
@@ -92,11 +99,48 @@ int sc_main(int nargs, char* vargs[]) {
 	instCoreRiscV.clk(clk);
 	instCoreRiscV.rst(rst);
 
+#ifdef trazas
+	sc_trace_file* Tf;
+	Tf = sc_create_vcd_trace_file("traza");
+	((vcd_trace_file*)Tf)->set_time_unit(0.5, SC_NS);
+#endif
+
 	if (instCoreRiscV.leeELF(elf)) {
 		fclose(elf);
 		cerr << "ERROR leyendo archivo " << vargs[1] << endl;
 		exit(-1);
 	}
+
+#ifdef trazas
+	sc_trace(Tf, clk, "clk");
+	sc_trace(Tf, instCoreRiscV.hazard, "hazard");
+	sc_trace(Tf, instCoreRiscV.bubble, "bubble");
+	sc_trace(Tf, instCoreRiscV.rs1, "rs1");
+	sc_trace(Tf, instCoreRiscV.rs2, "rs2");
+	sc_trace(Tf, instCoreRiscV.hzrdRs1, "hzrdRs1");
+	sc_trace(Tf, instCoreRiscV.hzrdRs2, "hzrdRs2");
+	sc_trace(Tf, instCoreRiscV.iDX.read().address, "iDX.addr");
+	sc_trace(Tf, instCoreRiscV.iDX.read().rs1, "iDX.rs1");
+	sc_trace(Tf, instCoreRiscV.iDX.read().rs2, "iDX.rs2");
+	sc_trace(Tf, instCoreRiscV.iDX.read().rd, "iDX.rd");
+	sc_trace(Tf, instCoreRiscV.iDX.read().wReg, "iDX.wReg");
+
+	sc_trace(Tf, instCoreRiscV.iMul.read().address, "iMul.addr");
+	sc_trace(Tf, instCoreRiscV.iMul.read().rs1, "iMul.rs1");
+	sc_trace(Tf, instCoreRiscV.iMul.read().rs2, "iMul.rs2");
+	sc_trace(Tf, instCoreRiscV.iMul.read().rd, "iMul.rd");
+	sc_trace(Tf, instCoreRiscV.iMul.read().wReg, "iMul.wReg");
+
+	sc_trace(Tf, instCoreRiscV.instDecod->HZ1, "HZ1");
+	sc_trace(Tf, instCoreRiscV.instDecod->HZ2, "HZ2");
+
+
+//	sc_trace(Tf, instCoreRiscV.iXM, "iXM");
+	//sc_trace(Tf, instCoreRiscV., "");
+
+	
+#endif
+
 
 	rst.write(true); sc_start(2, SC_NS);
 	time(&begin);

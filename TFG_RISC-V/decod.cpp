@@ -22,7 +22,7 @@ void decod::registros(){		// este método implementa el banco de registros
 
 			if (target) {
 				regs[target] = backInst.dataOut;
-#if 1	
+#if DEBUG	
 				printf("decod.cpp: M %2d <- %08x   @ %.0lf \n", target, regs[target].to_int(), sc_time_stamp().to_double() / 1000.0);
 				printf("decod.cpp: M %2d <- %08x   @ %.0lf   -  %08x \n", target, regs[target].to_int(), sc_time_stamp().to_double() / 1000.0, backInst.address.to_int());
 #endif
@@ -87,8 +87,8 @@ void decod::decoding() {
 	rs2 = regs[I(24, 20)];
 
 	// Hazard Detection with MUL module
-	rs1Out.write(rs1);
-	rs2Out.write(rs2);
+	rs1Out.write(INST.rs1);
+	rs2Out.write(INST.rs2);
 
 	jump = false; 
 	C_rs2 = rs2;
@@ -147,7 +147,9 @@ void decod::decoding() {
 		C_opB  = (rs2);
 		C_rd  = (I(11, 7));		preWrite = true;
 		preAlu.bit(4) = I.bit(25);	preAlu.bit(3) = I.bit(30);		preAlu(2, 0) = I(14, 12);	// supports M-extensin
-		
+		if (preAlu == MUL) {
+			int i = 0;
+		}
 		uRs1 = true;	uRs2 = true;
 		break;
 
@@ -267,21 +269,29 @@ void decod::decoding() {
 	};
 
 
-	instruction iX, iM, iW; 
+	instruction iX, iM, iMU, iW;
 	iX = fbEx.read();
+	iMU = fbMul.read();
 	iM = fbMem.read();
 	iW = fbWB.read();
-
 
 	if (!INST.rs1)
 		hRs1 = false; 
 	else 
-		hRs1 = (iX.wReg && (iX.rd == INST.rs1)) || (iM.wReg && (iM.rd == INST.rs1)) || (iW.wReg && (iW.rd == INST.rs1)) || hzrdRs1.read();
+		hRs1 = (iX.wReg && (iX.rd == INST.rs1)) || (iM.wReg && (iM.rd == INST.rs1)) || (iW.wReg && (iW.rd == INST.rs1)) || (iMU.wReg && (iMU.rd == INST.rs1)) || hzrdRs1.read();
 
 	if (!INST.rs2)
 		hRs2 = false;
 	else
-		hRs2 = (iX.wReg && (iX.rd == INST.rs2)) || (iM.wReg && (iM.rd == INST.rs2)) || (iW.wReg && (iW.rd == INST.rs2)) || hzrdRs2.read();
+		hRs2 = (iX.wReg && (iX.rd == INST.rs2)) || (iM.wReg && (iM.rd == INST.rs2)) || (iW.wReg && (iW.rd == INST.rs2)) || (iMU.wReg && (iMU.rd == INST.rs2)) || hzrdRs2.read();
+
+	sc_uint<2> probe1, probe2;
+
+	probe1.bit(1) = uRs1;	probe1.bit(0) = hRs1;
+	probe2.bit(1) = uRs2;	probe2.bit(0) = hRs2;
+
+	HZ1.write(probe1);
+	HZ2.write(probe2);
 
 	if ((uRs1 && hRs1) || (uRs2 && hRs2)) {		// hazard
 		hazard.write(true);

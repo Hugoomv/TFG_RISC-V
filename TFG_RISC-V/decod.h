@@ -20,7 +20,7 @@ public:
 	sc_out<bool>			hazard, bubble;
 	sc_out< sc_uint<32> >	PCout;
 
-	sc_out< sc_int<32> >	rs1Out, rs2Out;
+	sc_out< sc_uint<5> >	rs1Out, rs2Out;
 
 	void decoding();
 	void registros();
@@ -42,6 +42,8 @@ public:
 	}
 
 	unsigned int* numInst; 
+
+	sc_signal<sc_uint<2>> HZ1, HZ2; 
 
 private:
 	sc_int<32> regs[32];

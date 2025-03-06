@@ -14,7 +14,7 @@ public:
 	sc_in<instruction> I;
 
 	// Hazard detection from Decod
-	sc_in< sc_int<32> > rs1In, rs2In;
+	sc_in< sc_uint<5> > rs1In, rs2In;
 	sc_out< bool > hzrdRs1, hzrdRs2;
 
 	sc_out<instruction> instOut;
@@ -34,7 +34,9 @@ public:
 		sensitive << clk.pos();
 
 		SC_METHOD(hazardDetection);
-		sensitive << rs1In << rs2In;
+		sensitive << rs1In << rs2In << fire;
+
+		fire.write(true);
 
 	}
 
@@ -42,8 +44,10 @@ private:
 
 	instruction INST;
 
+	sc_signal < bool > fire;
 
-	instruction pipeline[latencyMUL];
+
+	instruction pipeline[pipelineSize];
 
 };
 
