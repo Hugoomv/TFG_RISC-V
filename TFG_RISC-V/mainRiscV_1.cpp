@@ -131,6 +131,13 @@ int sc_main(int nargs, char* vargs[]) {
 	sc_trace(Tf, instCoreRiscV.iMul.read().rd, "iMul.rd");
 	sc_trace(Tf, instCoreRiscV.iMul.read().wReg, "iMul.wReg");
 
+	sc_trace(Tf, instCoreRiscV.iXM.read().wReg, "iXM.wReg");
+	sc_trace(Tf, instCoreRiscV.iXM.read().rd, "iXM.rd");
+
+
+	sc_trace(Tf, instCoreRiscV.iMW.read().wReg, "iMW.wReg");
+	sc_trace(Tf, instCoreRiscV.iMW.read().rd, "iMW.rd");
+
 	sc_trace(Tf, instCoreRiscV.instDecod->HZ1, "HZ1");
 	sc_trace(Tf, instCoreRiscV.instDecod->HZ2, "HZ2");
 

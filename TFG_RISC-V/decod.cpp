@@ -269,11 +269,11 @@ void decod::decoding() {
 	};
 
 
-	instruction iX, iM, iMU, iW;
-	iX = fbEx.read();
+	instruction iDX, iXM, iMU, iMW;
+	iDX = fbEx.read();
 	iMU = fbMul.read();
-	iM = fbMem.read();
-	iW = fbWB.read();
+	iXM = fbMem.read();
+	iMW = fbWB.read();
 
 	if (!INST.rs1)
 		hRs1 = false; 
