@@ -278,12 +278,12 @@ void decod::decoding() {
 	if (!INST.rs1)
 		hRs1 = false; 
 	else 
-		hRs1 = (iX.wReg && (iX.rd == INST.rs1)) || (iM.wReg && (iM.rd == INST.rs1)) || (iW.wReg && (iW.rd == INST.rs1)) || (iMU.wReg && (iMU.rd == INST.rs1)) || hzrdRs1.read();
+		hRs1 = (iDX.wReg && (iDX.rd == INST.rs1)) || (iXM.wReg && (iXM.rd == INST.rs1)) || (iMW.wReg && (iMW.rd == INST.rs1)) || hzrdRs1.read();
 
 	if (!INST.rs2)
 		hRs2 = false;
 	else
-		hRs2 = (iX.wReg && (iX.rd == INST.rs2)) || (iM.wReg && (iM.rd == INST.rs2)) || (iW.wReg && (iW.rd == INST.rs2)) || (iMU.wReg && (iMU.rd == INST.rs2)) || hzrdRs2.read();
+		hRs2 = (iDX.wReg && (iDX.rd == INST.rs2)) || (iXM.wReg && (iXM.rd == INST.rs2)) || (iMW.wReg && (iMW.rd == INST.rs2)) || hzrdRs2.read();
 
 	sc_uint<2> probe1, probe2;
 

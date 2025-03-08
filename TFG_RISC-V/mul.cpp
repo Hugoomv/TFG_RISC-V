@@ -93,6 +93,18 @@ void mul::hazardDetection() {
 		}
 	}
 
+	// REV - Ben aqui??
+	if (instOut.read().wReg) {
+
+		if (rs1 == instOut.read().rd) {
+			aux1 = true;
+		}
+
+		if (rs2 == instOut.read().rd) {
+			aux2 = true;
+		}
+	}
+
 	hzrdRs1.write(aux1);
 	hzrdRs2.write(aux2);
 
