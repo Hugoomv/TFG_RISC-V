@@ -45,6 +45,14 @@ public:
 
 	sc_signal<sc_uint<2>> HZ1, HZ2; 
 
+	bool idx_rs1;
+	bool ixm_rs1;
+	bool imw_rs1;
+
+	bool idx_rs2;
+	bool ixm_rs2;
+	bool imw_rs2;
+
 private:
 	sc_int<32> regs[32];
 	sc_signal<bool> fire; 

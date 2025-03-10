@@ -275,6 +275,14 @@ void decod::decoding() {
 	iXM = fbMem.read();
 	iMW = fbWB.read();
 
+	idx_rs1 = (iDX.wReg && (iDX.rd == INST.rs1));
+	ixm_rs1 = (iXM.wReg && (iXM.rd == INST.rs1));
+	imw_rs1 = (iMW.wReg && (iMW.rd == INST.rs1));
+
+	idx_rs2 = (iDX.wReg && (iDX.rd == INST.rs2));
+	ixm_rs2 = (iXM.wReg && (iXM.rd == INST.rs2));
+	imw_rs2 = (iMW.wReg && (iMW.rd == INST.rs2));
+
 	if (!INST.rs1)
 		hRs1 = false; 
 	else 
@@ -292,6 +300,10 @@ void decod::decoding() {
 
 	HZ1.write(probe1);
 	HZ2.write(probe2);
+
+	if (hRs1 && hRs2 && hzrdRs2.read()) {
+		int i = 0;
+	}
 
 	if ((uRs1 && hRs1) || (uRs2 && hRs2)) {		// hazard
 		hazard.write(true);

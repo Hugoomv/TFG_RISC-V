@@ -124,6 +124,8 @@ int sc_main(int nargs, char* vargs[]) {
 	sc_trace(Tf, instCoreRiscV.iDX.read().rs2, "iDX.rs2");
 	sc_trace(Tf, instCoreRiscV.iDX.read().rd, "iDX.rd");
 	sc_trace(Tf, instCoreRiscV.iDX.read().wReg, "iDX.wReg");
+	sc_trace(Tf, instCoreRiscV.instDecod->idx_rs1, "iDX_rs1");
+	sc_trace(Tf, instCoreRiscV.instDecod->idx_rs2, "iDX_rs2");
 
 	sc_trace(Tf, instCoreRiscV.iMul.read().address, "iMul.addr");
 	sc_trace(Tf, instCoreRiscV.iMul.read().rs1, "iMul.rs1");
@@ -131,15 +133,22 @@ int sc_main(int nargs, char* vargs[]) {
 	sc_trace(Tf, instCoreRiscV.iMul.read().rd, "iMul.rd");
 	sc_trace(Tf, instCoreRiscV.iMul.read().wReg, "iMul.wReg");
 
+
 	sc_trace(Tf, instCoreRiscV.iXM.read().wReg, "iXM.wReg");
 	sc_trace(Tf, instCoreRiscV.iXM.read().rd, "iXM.rd");
-
+	sc_trace(Tf, instCoreRiscV.instDecod->ixm_rs1, "iXM_rs1");
+	sc_trace(Tf, instCoreRiscV.instDecod->ixm_rs2, "iXM_rs2");
 
 	sc_trace(Tf, instCoreRiscV.iMW.read().wReg, "iMW.wReg");
 	sc_trace(Tf, instCoreRiscV.iMW.read().rd, "iMW.rd");
+	sc_trace(Tf, instCoreRiscV.instDecod->imw_rs1, "iMW_rs1");
+	sc_trace(Tf, instCoreRiscV.instDecod->imw_rs2, "iMW_rs2");
 
 	sc_trace(Tf, instCoreRiscV.instDecod->HZ1, "HZ1");
 	sc_trace(Tf, instCoreRiscV.instDecod->HZ2, "HZ2");
+
+
+
 
 
 //	sc_trace(Tf, instCoreRiscV.iXM, "iXM");
