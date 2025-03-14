@@ -51,7 +51,7 @@ void alu::registro(){
 		case SLL: 	strcpy(nem, "sll");
 					res = A << B ;		 break;
 		case SRL: 	strcpy(nem, "srl");
-					res = A >> B ;		 break;
+					res = ((sc_uint<32>)A) >> B ;		 break;
 		case SRA: 	strcpy(nem, "sra");
 					res = ((sc_int<32>)A) >> B ; break;			// check
 
