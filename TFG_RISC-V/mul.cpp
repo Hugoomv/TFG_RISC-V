@@ -79,6 +79,7 @@ void mul::hazardDetection() {
 	bool aux1 = false, 
 		 aux2 = false;
 
+	// Prevents RAW
 	for (int i = 0; i < pipelineSize; i++) {
 
 		if (pipeline[i].wReg) {
@@ -105,11 +106,16 @@ void mul::hazardDetection() {
 		}
 	}
 
-	hzrdRs1.write(aux1);
-	hzrdRs2.write(aux2);
+	
+	// REV
+	if (pipelineSize == 2 && I.read().wReg) {
 
-	if (aux1 || aux2) {
-		int i = 0;
+		if (I.read().aluOp == 16 || I.read().aluOp == 19) {
+			aux1 = true;
+			aux2 = true;
+		}
 	}
 
+	hzrdRs1.write(aux1);
+	hzrdRs2.write(aux2);
 }
