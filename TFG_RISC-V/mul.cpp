@@ -48,18 +48,21 @@ void mul::multiplication() {
 		// New instruction
 		pipeline[pipelineSize - 1] = INST;
 
+		sc_int<64> tmp = 0;
+		sc_uint<64> tmpU = 0; 
 
 		// Operate
 		switch (opCode)
 		{
 		case MUL:
-			pipeline[pipelineSize - 1].aluOut = pipeline[pipelineSize -1].dataOut = ((sc_int<32>)A) * ((sc_int<32>)B);
+			tmp = ((sc_int<32>)A) * ((sc_int<32>)B);
+			pipeline[pipelineSize - 1].aluOut = pipeline[pipelineSize -1].dataOut = tmp(31,0);// A * B
 			strcpy(pipeline[pipelineSize - 1].desc, "mul");
 			break;
 
 		case MULHU:
-			res = A(15, 0) * B(15, 0);
-			pipeline[pipelineSize - 1].aluOut = pipeline[pipelineSize - 1].dataOut = res(31, 16);
+			tmpU = ((sc_uint<32>)A) * ((sc_uint<32>)B);
+			pipeline[pipelineSize - 1].aluOut = pipeline[pipelineSize - 1].dataOut = tmpU(63, 32);
 			strcpy(pipeline[pipelineSize - 1].desc, "mulhu");
 			break;
 
