@@ -19,9 +19,6 @@ void dataMem::registro(){
 	}else{
 		INST = I.read();
 
-////////////		cout << INST << endl;	se puede imprimir la instrucción en casi cualquier parte
-////////////		esto ayuda a depurar el código
-
 		address = INST.aluOut;
 		BH = address & 3;		// byte or half-word
 		dataWrite = INST.val2;

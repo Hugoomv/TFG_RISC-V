@@ -62,7 +62,7 @@ int mem::readWord(int addr) {
 		}
 		pt = pt->next;
 		if (!pt) {
-			cerr << "ERROR. Direccion de memoria " << hex << addr << " no accesible" << endl;
+			cerr << "ERROR. Direccion de memoria " << hex << addr << " no accesible (lectura)  en ciclo " << dec << (sc_time_stamp().to_double() / 1000.0) << endl;
 			exit(-1);
 		}
 	}
@@ -84,7 +84,7 @@ void mem::writeByte(int addr, int data) {
 		}
 		pt = pt->next;
 		if (!pt) {
-			cerr << "ERROR. Direccion de memoria " << hex << addr << " no accesible" << endl;
+			cerr << "ERROR. Direccion de memoria " << hex << addr << " no accesible (escritura)  en ciclo " << dec << (sc_time_stamp().to_double() / 1000.0) << endl;
 			exit(-1);
 		}
 	}

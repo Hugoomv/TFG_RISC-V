@@ -12,8 +12,6 @@ void decod::registros(){		// este método implementa el banco de registros
 		for(int i=0; i<32; ++i)	regs[i] = 0;
 	}else{
 
-		//printf("%08x   %08x   %s   \n",INST.address.to_int(), INST.I.to_int(), INST.desc);
-
 		// In case of receiving from MEM and MUL, MUL will be written and MEM ignored -- REV
 		backInst = fbMul.read();
 
@@ -22,10 +20,6 @@ void decod::registros(){		// este método implementa el banco de registros
 
 			if (target) {
 				regs[target] = backInst.dataOut;
-#if DEBUG	
-				printf("decod.cpp: M %2d <- %08x   @ %.0lf \n", target, regs[target].to_int(), sc_time_stamp().to_double() / 1000.0);
-				printf("decod.cpp: M %2d <- %08x   @ %.0lf   -  %08x \n", target, regs[target].to_int(), sc_time_stamp().to_double() / 1000.0, backInst.address.to_int());
-#endif
 			}
 		} else {
 			backInst = fbWB.read();
@@ -33,12 +27,9 @@ void decod::registros(){		// este método implementa el banco de registros
 			if (backInst.wReg) {
 				int target = backInst.rd;
 
+
 				if (target) {
 					regs[target] = backInst.dataOut;
-#if DEBUG	
-					printf("decod.cpp: %2d <- %08x   @ %.0lf \n", target, regs[target].to_int(), sc_time_stamp().to_double() / 1000.0);
-					printf("decod.cpp: %2d <- %08x   @ %.0lf   -  %08x \n", target, regs[target].to_int(), sc_time_stamp().to_double() / 1000.0, backInst.address.to_int());
-#endif
 				}
 			}
 		}
@@ -46,14 +37,6 @@ void decod::registros(){		// este método implementa el banco de registros
 		INST.opA = C_opA;		INST.opB = C_opB;
 		INST.val2 = C_rs2;
 		INST.aluOp = C_aluOp;	INST.memOp = C_memOp;
-
-		//if(INST.wReg && (INST.opA < 0 || INST.opB < 0) && INST.rd == 10)
-			//printf("Decod \t%d - %d(%s): %d[%d] op %d[%d] =>_[%d] --MemOp = %d\n", (int)INST.wReg, (int)INST.aluOp, INST.desc, (int)INST.opA, (int)INST.rs1, (int)INST.opB, (int)INST.rs2, (int)INST.rd, (int)INST.memOp);
-
-		
-		//printf("Decod \t%d\n",(int)regs[10]);
-
-
 	}
 
 	instOut.write(INST);
@@ -129,13 +112,12 @@ void decod::decoding() {
 		}
 
 		inm12 = I(31, 20);
-		if (inm12 == -1616)
-			inm12 = inm12; 
 
 		C_opA = (rs1);
 		C_opB = (inm12);
 		C_rd = (I(11, 7));		preWrite = true;
 		preAlu.bit(4) = 0;
+		// SRLI, SLLI and SRAI
 		if ((I(14, 12) == 1) || (I(14, 12) == 5))
 			preAlu.bit(3) = I.bit(30);
 		else 
@@ -151,9 +133,6 @@ void decod::decoding() {
 		C_opB  = (rs2);
 		C_rd  = (I(11, 7));		preWrite = true;
 		preAlu.bit(4) = I.bit(25);	preAlu.bit(3) = I.bit(30);		preAlu(2, 0) = I(14, 12);	// supports M-extensin
-		if (preAlu == MUL) {
-			int i = 0;
-		}
 		uRs1 = true;	uRs2 = true;
 		break;
 
@@ -279,6 +258,7 @@ void decod::decoding() {
 	iXM = fbMem.read();
 	iMW = fbWB.read();
 
+	// Hazard detection 
 	idx_rs1 = (iDX.wReg && (iDX.rd == INST.rs1));
 	ixm_rs1 = (iXM.wReg && (iXM.rd == INST.rs1));
 	imw_rs1 = (iMW.wReg && (iMW.rd == INST.rs1));
@@ -288,14 +268,14 @@ void decod::decoding() {
 	imw_rs2 = (iMW.wReg && (iMW.rd == INST.rs2));
 
 	if (!INST.rs1)
-		hRs1 = false; 
-	else 
-		hRs1 = (iDX.wReg && (iDX.rd == INST.rs1)) || (iXM.wReg && (iXM.rd == INST.rs1)) || (iMW.wReg && (iMW.rd == INST.rs1)) || hzrdRs1.read();
+		hRs1 = false;
+	else
+		hRs1 = idx_rs1 || ixm_rs1 || imw_rs1 || hzrdRs1.read();
 
 	if (!INST.rs2)
 		hRs2 = false;
 	else
-		hRs2 = (iDX.wReg && (iDX.rd == INST.rs2)) || (iXM.wReg && (iXM.rd == INST.rs2)) || (iMW.wReg && (iMW.rd == INST.rs2)) || hzrdRs2.read();
+		hRs2 = idx_rs2 || ixm_rs2 || imw_rs2 || hzrdRs2.read();
 
 	sc_uint<2> probe1, probe2;
 

@@ -28,10 +28,6 @@ void alu::registro(){
 		shamt = B(4, 0);
 		opCode = INST.aluOp;
 
-		//if (opCode == ADD && (A < 0 || B < 0) && INST.rd == 10 && INST.wReg) 
-			//printf("Alu \t%d - %d(%s): %d[%d] op %d[%d] =>_[%d] --MemOp = %d\n", (int)INST.wReg, (int)INST.aluOp, INST.desc, (int)INST.opA, (int)INST.rs1, (int)INST.opB, (int)INST.rs2, (int)INST.rd,(int)INST.memOp);
-		
-
 		switch(opCode){
 		case ADD: 
 					strcpy(nem, "add");
@@ -81,10 +77,6 @@ void alu::registro(){
 		
 
 		instOut.write(INST); 
-
-		//if (INST.wReg && (int)INST.aluOut < 0 && (int)INST.rd == 10)
-			//printf("Alu \t%d - %d(%s): %d[%d] op %d[%d] =>%d[%d]\n", (int)INST.wReg, (int)INST.aluOp, INST.desc, (int)INST.opA, (int)INST.rs1, (int)INST.opB, (int)INST.rs2, (int)INST.aluOut, (int)INST.rd);
-
 
 	}
 }

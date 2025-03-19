@@ -12,12 +12,14 @@
 #endif 
 
 /*
-* SPMV usando int y verify en lugar de verifyDouble
- Latencia 2 falla
- Correcto con 1,3,5,16,17
- Rev problema escritura?? --> Mod decod.cpp registros
+  REV - Mod hazard detection - tanto en mul como decod
+ REV - Org cond decod
+ REV - Decod lat 2 mul ??  
 
- SPMV usando double y verifyDouble
- falla :(
+ cout << hex << INST.address << "  " << INST.rd << "   " << INST.desc << "  " << INST.opA << " " << INST.opB << "  " << tiempo << endl;
+
+ //printf("xxx.cpp: M %2d <- %08x   @ %.0lf   -  %08x   %s   %08x op %08x \n", target, regs[target].to_int(), sc_time_stamp().to_double() / 1000.0, backInst.address.to_int(), backInst.desc, backInst.opA.to_int(), backInst.opB.to_int());
+
+
 
 */
