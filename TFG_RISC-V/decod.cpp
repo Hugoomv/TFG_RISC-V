@@ -133,9 +133,13 @@ void decod::decoding() {
 			inm12 = inm12; 
 
 		C_opA = (rs1);
-		C_opB  = (inm12);
-		C_rd  = (I(11, 7));		preWrite = true;
-		preAlu(4, 3) = 0;
+		C_opB = (inm12);
+		C_rd = (I(11, 7));		preWrite = true;
+		preAlu.bit(4) = 0;
+		if ((I(14, 12) == 1) || (I(14, 12) == 5))
+			preAlu.bit(3) = I.bit(30);
+		else 
+			preAlu.bit(3) = 0;
 		preAlu(2, 0) = I(14, 12);
 		uRs1 = true;
 		break;
