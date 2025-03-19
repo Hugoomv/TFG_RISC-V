@@ -49,11 +49,11 @@ void alu::registro(){
 		case SLTU: 	strcpy(nem, "sltu");
 					res = ((sc_uint<32>)A)<((sc_uint<32>)B) ? 1 : 0 ; break;	// check that works...
 		case SLL: 	strcpy(nem, "sll");
-					res = A << B ;		 break;
+					res = A << shamt;		 break;
 		case SRL: 	strcpy(nem, "srl");
-					res = ((sc_uint<32>)A) >> B ;		 break;
+					res = ((sc_uint<32>)A) >> shamt;		 break;
 		case SRA: 	strcpy(nem, "sra");
-					res = ((sc_int<32>)A) >> B ; break;			// check
+					res = A >> shamt;break;			// check
 
 		case MUL:	flagNOP = true; // Does nothing - NOP 
 					break;			
