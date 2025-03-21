@@ -124,7 +124,8 @@ void mul::hazardDetection() {
 	// REV
 	if (pipelineSizeMUL == 2 && I.read().wReg) {
 
-		if (I.read().aluOp == 16 || I.read().aluOp == 17 || I.read().aluOp == 18 || I.read().aluOp == 19) {
+		int opCode = I.read().aluOp;
+		if (opCode == 16 || opCode == 17 || opCode == 18 || opCode == 19) {
 			aux1 = true;
 			aux2 = true;
 		}
