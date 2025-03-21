@@ -29,32 +29,57 @@ void alu::registro(){
 		opCode = INST.aluOp;
 
 		switch(opCode){
-		case ADD: 
-					strcpy(nem, "add");
-					res = A + B;		break;
-		case SUB:	strcpy(nem, "sub");
-					res = A - B;		 break;
-		case AND: 	strcpy(nem, "and");
-					res = A & B;		break;
-		case OR: 	strcpy(nem, "or");
-					res = A | B;		 break;
-		case XOR: 	strcpy(nem, "xor");
-					res = A ^ B;		break;
-		case SLT: 	strcpy(nem, "slt");
-					res = A<B ? 1 : 0; break;
-		case SLTU: 	strcpy(nem, "sltu");
-					res = ((sc_uint<32>)A)<((sc_uint<32>)B) ? 1 : 0 ; break;	// check that works...
-		case SLL: 	strcpy(nem, "sll");
-					res = A << shamt;		 break;
-		case SRL: 	strcpy(nem, "srl");
-					res = ((sc_uint<32>)A) >> shamt;		 break;
-		case SRA: 	strcpy(nem, "sra");
-					res = A >> shamt;break;			// check
+		case ADD:		strcpy(nem, "add");
+						res = A + B;		
+						break;
 
-		case MUL:	flagNOP = true; // Does nothing - NOP 
-					break;			
-		case MULHU:	flagNOP = true; // Does nothing - NOP 	 
-					break;
+		case SUB:		strcpy(nem, "sub");
+						res = A - B;		 
+						break;
+
+		case AND: 		strcpy(nem, "and");
+						res = A & B;		
+						break;
+
+		case OR: 		strcpy(nem, "or");
+						res = A | B;		 
+						break;
+
+		case XOR: 		strcpy(nem, "xor");
+						res = A ^ B;		
+						break;
+
+		case SLT: 		strcpy(nem, "slt");
+						res = A<B ? 1 : 0; 
+						break;
+
+		case SLTU: 		strcpy(nem, "sltu");
+						res = ((sc_uint<32>)A)<((sc_uint<32>)B) ? 1 : 0 ; 
+						break;	
+
+		case SLL: 		strcpy(nem, "sll");
+						res = A << shamt;		 
+						break;
+
+		case SRL: 		strcpy(nem, "srl");
+						res = ((sc_uint<32>)A) >> shamt;		 
+						break;
+
+		case SRA: 		strcpy(nem, "sra");
+						res = A >> shamt;
+						break;	
+
+		case MUL:		flagNOP = true;
+						break;	
+
+		case MULH:		flagNOP = true; 
+						break;
+
+		case MULHU:		flagNOP = true;  	 
+						break;
+
+		case MULHSU:	flagNOP = true;	 
+						break;
 
 		default: cerr << "Error at the ALU, unknown ALU opcode " << opCode << endl;
 					exit(-1);
