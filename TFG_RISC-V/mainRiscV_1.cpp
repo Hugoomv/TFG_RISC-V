@@ -81,7 +81,6 @@ int sc_main(int nargs, char* vargs[]) {
 	FILE* elf; 
 	time_t begin, end;
 
-
 	
 	if (nargs != 2) {
 		cerr << "ERROR. Se debe especificar el archivo ELF" << endl;
@@ -99,7 +98,7 @@ int sc_main(int nargs, char* vargs[]) {
 	instCoreRiscV.clk(clk);
 	instCoreRiscV.rst(rst);
 
-#ifdef trazas
+#if TRAZAS
 	sc_trace_file* Tf;
 	Tf = sc_create_vcd_trace_file("traza");
 	((vcd_trace_file*)Tf)->set_time_unit(0.5, SC_NS);
@@ -111,7 +110,7 @@ int sc_main(int nargs, char* vargs[]) {
 		exit(-1);
 	}
 
-#ifdef trazas
+#if TRAZAS
 	sc_trace(Tf, clk, "clk");
 	sc_trace(Tf, instCoreRiscV.hazard, "hazard");
 	sc_trace(Tf, instCoreRiscV.bubble, "bubble");
@@ -146,14 +145,6 @@ int sc_main(int nargs, char* vargs[]) {
 
 	sc_trace(Tf, instCoreRiscV.instDecod->HZ1, "HZ1");
 	sc_trace(Tf, instCoreRiscV.instDecod->HZ2, "HZ2");
-
-
-
-
-
-//	sc_trace(Tf, instCoreRiscV.iXM, "iXM");
-	//sc_trace(Tf, instCoreRiscV., "");
-
 	
 #endif
 

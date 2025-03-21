@@ -9,6 +9,8 @@
 
 #define DEBUG 0
 
+#define TRAZAS 0
+
 #endif 
 
 /*
