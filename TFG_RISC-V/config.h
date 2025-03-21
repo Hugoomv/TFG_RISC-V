@@ -1,9 +1,12 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define latencyMUL 2
-#define latencyMULHU 2
-#define pipelineSize max(latencyMUL,latencyMULHU)
+#define latencyMUL 3
+#define latencyMULH 5
+#define latencyMULHU 1
+#define latencyMULHSU 1
+constexpr int pipelineSizeMUL = std::max({latencyMUL,latencyMULH,latencyMULHU,latencyMULHSU});
+
 
 #define BENCHMARKS 0
 

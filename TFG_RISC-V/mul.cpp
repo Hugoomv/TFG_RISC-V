@@ -19,7 +19,7 @@ void mul::multiplication() {
 		instOut.write(INST); 
 
 		// empty pipeline
-		for (int i = 0; i < pipelineSize; i++) {
+		for (int i = 0; i < pipelineSizeMUL; i++) {
 			pipeline[i] = createNOP();
 		}
 
@@ -41,33 +41,44 @@ void mul::multiplication() {
 		// Loop to shift pipeline content 
 		// Pos 0: exit
 		// Pos latencyMUL-1: newElement
-		for (int i = 0; i < pipelineSize - 1; i++) {
+		for (int i = 0; i < pipelineSizeMUL - 1; i++) {
 			pipeline[i] = pipeline[i + 1];
 		}
 
 		// New instruction
-		pipeline[pipelineSize - 1] = INST;
+		pipeline[pipelineSizeMUL - 1] = INST;
 
 		sc_int<64> tmp = 0;
-		sc_uint<64> tmpU = 0; 
 
 		// Operate
 		switch (opCode)
 		{
-		case MUL:
+		case MUL: 
 			tmp = ((sc_int<32>)A) * ((sc_int<32>)B);
-			pipeline[pipelineSize - 1].aluOut = pipeline[pipelineSize -1].dataOut = tmp(31,0);// A * B
-			strcpy(pipeline[pipelineSize - 1].desc, "mul");
+			pipeline[pipelineSizeMUL - 1].aluOut = pipeline[pipelineSizeMUL -1].dataOut = tmp(31,0);
+			strcpy(pipeline[pipelineSizeMUL - 1].desc, "mul");
+			break;
+
+		case MULH: 
+			tmp = ((sc_int<32>)A) * ((sc_int<32>)B);
+			pipeline[pipelineSizeMUL - 1].aluOut = pipeline[pipelineSizeMUL - 1].dataOut = tmp(63,32);
+			strcpy(pipeline[pipelineSizeMUL - 1].desc, "mulh");
 			break;
 
 		case MULHU:
-			tmpU = ((sc_uint<32>)A) * ((sc_uint<32>)B);
-			pipeline[pipelineSize - 1].aluOut = pipeline[pipelineSize - 1].dataOut = tmpU(63, 32);
-			strcpy(pipeline[pipelineSize - 1].desc, "mulhu");
+			tmp = ((sc_uint<32>)A) * ((sc_uint<32>)B);
+			pipeline[pipelineSizeMUL - 1].aluOut = pipeline[pipelineSizeMUL - 1].dataOut = tmp(63, 32);
+			strcpy(pipeline[pipelineSizeMUL - 1].desc, "mulhu");
+			break;
+
+		case MULHSU:
+			tmp = ((sc_int<32>)A) * ((sc_uint<32>)B);
+			pipeline[pipelineSizeMUL - 1].aluOut = pipeline[pipelineSizeMUL - 1].dataOut = tmp(63, 32);
+			strcpy(pipeline[pipelineSizeMUL - 1].desc, "mulhu");
 			break;
 
 		default:
-			pipeline[pipelineSize - 1] = createNOP();
+			pipeline[pipelineSizeMUL - 1] = createNOP();
 			break;
 		}
 	} 
@@ -83,7 +94,7 @@ void mul::hazardDetection() {
 		 aux2 = false;
 
 	// Prevents RAW
-	for (int i = 0; i < pipelineSize; i++) {
+	for (int i = 0; i < pipelineSizeMUL; i++) {
 
 		if (pipeline[i].wReg) {
 
@@ -111,9 +122,9 @@ void mul::hazardDetection() {
 
 	
 	// REV
-	if (pipelineSize == 2 && I.read().wReg) {
+	if (pipelineSizeMUL == 2 && I.read().wReg) {
 
-		if (I.read().aluOp == 16 || I.read().aluOp == 19) {
+		if (I.read().aluOp == 16 || I.read().aluOp == 17 || I.read().aluOp == 18 || I.read().aluOp == 19) {
 			aux1 = true;
 			aux2 = true;
 		}

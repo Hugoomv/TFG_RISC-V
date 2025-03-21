@@ -46,7 +46,7 @@ private:
 
 	sc_signal < bool > fire;
 
-	instruction pipeline[pipelineSize];
+	instruction pipeline[pipelineSizeMUL];
 
 };
 
