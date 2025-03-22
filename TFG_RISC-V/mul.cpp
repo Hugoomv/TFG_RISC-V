@@ -45,9 +45,6 @@ void mul::multiplication() {
 			pipeline[i] = pipeline[i + 1];
 		}
 
-		// New instruction
-		pipeline[pipelineSizeMUL - 1] = INST;
-
 		sc_int<64> tmp = 0;
 
 		// Operate
@@ -55,32 +52,35 @@ void mul::multiplication() {
 		{
 		case MUL: 
 			tmp = ((sc_int<32>)A) * ((sc_int<32>)B);
-			pipeline[pipelineSizeMUL - 1].aluOut = pipeline[pipelineSizeMUL -1].dataOut = tmp(31,0);
-			strcpy(pipeline[pipelineSizeMUL - 1].desc, "mul");
+			INST.aluOut = INST.dataOut = tmp(31,0);
+			strcpy(INST.desc, "mul");
 			break;
 
 		case MULH: 
 			tmp = ((sc_int<32>)A) * ((sc_int<32>)B);
-			pipeline[pipelineSizeMUL - 1].aluOut = pipeline[pipelineSizeMUL - 1].dataOut = tmp(63,32);
-			strcpy(pipeline[pipelineSizeMUL - 1].desc, "mulh");
+			INST.aluOut = INST.dataOut = tmp(63,32);
+			strcpy(INST.desc, "mulh");
 			break;
 
 		case MULHU:
 			tmp = ((sc_uint<32>)A) * ((sc_uint<32>)B);
-			pipeline[pipelineSizeMUL - 1].aluOut = pipeline[pipelineSizeMUL - 1].dataOut = tmp(63, 32);
-			strcpy(pipeline[pipelineSizeMUL - 1].desc, "mulhu");
+			INST.aluOut = INST.dataOut = tmp(63, 32);
+			strcpy(INST.desc, "mulhu");
 			break;
 
 		case MULHSU:
 			tmp = ((sc_int<32>)A) * ((sc_uint<32>)B);
-			pipeline[pipelineSizeMUL - 1].aluOut = pipeline[pipelineSizeMUL - 1].dataOut = tmp(63, 32);
-			strcpy(pipeline[pipelineSizeMUL - 1].desc, "mulhu");
+			INST.aluOut = INST.dataOut = tmp(63, 32);
+			strcpy(INST.desc, "mulhu");
 			break;
 
 		default:
-			pipeline[pipelineSizeMUL - 1] = createNOP();
+			INST = createNOP();
 			break;
 		}
+
+		// New instruction
+		pipeline[pipelineSizeMUL - 1] = INST;
 	} 
 	fire.write(!fire.read());
 }
