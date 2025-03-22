@@ -5,4 +5,6 @@
 
 instruction createNOP();
 
+int getLatencyOp(int op);
+
 #endif

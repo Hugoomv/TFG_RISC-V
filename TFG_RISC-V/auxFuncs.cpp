@@ -1,4 +1,6 @@
 #include "auxFuncs.h"
+#include "alu.h"
+#include "config.h"
 
 
 /*
@@ -14,4 +16,15 @@ instruction createNOP() {
 	strcpy(INST.desc, "NOP");
 
 	return INST;
+}
+
+int getLatencyOp(int op) {
+	switch (op)
+	{
+	case MUL:		return latencyMUL;		break;
+	case MULH:		return latencyMULH;		break;
+	case MULHU:		return latencyMULHU;	break;
+	case MULHSU:	return latencyMULHSU;	break;
+	default:		return 1;				break;
+	}
 }
