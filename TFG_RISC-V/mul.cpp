@@ -34,11 +34,27 @@ void mul::multiplication() {
 		target = INST.rd;
 		opCode = INST.aluOp;
 
-		// Output
-		instOut.write(pipeline[0]);
+		// Independant pipeline for each instruction
+		int cyclesInPipeline = 0;
+		instruction output = pipeline[0];
 
-		
-		// Loop to shift pipeline content 
+		for (int i = 0; i < pipelineSizeMUL - 1; i++) {
+
+			cyclesInPipeline = pipelineSizeMUL - i;
+
+			if (pipeline[i].wReg && getLatencyOp(pipeline[i].aluOp) <= cyclesInPipeline) {
+
+				output = pipeline[i];
+				pipeline[i] = createNOP();
+				break;
+			}
+
+		}
+
+		instOut.write(output);
+
+
+		// Loop to shift pipeline content
 		// Pos 0: exit
 		// Pos latencyMUL-1: newElement
 		for (int i = 0; i < pipelineSizeMUL - 1; i++) {
