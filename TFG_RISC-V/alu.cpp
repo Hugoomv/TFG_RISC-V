@@ -69,15 +69,9 @@ void alu::registro(){
 						res = A >> shamt;
 						break;	
 
-		case MUL:		flagNOP = true;
-						break;	
-
-		case MULH:		flagNOP = true; 
-						break;
-
-		case MULHU:		flagNOP = true;  	 
-						break;
-
+		case MUL:			
+		case MULH:		
+		case MULHU:		
 		case MULHSU:	flagNOP = true;	 
 						break;
 

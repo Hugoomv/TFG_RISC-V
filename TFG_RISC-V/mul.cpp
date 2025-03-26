@@ -34,7 +34,7 @@ void mul::multiplication() {
 		target = INST.rd;
 		opCode = INST.aluOp;
 
-		// Independant pipeline for each instruction
+		// Independant pipeline for each instruction - REV
 		int cyclesInPipeline = 0;
 		instruction output = pipeline[0];
 

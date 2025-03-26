@@ -1,12 +1,11 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define latencyMUL 3
-#define latencyMULH 5
+#define latencyMUL 10
+#define latencyMULH 2 
 #define latencyMULHU 1
 #define latencyMULHSU 1
 constexpr int pipelineSizeMUL = std::max({latencyMUL,latencyMULH,latencyMULHU,latencyMULHSU});
-
 
 #define BENCHMARKS 0
 
@@ -17,7 +16,7 @@ constexpr int pipelineSizeMUL = std::max({latencyMUL,latencyMULH,latencyMULHU,la
 #endif 
 
 /*
-  REV - Mod hazard detection - tanto en mul como decod
+ REV - Mod hazard detection - tanto en mul como decod
  REV - Org cond decod
  REV - Decod lat 2 mul ??  
 
