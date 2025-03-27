@@ -87,7 +87,7 @@ void mul::multiplication() {
 		case MULHSU:
 			tmp = ((sc_int<32>)A) * ((sc_uint<32>)B);
 			INST.aluOut = INST.dataOut = tmp(63, 32);
-			strcpy(INST.desc, "mulhu");
+			strcpy(INST.desc, "mulhsu");
 			break;
 
 		default:
