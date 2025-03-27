@@ -72,7 +72,8 @@ void alu::registro(){
 		case MUL:			
 		case MULH:		
 		case MULHU:		
-		case MULHSU:	flagNOP = true;	 
+		case MULHSU:	
+		case DIV:		flagNOP = true;	 
 						break;
 
 		default: cerr << "Error at the ALU, unknown ALU opcode " << opCode << endl;

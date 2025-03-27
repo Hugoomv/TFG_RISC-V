@@ -1,17 +1,29 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define latencyMUL 10
-#define latencyMULH 2 
-#define latencyMULHU 1
-#define latencyMULHSU 1
-constexpr int pipelineSizeMUL = std::max({latencyMUL,latencyMULH,latencyMULHU,latencyMULHSU});
 
+// GENERAL
 #define BENCHMARKS 0
 
 #define DEBUG 0
 
 #define TRAZAS 0
+
+
+// MUL MODULE
+#define latencyMUL		10
+#define latencyMULH		2 
+#define latencyMULHU	1
+#define latencyMULHSU	1
+#define latencyDIV		1
+
+constexpr int pipelineSizeMUL = std::max({latencyMUL,latencyMULH,latencyMULHU,latencyMULHSU, latencyDIV});
+
+/* Si 1 -> Solo puede estar ejecutandose una division/multiplicacion 
+* y no puede entrar ninguna otra op
+* Si 0 -> Solo puede haber una div, pero puede entrar otra mul
+*/
+#define SOLO_1OP 1
 
 #endif 
 

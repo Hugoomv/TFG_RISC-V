@@ -90,6 +90,11 @@ void mul::multiplication() {
 			strcpy(INST.desc, "mulhsu");
 			break;
 
+		case DIV:
+			INST.aluOut = INST.dataOut = (B == 0) ? 0 : ((sc_int<32>)A) / ((sc_int<32>)B);
+			strcpy(INST.desc, "div");
+			break;
+
 		default:
 			INST = createNOP();
 			break;
