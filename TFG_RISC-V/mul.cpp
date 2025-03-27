@@ -34,7 +34,7 @@ void mul::multiplication() {
 		target = INST.rd;
 		opCode = INST.aluOp;
 
-		// Independant pipeline for each instruction - REV
+		// Independant pipeline for each instruction 
 		int cyclesInPipeline = 0;
 		instruction output = pipeline[0];
 
@@ -48,11 +48,19 @@ void mul::multiplication() {
 				pipeline[i] = createNOP();
 				break;
 			}
-
 		}
 
 		instOut.write(output);
 
+#if SOLO_1OP
+		if (output.aluOp != 0) {
+			flag1op = false;
+		}
+#else
+		if (output.aluOp == 20) {
+			flagDiv = false;
+		}
+#endif
 
 		// Loop to shift pipeline content
 		// Pos 0: exit
@@ -93,6 +101,9 @@ void mul::multiplication() {
 		case DIV:
 			INST.aluOut = INST.dataOut = (B == 0) ? 0 : ((sc_int<32>)A) / ((sc_int<32>)B);
 			strcpy(INST.desc, "div");
+#if !SOLO_1OP
+			flagDiv = true;
+#endif
 			break;
 
 		default:
@@ -102,6 +113,14 @@ void mul::multiplication() {
 
 		// New instruction
 		pipeline[pipelineSizeMUL - 1] = INST;
+
+
+#if SOLO_1OP
+		if (INST.aluOp != 0) {
+			flag1op = true;
+		}
+#endif
+
 	} 
 	fire.write(!fire.read());
 }
@@ -129,7 +148,6 @@ void mul::hazardDetection() {
 		}
 	}
 
-	// REV - Ben aqui??
 	if (instOut.read().wReg) {
 
 		if (rs1 == instOut.read().rd) {
@@ -141,16 +159,27 @@ void mul::hazardDetection() {
 		}
 	}
 
-	
-	// REV
 	if (pipelineSizeMUL == 2 && I.read().wReg) {
 
 		int opCode = I.read().aluOp;
-		if (opCode == 16 || opCode == 17 || opCode == 18 || opCode == 19) {
+		// REV
+		if (opCode == 16 || opCode == 17 || opCode == 18 || opCode == 19 || opCode == 20 ) {
 			aux1 = true;
 			aux2 = true;
 		}
 	}
+
+#if SOLO_1OP
+	if (flag1op) {
+		aux1 = true;
+		aux2 = true;
+	}
+#else
+	if (flagDiv && (I.read().aluOp == 20)) {
+		aux1 = true;
+		aux2 = true;
+	}
+#endif
 
 	hzrdRs1.write(aux1);
 	hzrdRs2.write(aux2);
