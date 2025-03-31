@@ -29,3 +29,9 @@ int getLatencyOp(int op) {
 	default:		return 1;				break;
 	}
 }
+
+void swapVars(sc_int<32> * a, sc_int<32> * b) {
+	(*a) = (*a) + (*b);
+	(*b) = (*a) - (*b);
+	(*a) = (*a) - (*b);
+}
