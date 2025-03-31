@@ -284,16 +284,6 @@ void decod::decoding() {
 	HZ1.write(probe1);
 	HZ2.write(probe2);
 
-	/*
-	// REV
-	if (pipelineSize == 2){
-		int opCode = I.read().aluOp;
-		if (opCode == 16 || opCode == 17 || opCode == 18 || opCode == 19) {
-			hRs1 = true;
-			hRs2 = true;
-		}
-	}*/
-
 	if ((uRs1 && hRs1) || (uRs2 && hRs2)) {		// hazard
 		hazard.write(true);
 		bubble.write(false);
