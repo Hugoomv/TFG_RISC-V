@@ -35,3 +35,22 @@ void swapVars(sc_int<32> * a, sc_int<32> * b) {
 	(*b) = (*a) - (*b);
 	(*a) = (*a) - (*b);
 }
+
+
+bool isMulModuleOp(int op) {
+	switch (op) {
+	case MUL:
+	case MULH:
+	case MULHSU:
+	case MULHU:
+	case DIV:
+	case DIVU:
+	case REM:
+	case REMU:
+		return true;
+		break;
+	default:
+		return false;
+		break;
+	}
+}

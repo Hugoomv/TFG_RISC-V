@@ -7,6 +7,8 @@ instruction createNOP();
 
 int getLatencyOp(int op);
 
-void swapVars(sc_int<32>* a, sc_int<32>* b);
+//void swapVars(sc_int<32>* a, sc_int<32>* b);
+
+bool isMulModuleOp(int op);
 
 #endif
