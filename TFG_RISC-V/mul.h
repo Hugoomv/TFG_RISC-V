@@ -43,16 +43,12 @@ public:
 private:
 
 	instruction INST;
-
 	sc_signal < bool > fire;
 
-#if SOLO_1OP
-	bool flag1op = false;
-#else 
-	bool flagDiv = false;
-#endif
+	instruction pipeline[pipelineSizeMul];
 
-	instruction pipeline[pipelineSizeMUL];
+	bool pipelineFull = false;
+	bool flagDiv = false;
 
 };
 

@@ -46,21 +46,21 @@ void mul::multiplication() {
 
 				output = pipeline[i];
 				pipeline[i] = createNOP();
+
+				// Sale una div
+				if (pipeline[i].aluOp == 20) {
+					flagDiv = false;
+					pipelineFull = false;
+				}
 				break;
 			}
 		}
 
-		instOut.write(output);
-
-#if SOLO_1OP
 		if (output.aluOp != 0) {
-			flag1op = false;
+			pipelineFull = false;
 		}
-#else
-		if (output.aluOp == 20) {
-			flagDiv = false;
-		}
-#endif
+
+		instOut.write(output);
 
 		// Loop to shift pipeline content
 		// Pos 0: exit
@@ -99,11 +99,10 @@ void mul::multiplication() {
 			break;
 
 		case DIV:
+			// excepcion b = 0
 			INST.aluOut = INST.dataOut = (B == 0) ? 0 : ((sc_int<32>)A) / ((sc_int<32>)B);
 			strcpy(INST.desc, "div");
-#if !SOLO_1OP
 			flagDiv = true;
-#endif
 			break;
 
 		default:
@@ -112,14 +111,7 @@ void mul::multiplication() {
 		}
 
 		// New instruction
-		pipeline[pipelineSizeMUL - 1] = INST;
-
-
-#if SOLO_1OP
-		if (INST.aluOp != 0) {
-			flag1op = true;
-		}
-#endif
+		pipeline[pipelineSizeMul - 1] = INST;
 
 	} 
 	fire.write(!fire.read());
@@ -129,6 +121,7 @@ void mul::hazardDetection() {
 
 	int rs1 = rs1In.read();
 	int rs2 = rs2In.read();
+
 
 	bool aux1 = false, 
 		 aux2 = false;
@@ -159,25 +152,33 @@ void mul::hazardDetection() {
 		}
 	}
 
-	if (pipelineSizeMUL == 2 && I.read().wReg) {
-
-		int opCode = I.read().aluOp;
-		// REV
-		if (opCode == 16 || opCode == 17 || opCode == 18 || opCode == 19 || opCode == 20 ) {
-			aux1 = true;
-			aux2 = true;
-		}
-	}
-
 #if SOLO_1OP
-	if (flag1op) {
-		aux1 = true;
-		aux2 = true;
+	int opCode = I.read().aluOp;
+	if (opCode == 16 || opCode == 17 || opCode == 18 || opCode == 19 || opCode == 20) {
+		aux1 = aux2 = true;
+		pipelineFull = true;
 	}
+	else if (!pipelineFull) {
+		aux1 = aux2 = false;
+	}
+	else {
+		aux1 = aux2 = true;
+	}
+	
 #else
-	if (flagDiv && (I.read().aluOp == 20)) {
-		aux1 = true;
-		aux2 = true;
+
+	int opCode = I.read().aluOp;
+
+	if (flagDiv && (opCode == 16 || opCode == 17 || opCode == 18 || opCode == 19)) {
+		aux1 = aux2 = true;
+	}
+	else if (opCode == 16 || opCode == 17 || opCode == 18 || opCode == 19 || opCode == 20) {
+		for (int i = 0; i < pipelineSizeMul; i++) {
+			if (pipeline[i].aluOp == 20 || pipeline[i].aluOp == 19) {
+				aux1 = aux2 = true;
+				break;
+			}
+		}
 	}
 #endif
 
