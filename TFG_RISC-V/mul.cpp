@@ -47,7 +47,7 @@ void mul::multiplication() {
 				output = pipeline[i];
 				pipeline[i] = createNOP();
 
-				// Sale una div
+				// Div in output
 				if (pipeline[i].aluOp == 20) {
 					flagDiv = false;
 					pipelineFull = false;
@@ -99,9 +99,41 @@ void mul::multiplication() {
 			break;
 
 		case DIV:
-			// excepcion b = 0
-			INST.aluOut = INST.dataOut = (B == 0) ? 0 : ((sc_int<32>)A) / ((sc_int<32>)B);
+			if (B == 0) {
+				cerr << "Divider can't be 0 " << endl;
+			}
+			INST.aluOut = INST.dataOut = ((sc_int<32>)A) / ((sc_int<32>)B);
 			strcpy(INST.desc, "div");
+			flagDiv = true;
+			break;
+
+		case DIVU:
+			if (B == 0) {
+				cerr << "Divider can't be 0 " << endl;
+			}
+			INST.aluOut = INST.dataOut =((sc_uint<32>)A) / ((sc_uint<32>)B);
+			strcpy(INST.desc, "divu");
+			flagDiv = true;
+			break;
+
+
+		case REM:
+			if (B == 0) {
+				cerr << "Divider can't be 0 " << endl;
+			}
+			INST.aluOut = INST.dataOut = ((sc_int<32>)A) % ((sc_int<32>)B);
+			strcpy(INST.desc, "rem");
+			flagDiv = true;
+			break;
+
+
+
+		case REMU:
+			if (B == 0) {
+				cerr << "Divider can't be 0 " << endl;
+			}
+			INST.aluOut = INST.dataOut =  ((sc_uint<32>)A) % ((sc_uint<32>)B);
+			strcpy(INST.desc, "remu");
 			flagDiv = true;
 			break;
 
