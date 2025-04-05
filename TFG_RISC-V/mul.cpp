@@ -48,7 +48,8 @@ void mul::multiplication() {
 				pipeline[i] = createNOP();
 
 				// Div in output
-				if (pipeline[i].aluOp == 20) {
+				if (pipeline[i].aluOp == DIV || pipeline[i].aluOp == DIVU || 
+					pipeline[i].aluOp == REM || pipeline[i].aluOp == REMU ) {
 					flagDiv = false;
 					pipelineFull = false;
 				}
@@ -116,7 +117,6 @@ void mul::multiplication() {
 			flagDiv = true;
 			break;
 
-
 		case REM:
 			if (B == 0) {
 				cerr << "Divider can't be 0 " << endl;
@@ -125,8 +125,6 @@ void mul::multiplication() {
 			strcpy(INST.desc, "rem");
 			flagDiv = true;
 			break;
-
-
 
 		case REMU:
 			if (B == 0) {
@@ -159,7 +157,7 @@ void mul::hazardDetection() {
 		 aux2 = false;
 
 	// Prevents RAW
-	for (int i = 0; i < pipelineSizeMul; i++) {// rev pipelineSizeMul-1
+	for (int i = 0; i < pipelineSizeMul; i++) {
 
 		if (pipeline[i].wReg) {
 
@@ -186,7 +184,8 @@ void mul::hazardDetection() {
 
 #if SOLO_1OP
 	int opCode = I.read().aluOp;
-	if (opCode == 16 || opCode == 17 || opCode == 18 || opCode == 19 || opCode == 20) {
+
+	if (isMulModuleOp(opCode)) {
 		aux1 = aux2 = true;
 		pipelineFull = true;
 	}
@@ -201,12 +200,12 @@ void mul::hazardDetection() {
 
 	int opCode = I.read().aluOp;
 
-	if (flagDiv && (opCode == 16 || opCode == 17 || opCode == 18 || opCode == 19)) {
+	if (flagDiv && isMulModuleOp(opCode)) {
 		aux1 = aux2 = true;
 	}
-	else if (opCode == 16 || opCode == 17 || opCode == 18 || opCode == 19 || opCode == 20) {
+	else if (isMulModuleOp(opCode)) {
 		for (int i = 0; i < pipelineSizeMul; i++) {
-			if (pipeline[i].aluOp == 20 || pipeline[i].aluOp == 19) {
+			if ( isMulModuleOp(pipeline[i].aluOp)) {
 				aux1 = aux2 = true;
 				break;
 			}
