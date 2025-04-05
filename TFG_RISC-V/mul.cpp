@@ -35,14 +35,14 @@ void mul::multiplication() {
 		opCode = INST.aluOp;
 
 		// Independant pipeline for each instruction 
-		int cyclesRemaining = 0;
+		int cyclesInPipeline = 0;
 		instruction output = pipeline[0];
 
 		for (int i = 0; i < pipelineSizeMul - 1; i++) {
 
-			cyclesRemaining = pipelineSizeMul - i;
+			cyclesInPipeline = pipelineSizeMul - i;
 
-			if (pipeline[i].wReg && getLatencyOp(pipeline[i].aluOp) <= cyclesRemaining) {
+			if (pipeline[i].wReg && getLatencyOp(pipeline[i].aluOp) <= cyclesInPipeline) {
 
 				output = pipeline[i];
 				pipeline[i] = createNOP();

@@ -46,6 +46,8 @@ private:
 #define SUB 8
 #define SRA 13
 
+
+// MUL MODULE
 #define MUL 16
 #define MULH 17
 #define MULHSU 18
