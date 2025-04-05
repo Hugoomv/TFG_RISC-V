@@ -19,7 +19,7 @@ void mul::multiplication() {
 		instOut.write(INST); 
 
 		// empty pipeline
-		for (int i = 0; i < pipelineSizeMUL; i++) {
+		for (int i = 0; i < pipelineSizeMul; i++) {
 			pipeline[i] = createNOP();
 		}
 
@@ -35,14 +35,14 @@ void mul::multiplication() {
 		opCode = INST.aluOp;
 
 		// Independant pipeline for each instruction 
-		int cyclesInPipeline = 0;
+		int cyclesRemaining = 0;
 		instruction output = pipeline[0];
 
-		for (int i = 0; i < pipelineSizeMUL - 1; i++) {
+		for (int i = 0; i < pipelineSizeMul - 1; i++) {
 
-			cyclesInPipeline = pipelineSizeMUL - i;
+			cyclesRemaining = pipelineSizeMul - i;
 
-			if (pipeline[i].wReg && getLatencyOp(pipeline[i].aluOp) <= cyclesInPipeline) {
+			if (pipeline[i].wReg && getLatencyOp(pipeline[i].aluOp) <= cyclesRemaining) {
 
 				output = pipeline[i];
 				pipeline[i] = createNOP();
@@ -65,7 +65,7 @@ void mul::multiplication() {
 		// Loop to shift pipeline content
 		// Pos 0: exit
 		// Pos latencyMUL-1: newElement
-		for (int i = 0; i < pipelineSizeMUL - 1; i++) {
+		for (int i = 0; i < pipelineSizeMul - 1; i++) {
 			pipeline[i] = pipeline[i + 1];
 		}
 
@@ -134,7 +134,7 @@ void mul::hazardDetection() {
 		 aux2 = false;
 
 	// Prevents RAW
-	for (int i = 0; i < pipelineSizeMUL; i++) {
+	for (int i = 0; i < pipelineSizeMul; i++) {// rev pipelineSizeMul-1
 
 		if (pipeline[i].wReg) {
 

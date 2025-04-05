@@ -11,13 +11,15 @@
 
 
 // MUL MODULE
-#define latencyMUL		10
-#define latencyMULH		2 
+#define latencyMUL		2
+#define latencyMULH		2
 #define latencyMULHU	1
 #define latencyMULHSU	1
-#define latencyDIV		1
+#define latencyDIV		12
 
-constexpr int pipelineSizeMUL = std::max({latencyMUL,latencyMULH,latencyMULHU,latencyMULHSU, latencyDIV});
+// rev todos 2 ej xogar con eso
+
+constexpr int pipelineSizeMul = std::max({latencyMUL,latencyMULH,latencyMULHU,latencyMULHSU, latencyDIV});
 
 /* Si 1 -> Solo puede estar ejecutandose una division/multiplicacion 
 * y no puede entrar ninguna otra op
@@ -27,15 +29,10 @@ constexpr int pipelineSizeMUL = std::max({latencyMUL,latencyMULH,latencyMULHU,la
 
 #endif 
 
+// AUX PRINTS
 /*
- REV - Mod hazard detection - tanto en mul como decod
- REV - Org cond decod
- REV - Decod lat 2 mul ??  
-
  cout << hex << INST.address << "  " << INST.rd << "   " << INST.desc << "  " << INST.opA << " " << INST.opB << "  " << tiempo << endl;
 
  //printf("xxx.cpp: M %2d <- %08x   @ %.0lf   -  %08x   %s   %08x op %08x \n", target, regs[target].to_int(), sc_time_stamp().to_double() / 1000.0, backInst.address.to_int(), backInst.desc, backInst.opA.to_int(), backInst.opB.to_int());
-
-
 
 */
