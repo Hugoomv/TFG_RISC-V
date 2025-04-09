@@ -201,15 +201,15 @@ void mul::hazardDetection() {
 	int opCode = I.read().aluOp;
 
 	if (flagDiv && isMulModuleOp(opCode)) {
-		aux1 = aux2 = true;
-	}
-	else if (isMulModuleOp(opCode)) {
-		for (int i = 0; i < pipelineSizeMul; i++) {
-			if ( isMulModuleOp(pipeline[i].aluOp)) {
-				aux1 = aux2 = true;
-				break;
-			}
+		if (opCode == DIV || opCode == DIVU || opCode == REM || opCode == REMU) {
+			aux1 = aux2 = true;
 		}
+		else {
+			aux1 = aux2 = false;
+		}
+	}
+	else {
+		aux1 = aux2 = false;
 	}
 #endif
 
