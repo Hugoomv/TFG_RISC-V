@@ -29,7 +29,6 @@ public:
 		instDecod = new decod("instDecod");
 		instAlu = new alu("instAlu");
 		instDataMem = new dataMem("instDataMem");
-
 		instMul = new mul("instMul");
 
 
@@ -59,11 +58,13 @@ public:
 		instAlu->rst(rst);
 		instAlu->I(iDX);
 		instAlu->instOut(iXM);
+		instAlu->readyFenceAluOut(readyFenceAlu);
 
 		instDataMem->clk(clk);
 		instDataMem->rst(rst);
 		instDataMem->I(iXM);
 		instDataMem->instOut(iMW);
+		instDataMem->readyFenceMemOut(readyFenceMem);
 
 		// MUL MODULE
 		instMul->clk(clk);
@@ -80,11 +81,15 @@ public:
 		instMul->rs1In(rs1);
 		instMul->rs2In(rs2);
 
-		instMul->hzrdRs1(hzrdRs1);
-		instMul->hzrdRs2(hzrdRs2);
+		instMul->hzrdRs1Out(hzrdRs1);
+		instMul->hzrdRs2Out(hzrdRs2);
+		instMul->readyFenceMulOut(readyFenceMul);
 
-		instDecod->hzrdRs1(hzrdRs1);
-		instDecod->hzrdRs2(hzrdRs2);
+		instDecod->hzrdRs1In(hzrdRs1);
+		instDecod->hzrdRs2In(hzrdRs2);
+		instDecod->readyFenceMulIn(readyFenceMul);
+		instDecod->readyFenceAluIn(readyFenceAlu);
+		instDecod->readyFenceMemIn(readyFenceMem);
 
 
 		MEM = new mem; 
@@ -111,6 +116,7 @@ public:
 
 	sc_signal < sc_uint<5> >	rs1, rs2;
 	sc_signal < bool >			hzrdRs1, hzrdRs2;
+	sc_signal < bool >			readyFenceMul,readyFenceAlu,readyFenceMem;
 
 /*	sc_signal< sc_int<32> >		wbValue, opA, opB, rs2_DescodAlu, rs2_AluDataMem;
 	sc_signal< sc_uint<5> >		mRegEX, mRegMem, mRegWB;

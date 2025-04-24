@@ -156,6 +156,9 @@ void mul::hazardDetection() {
 	bool aux1 = false, 
 		 aux2 = false;
 
+	int cont = 0;
+	bool emptyPipeline = false;
+
 	// Prevents RAW
 	for (int i = 0; i < pipelineSizeMul; i++) {
 
@@ -169,6 +172,9 @@ void mul::hazardDetection() {
 				aux2 = true;
 			}
 		}
+		else {
+			cont++;
+		}
 	}
 
 	if (instOut.read().wReg) {
@@ -181,38 +187,56 @@ void mul::hazardDetection() {
 			aux2 = true;
 		}
 	}
+	else {
+		emptyPipeline = true;
+	}
 
 #if SOLO_1OP
-	int opCode = I.read().aluOp;
 
-	if (isMulModuleOp(opCode)) {
-		aux1 = aux2 = true;
-		pipelineFull = true;
-	}
-	else if (!pipelineFull) {
-		aux1 = aux2 = false;
-	}
-	else {
-		aux1 = aux2 = true;
-	}
-	
-#else
+	if (I.read().wReg) {
+		int opCode = I.read().aluOp;
 
-	int opCode = I.read().aluOp;
-
-	if (flagDiv && isMulModuleOp(opCode)) {
-		if (opCode == DIV || opCode == DIVU || opCode == REM || opCode == REMU) {
+		if (isMulModuleOp(opCode)) {
 			aux1 = aux2 = true;
+			pipelineFull = true;
 		}
-		else {
+		else if (!pipelineFull) {
 			aux1 = aux2 = false;
 		}
 	}
 	else {
+		aux1 = aux2 = true;
+		emptyPipeline = emptyPipeline && true;
+	}
+	
+	
+#else
+
+	if (I.read().wReg) {
+		int opCode = I.read().aluOp;
+
+		if (flagDiv && isMulModuleOp(opCode)) {
+			if (opCode == DIV || opCode == DIVU || opCode == REM || opCode == REMU) {
+				aux1 = aux2 = true;
+			}
+			else {
+				aux1 = aux2 = false;
+			}
+		}
+	}
+	else {
 		aux1 = aux2 = false;
+		emptyPipeline = emptyPipeline && true;
 	}
 #endif
 
-	hzrdRs1.write(aux1);
-	hzrdRs2.write(aux2);
+	if (cont == pipelineSizeMul && emptyPipeline) {
+		readyFenceMulOut.write(true);
+	}
+	else {
+		readyFenceMulOut.write(false);
+	}
+
+	hzrdRs1Out.write(aux1);
+	hzrdRs2Out.write(aux2);
 }

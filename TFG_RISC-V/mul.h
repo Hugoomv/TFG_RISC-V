@@ -15,7 +15,9 @@ public:
 
 	// Hazard detection from Decod
 	sc_in< sc_uint<5> > rs1In, rs2In;
-	sc_out< bool > hzrdRs1, hzrdRs2;
+	sc_out< bool > hzrdRs1Out, hzrdRs2Out;
+
+	sc_out <bool> readyFenceMulOut;
 
 	sc_out<instruction> instOut;
 

@@ -76,6 +76,13 @@ void dataMem::registro(){
 					exit(-1);
 		};
 
+		if (!(INST.wReg)) {
+			readyFenceMemOut.write(true);
+		}
+		else {
+			readyFenceMemOut.write(false);
+		}
+
 
 		instOut.write(INST);
 

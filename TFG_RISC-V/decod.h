@@ -14,7 +14,8 @@ public:
 	sc_in< sc_uint<32> >   	PCin;
 	sc_in< instruction >   	fbEx, fbMem, fbWB, fbMul;
 
-	sc_in < bool >			hzrdRs1, hzrdRs2;
+	sc_in < bool >			hzrdRs1In, hzrdRs2In;
+	sc_in < bool >			readyFenceMulIn,readyFenceAluIn,readyFenceMemIn;
 
 	sc_out<instruction>		instOut; 
 	sc_out<bool>			hazard, bubble;
@@ -43,8 +44,6 @@ public:
 
 	unsigned int* numInst; 
 
-	sc_signal<sc_uint<2>> HZ1, HZ2; 
-
 	bool idx_rs1;
 	bool ixm_rs1;
 	bool imw_rs1;
@@ -65,8 +64,6 @@ private:
 	sc_uint<5> 	C_aluOp;
 	sc_uint<4> 	C_memOp;
 	sc_int<32> 	C_opA, C_opB, C_rs2;
-
-	short		hazardContMul = 0;
 
 	double tiempo;
 
