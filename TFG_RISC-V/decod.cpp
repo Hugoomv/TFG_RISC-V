@@ -62,18 +62,18 @@ void decod::decoding() {
 
 	INST = inst.read();
 
-	I = INST.I; 
-	INST.rs1 = I(19, 15);
-	INST.rs2 = I(24, 20);
-
-	// RS2 fallo porque non ten nada??
+	I = INST.I; ;
 
 	// REV A MELLORAR
 	// SI É UNHA INS INMD
 	if (I(6, 2) == 28 && I(14, 12) > 4) {
+		INST.rs1 = I(19, 15);
+		INST.rs2 = I(11, 7); // en verdad rd
 		rs1 = INST.rs1;
 	}
 	else {
+		INST.rs1 = I(19, 15);
+		INST.rs2 = I(24, 20);
 		rs1 = regs[I(19, 15)];
 		rs2 = regs[I(24, 20)];
 	}
