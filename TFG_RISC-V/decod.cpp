@@ -65,8 +65,18 @@ void decod::decoding() {
 	I = INST.I; 
 	INST.rs1 = I(19, 15);
 	INST.rs2 = I(24, 20);
-	rs1 = regs[I(19, 15)];
-	rs2 = regs[I(24, 20)];
+
+	// RS2 fallo porque non ten nada??
+
+	// REV A MELLORAR
+	// SI É UNHA INS INMD
+	if (I(6, 2) == 28 && I(14, 12) > 4) {
+		rs1 = INST.rs1;
+	}
+	else {
+		rs1 = regs[I(19, 15)];
+		rs2 = regs[I(24, 20)];
+	}
 
 	// Hazard Detection with MUL module
 	rs1Out.write(INST.rs1);
@@ -236,14 +246,62 @@ void decod::decoding() {
 		uRs1 = true;	uRs2 = true;
 		break;
 	case 3: // Fence
-	case 28: // ECALL, EBREAK
+		break;
+	case 28: // ECALL, EBREAK, CSRR 
 
-		preAlu = 0; preMem = 15;
-		INST.rs1 = INST.rs2 = C_rd = 0x1f; C_wReg = false;
-		INST.opA = INST.opB = INST.val2 = INST.aluOut = INST.dataOut = 0x0000dead;
-		strcpy(INST.desc, "sys"); 
-		preWrite = false;
-		//////cerr << "Control instructions are not supported at current time" << endl;
+		switch (I(14, 12)){
+
+		case 1: // CSRRW
+			int rd = I(11, 7);
+			int csr = I(31,27);
+
+			regs[rd] = regs[csr];
+			regs[csr] = regs[rs1];
+			break;
+		case 2: // CSRRS
+			int rd = I(11, 7);
+			int csr = I(31, 27);
+
+			regs[rd] = regs[csr];
+			regs[csr] = (regs[rs1] | regs[csr]);
+			break;
+		case 3: // CSRRC
+			int rd = I(11, 7);
+			int csr = I(31, 27);
+
+			regs[rd] = regs[csr];
+			regs[csr] = (regs[rs1] & (~regs[csr]));
+			break;
+		case 5: // CSRRWi
+			int rd = I(11, 7);
+			int csr = I(31, 27);
+
+			regs[rd] = regs[csr];
+			regs[csr] = rs1;
+			break;
+		case 6: // CSRRSi
+			int rd = I(11, 7);
+			int csr = I(31, 27);
+
+			regs[rd] = regs[csr];
+			regs[csr] = (rs1 | regs[csr]);
+			break;
+		case 7: // CSRRCi
+			int rd = I(11, 7);
+			int csr = I(31, 27);
+
+			regs[rd] = regs[csr];
+			regs[csr] = (rs1 & (~regs[csr]));
+			break;
+		default:
+			preAlu = 0; preMem = 15;
+			INST.rs1 = INST.rs2 = C_rd = 0x1f; C_wReg = false;
+			INST.opA = INST.opB = INST.val2 = INST.aluOut = INST.dataOut = 0x0000dead;
+			strcpy(INST.desc, "sys");
+			preWrite = false;
+			break;
+		}
+		
 		break;
 	default:
 		cerr << "Error, opCode " << opCode << " not supported" << endl;
