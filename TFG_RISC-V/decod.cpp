@@ -58,6 +58,8 @@ void decod::decoding() {
 	bool			uRs1, uRs2, hRs1, hRs2, jump, preWrite, flagFence = false;
 	double tiempo;
 
+	int rd = 0, csr = 0;
+
 	tiempo = sc_time_stamp().to_double() / 1000.0;
 
 	INST = inst.read();
@@ -254,48 +256,49 @@ void decod::decoding() {
 		switch (I(14, 12)){
 
 		case 1: // CSRRW
-			int rd = I(11, 7);
-			int csr = I(31,27);
+			rd = I(11, 7);
+			csr = I(31,27);
 
 			regs[rd] = regs[csr];
 			regs[csr] = regs[rs1];
 			break;
 		case 2: // CSRRS
-			int rd = I(11, 7);
-			int csr = I(31, 27);
+			rd = I(11, 7);
+			csr = I(31, 27);
 
 			regs[rd] = regs[csr];
 			regs[csr] = (regs[rs1] | regs[csr]);
 			break;
 		case 3: // CSRRC
-			int rd = I(11, 7);
-			int csr = I(31, 27);
+			rd = I(11, 7);
+			csr = I(31, 27);
 
 			regs[rd] = regs[csr];
 			regs[csr] = (regs[rs1] & (~regs[csr]));
 			break;
 		case 5: // CSRRWi
-			int rd = I(11, 7);
-			int csr = I(31, 27);
+			rd = I(11, 7);
+			csr = I(31, 27);
 
 			regs[rd] = regs[csr];
 			regs[csr] = rs1;
 			break;
 		case 6: // CSRRSi
-			int rd = I(11, 7);
-			int csr = I(31, 27);
+			rd = I(11, 7);
+			csr = I(31, 27);
 
 			regs[rd] = regs[csr];
 			regs[csr] = (rs1 | regs[csr]);
 			break;
 		case 7: // CSRRCi
-			int rd = I(11, 7);
-			int csr = I(31, 27);
+			rd = I(11, 7);
+			csr = I(31, 27);
 
 			regs[rd] = regs[csr];
 			regs[csr] = (rs1 & (~regs[csr]));
 			break;
 		default:
+			rd = csr = 0;
 			break;
 		}
 

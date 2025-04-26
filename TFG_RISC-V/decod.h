@@ -37,7 +37,7 @@ public:
 		strcpy(INST.desc, "???");
 
 		SC_METHOD(decoding);
-		sensitive << fire << hzrdRs1 << hzrdRs2;
+		sensitive << fire << hzrdRs1In << hzrdRs2In;
 		SC_METHOD(registros);
 		sensitive << clk.pos();
 	}
