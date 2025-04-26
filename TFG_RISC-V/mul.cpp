@@ -205,7 +205,6 @@ void mul::hazardDetection() {
 		}
 	}
 	else {
-		aux1 = aux2 = true;
 		emptyPipeline = emptyPipeline && true;
 	}
 	
@@ -229,7 +228,7 @@ void mul::hazardDetection() {
 		emptyPipeline = emptyPipeline && true;
 	}
 #endif
-
+	
 	if (cont == pipelineSizeMul && emptyPipeline) {
 		readyFenceMulOut.write(true);
 	}
