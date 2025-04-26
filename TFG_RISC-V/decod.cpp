@@ -12,7 +12,6 @@ void decod::registros(){		// este método implementa el banco de registros
 		for(int i=0; i<32; ++i)	regs[i] = 0;
 	}else{
 
-		// In case of receiving from MEM and MUL, MUL will be written and MEM ignored -- REV
 		backInst = fbMul.read();
 
 		if (backInst.wReg) {
@@ -253,32 +252,41 @@ void decod::decoding() {
 		break;
 	case 28: // ECALL, EBREAK, CSRR 
 
-		switch (I(14, 12)){
+		switch (I(14, 12)) {
 
 		case 1: // CSRRW
 			rd = I(11, 7);
-			csr = I(31,27);
+			csr = I(31, 27);
+
+			printf("Hola caracola\n");
 
 			regs[rd] = regs[csr];
-			regs[csr] = regs[rs1];
+			regs[csr] = rs1;
+
 			break;
 		case 2: // CSRRS
 			rd = I(11, 7);
 			csr = I(31, 27);
 
+			printf("Hola caracola1\n");
+
 			regs[rd] = regs[csr];
-			regs[csr] = (regs[rs1] | regs[csr]);
+			regs[csr] = (rs1 | regs[csr]);
 			break;
 		case 3: // CSRRC
 			rd = I(11, 7);
 			csr = I(31, 27);
 
+			printf("Hola caracola2\n");
+
 			regs[rd] = regs[csr];
-			regs[csr] = (regs[rs1] & (~regs[csr]));
+			regs[csr] = (rs1 & (~regs[csr]));
 			break;
 		case 5: // CSRRWi
 			rd = I(11, 7);
 			csr = I(31, 27);
+
+			printf("Hola caracola3\n");
 
 			regs[rd] = regs[csr];
 			regs[csr] = rs1;
@@ -287,6 +295,8 @@ void decod::decoding() {
 			rd = I(11, 7);
 			csr = I(31, 27);
 
+			printf("Hola caracola4\n");
+
 			regs[rd] = regs[csr];
 			regs[csr] = (rs1 | regs[csr]);
 			break;
@@ -294,20 +304,24 @@ void decod::decoding() {
 			rd = I(11, 7);
 			csr = I(31, 27);
 
+			printf("Hola caracola5\n");
+
 			regs[rd] = regs[csr];
 			regs[csr] = (rs1 & (~regs[csr]));
 			break;
 		default:
 			rd = csr = 0;
+			
 			break;
 		}
 
+		// REV - Aqui??
 		preAlu = 0; preMem = 15;
 		INST.rs1 = INST.rs2 = C_rd = 0x1f; C_wReg = false;
 		INST.opA = INST.opB = INST.val2 = INST.aluOut = INST.dataOut = 0x0000dead;
 		strcpy(INST.desc, "sys");
 		preWrite = false;
-		
+
 		break;
 	default:
 		cerr << "Error, opCode " << opCode << " not supported" << endl;
