@@ -259,8 +259,6 @@ void decod::decoding() {
 			rd = I(11, 7);
 			csr = I(31, 27);
 
-			printf("Hola caracola\n");
-
 			regs[rd] = regs[csr];
 			regs[csr] = rs1;
 
@@ -269,16 +267,12 @@ void decod::decoding() {
 			rd = I(11, 7);
 			csr = I(31, 27);
 
-			printf("Hola caracola1\n");
-
 			regs[rd] = regs[csr];
 			regs[csr] = (rs1 | regs[csr]);
 			break;
 		case 3: // CSRRC
 			rd = I(11, 7);
 			csr = I(31, 27);
-
-			printf("Hola caracola2\n");
 
 			regs[rd] = regs[csr];
 			regs[csr] = (rs1 & (~regs[csr]));
@@ -287,16 +281,12 @@ void decod::decoding() {
 			rd = I(11, 7);
 			csr = I(31, 27);
 
-			printf("Hola caracola3\n");
-
 			regs[rd] = regs[csr];
 			regs[csr] = rs1;
 			break;
 		case 6: // CSRRSi
 			rd = I(11, 7);
 			csr = I(31, 27);
-
-			printf("Hola caracola4\n");
 
 			regs[rd] = regs[csr];
 			regs[csr] = (rs1 | regs[csr]);
@@ -305,18 +295,14 @@ void decod::decoding() {
 			rd = I(11, 7);
 			csr = I(31, 27);
 
-			printf("Hola caracola5\n");
-
 			regs[rd] = regs[csr];
 			regs[csr] = (rs1 & (~regs[csr]));
 			break;
 		default:
 			rd = csr = 0;
-			
 			break;
 		}
 
-		// REV - Aqui??
 		preAlu = 0; preMem = 15;
 		INST.rs1 = INST.rs2 = C_rd = 0x1f; C_wReg = false;
 		INST.opA = INST.opB = INST.val2 = INST.aluOut = INST.dataOut = 0x0000dead;
