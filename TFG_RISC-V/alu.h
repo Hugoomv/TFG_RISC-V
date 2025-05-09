@@ -12,6 +12,7 @@ sc_in<bool> clk, rst;
 
 sc_in< instruction >	I; 
 sc_out < instruction >	instOut; 
+sc_out < bool >	readyFenceAluOut; 
 
   void registro();
 

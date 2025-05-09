@@ -12,7 +12,6 @@ void decod::registros(){		// este método implementa el banco de registros
 		for(int i=0; i<32; ++i)	regs[i] = 0;
 	}else{
 
-		// In case of receiving from MEM and MUL, MUL will be written and MEM ignored -- REV
 		backInst = fbMul.read();
 
 		if (backInst.wReg) {
@@ -55,18 +54,30 @@ void decod::decoding() {
 	sc_uint<5>		preAlu;
 	sc_uint<4>		preMem;
 	sc_int<21>		jalOffset;		// signed
-	bool			uRs1, uRs2, hRs1, hRs2, jump, preWrite; 
+	bool			uRs1, uRs2, hRs1, hRs2, jump, preWrite, flagFence = false;
 	double tiempo;
+
+	int rd = 0, csr = 0;
 
 	tiempo = sc_time_stamp().to_double() / 1000.0;
 
 	INST = inst.read();
 
-	I = INST.I; 
-	INST.rs1 = I(19, 15);
-	INST.rs2 = I(24, 20);
-	rs1 = regs[I(19, 15)];
-	rs2 = regs[I(24, 20)];
+	I = INST.I;
+
+	// REV A MELLORAR
+	// SI É UNHA INS INMD
+	if (I(6, 2) == 28 && I(14, 12) > 4) {
+		INST.rs1 = I(19, 15);
+		INST.rs2 = I(11, 7); // en verdad rd
+		rs1 = INST.rs1;
+	}
+	else {
+		INST.rs1 = I(19, 15);
+		INST.rs2 = I(24, 20);
+		rs1 = regs[I(19, 15)];
+		rs2 = regs[I(24, 20)];
+	}
 
 	// Hazard Detection with MUL module
 	rs1Out.write(INST.rs1);
@@ -236,16 +247,85 @@ void decod::decoding() {
 		uRs1 = true;	uRs2 = true;
 		break;
 	case 3: // Fence
-	case 28: // ECALL, EBREAK
+		flagFence = true;
+		preWrite = false;
 
+		break;
+	case 28: // ECALL, EBREAK, CSRR 
+
+		switch (I(14, 12)) {
+
+		case 1: // CSRRW
+			rd = I(11, 7);
+			csr = I(31, 27);
+
+			printf("Hola caracola\n");
+
+			regs[rd] = regs[csr];
+			regs[csr] = rs1;
+
+			break;
+		case 2: // CSRRS
+			rd = I(11, 7);
+			csr = I(31, 27);
+
+			printf("Hola caracola1\n");
+
+			regs[rd] = regs[csr];
+			regs[csr] = (rs1 | regs[csr]);
+			break;
+		case 3: // CSRRC
+			rd = I(11, 7);
+			csr = I(31, 27);
+
+			printf("Hola caracola2\n");
+
+			regs[rd] = regs[csr];
+			regs[csr] = (rs1 & (~regs[csr]));
+			break;
+		case 5: // CSRRWi
+			rd = I(11, 7);
+			csr = I(31, 27);
+
+			printf("Hola caracola3\n");
+
+			regs[rd] = regs[csr];
+			regs[csr] = rs1;
+			break;
+		case 6: // CSRRSi
+			rd = I(11, 7);
+			csr = I(31, 27);
+
+			printf("Hola caracola4\n");
+
+			regs[rd] = regs[csr];
+			regs[csr] = (rs1 | regs[csr]);
+			break;
+		case 7: // CSRRCi
+			rd = I(11, 7);
+			csr = I(31, 27);
+
+			printf("Hola caracola5\n");
+
+			regs[rd] = regs[csr];
+			regs[csr] = (rs1 & (~regs[csr]));
+			break;
+		default:
+			rd = csr = 0;
+			
+			break;
+		}
+
+		// REV - Aqui??
 		preAlu = 0; preMem = 15;
 		INST.rs1 = INST.rs2 = C_rd = 0x1f; C_wReg = false;
 		INST.opA = INST.opB = INST.val2 = INST.aluOut = INST.dataOut = 0x0000dead;
-		strcpy(INST.desc, "sys"); 
+		strcpy(INST.desc, "sys");
 		preWrite = false;
-		//////cerr << "Control instructions are not supported at current time" << endl;
+
 		break;
 	default:
+
 		cerr << "Error, opCode " << opCode << " not supported" << endl;
 		cerr << "    ERROR AT: " << INST << endl; 
 	};
@@ -268,25 +348,20 @@ void decod::decoding() {
 	imw_rs2 = (iMW.wReg && (iMW.rd == INST.rs2));
 	imu_rs2 = (iMU.wReg && (iMU.rd == INST.rs2));
 
+	// EmptyPipeline for Fence
+	bool emptyPipeline = (readyFenceAluIn.read() && readyFenceMemIn.read() && readyFenceMulIn.read());
+
 	if (!INST.rs1)
 		hRs1 = false;
 	else
-		hRs1 = idx_rs1 || ixm_rs1 || imw_rs1 || imu_rs1 || hzrdRs1.read();
+		hRs1 = idx_rs1 || ixm_rs1 || imw_rs1 || imu_rs1 || hzrdRs1In.read();
 
 	if (!INST.rs2)
 		hRs2 = false;
 	else
-		hRs2 = idx_rs2 || ixm_rs2 || imw_rs2 || imu_rs2 || hzrdRs2.read();
+		hRs2 = idx_rs2 || ixm_rs2 || imw_rs2 || imu_rs2 || hzrdRs2In.read();
 
-	sc_uint<2> probe1, probe2;
-
-	probe1.bit(1) = uRs1;	probe1.bit(0) = hRs1;
-	probe2.bit(1) = uRs2;	probe2.bit(0) = hRs2;
-
-	HZ1.write(probe1);
-	HZ2.write(probe2);
-
-	if ((uRs1 && hRs1) || (uRs2 && hRs2)) {		// hazard
+	if ((uRs1 && hRs1) || (uRs2 && hRs2) || (flagFence && !emptyPipeline)) {		// hazard
 		hazard.write(true);
 		bubble.write(false);
 		C_aluOp = (0);

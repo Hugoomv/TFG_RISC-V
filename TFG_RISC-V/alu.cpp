@@ -97,6 +97,14 @@ void alu::registro(){
 				}
 			INST.aluOut = res;
 		}
+
+		//REV lugar
+		if (flagNOP || !(INST.wReg)){
+			readyFenceAluOut.write(true);
+		}
+		else {
+			readyFenceAluOut.write(false);
+		}
 		
 
 		instOut.write(INST); 
