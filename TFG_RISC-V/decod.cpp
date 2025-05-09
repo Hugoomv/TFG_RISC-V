@@ -248,6 +248,7 @@ void decod::decoding() {
 		break;
 	case 3: // Fence
 		flagFence = true;
+		preWrite = false;
 
 		break;
 	case 28: // ECALL, EBREAK, CSRR 
@@ -324,6 +325,7 @@ void decod::decoding() {
 
 		break;
 	default:
+
 		cerr << "Error, opCode " << opCode << " not supported" << endl;
 		cerr << "    ERROR AT: " << INST << endl; 
 	};
