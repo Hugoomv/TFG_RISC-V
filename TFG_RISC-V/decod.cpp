@@ -316,35 +316,13 @@ void decod::decoding() {
 		rd = I(11, 7);
 		rs1 = I(19,15);
 
-		switch (I(31,27)) {
+		C_rd = rd;
+		C_opA = rs1;
 
-		case 24: // fcvt.w[u].s
-			if (I(20,20)) { // unsigned
+		preWrite = true;
+		uRs1 = true;
 
-			}
-			else { // signed
-
-			}
-			break;
-
-		case 26: // fcvt.s.w[u]
-			if (I(20, 20)) { // unsigned
-
-			}
-			else { // signed
-
-			}
-			break;
-
-		case 28: // fmv.x.s 
-			break;
-
-		case 30: // fmv.s.x
-			break;
-
-		default:
-			break;
-		}
+		strcpy(INST.desc, "PF_FLOAT");
 
 		break;
 

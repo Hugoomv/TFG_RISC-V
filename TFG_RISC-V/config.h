@@ -17,7 +17,6 @@
 #define latencyMULHSU	1
 #define latencyDIV		12
 
-// rev todos 2 ej xogar con eso
 
 constexpr int pipelineSizeMul = std::max({latencyMUL,latencyMULH,latencyMULHU,latencyMULHSU, latencyDIV});
 

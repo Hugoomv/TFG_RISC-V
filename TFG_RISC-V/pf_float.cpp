@@ -36,5 +36,35 @@ void pf_float::pf() {
 
 		// fcvt.w[u].s rd, fs1 R Convert to [un]signed 32-bit integer
 		// fcvt.s.w[u] fd, rs1 R Convert from[un]signed 32 - bit integer
+	
+		switch (I(31, 27)) {
+
+		case 24: // fcvt.w[u].s
+			if (I(20, 20)) { // unsigned
+
+			}
+			else { // signed
+
+			}
+			break;
+
+		case 26: // fcvt.s.w[u]
+			if (I(20, 20)) { // unsigned
+
+			}
+			else { // signed
+
+			}
+			break;
+
+		case 28: // fmv.x.s 
+			break;
+
+		case 30: // fmv.s.x
+			break;
+
+		default:
+			break;
+		}
 	}
 }
