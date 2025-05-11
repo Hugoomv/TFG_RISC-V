@@ -97,8 +97,9 @@ public:
 		instPF_float->clk(clk);
 		instPF_float->rst(rst);
 		instPF_float->instIn(iDX); // Same entry as ALU
-
-
+		instPF_float->instOut(iPF_float);
+		
+		instDecod->fbPF_float(iPF_float);
 
 		MEM = new mem; 
 		instFetch->MEM = MEM; 
@@ -121,7 +122,7 @@ public:
 	sc_signal< sc_uint<32> >	PC_DecodFetch, PC_FetchDecod;
 	sc_signal< bool >			hazard, bubble;
 
-	sc_signal < instruction >	iFD, iDX, iXM, iMW, iMul;
+	sc_signal < instruction >	iFD, iDX, iXM, iMW, iMul, iPF_float;
 
 	sc_signal < sc_uint<5> >	rs1, rs2;
 	sc_signal < bool >			hzrdRs1, hzrdRs2;

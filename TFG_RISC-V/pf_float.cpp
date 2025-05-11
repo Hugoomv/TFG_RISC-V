@@ -54,7 +54,7 @@ void pf_float::pf() {
 			out.rd = rd;
 			break;
 
-		case 26: // fcvt.s.w[u]
+		case 26: // fcvt.s.w[u] - fcvt.s.x REV
 			// rs1 - number integer register 
 			// opA - value of rs1 (from regs in decod)
 
