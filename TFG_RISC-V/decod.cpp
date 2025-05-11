@@ -298,6 +298,7 @@ void decod::decoding() {
 			regs[rd] = regs[csr];
 			regs[csr] = (rs1 & (~regs[csr]));
 			break;
+
 		default:
 			rd = csr = 0;
 			break;
@@ -322,7 +323,7 @@ void decod::decoding() {
 		preWrite = true;
 		uRs1 = true;
 
-		strcpy(INST.desc, "PF_FLOAT");
+		strcpy(INST.desc, "pf_float");
 
 		break;
 

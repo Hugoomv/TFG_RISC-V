@@ -1,11 +1,15 @@
 #ifndef PF_FLOAT_H
 #define PF_FLOAT_H
 
+#include "systemc.h"
+#include "structsRV.h"
+#include "auxFuncs.h"
+
 SC_MODULE(pf_float) {
 public:
 
 	sc_in<bool> clk, rst;
-	sc_in<instruction> I;
+	sc_in<instruction> instIn;
 
 
 	void pf();
@@ -22,10 +26,16 @@ public:
 		SC_METHOD(pf);
 		sensitive << clk.pos();
 
+		SC_METHOD(registrosFloat);
+		sensitive << clk.pos();
+
 	}
 
 private:
-	sc_float<32> regsFloat[32];
+	instruction INST;
+	sc_uint<32> I;
+
+	sc_int<32> regsFloat[32]; // rev float
 
 };
 

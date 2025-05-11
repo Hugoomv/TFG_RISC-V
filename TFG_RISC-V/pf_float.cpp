@@ -2,7 +2,7 @@
 
 void pf_float::registrosFloat() {
 
-	tiempo = sc_time_stamp().to_double() / 1000.0;
+	double tiempo = sc_time_stamp().to_double() / 1000.0;
 
 	if (rst.read()) {
 		for (int i = 0; i < 32; ++i)	regsFloat[i] = 0.0;
@@ -12,7 +12,6 @@ void pf_float::registrosFloat() {
 	}
 }
 
-}
 
 void pf_float::pf() {
 	
@@ -23,11 +22,14 @@ void pf_float::pf() {
 
 	tiempo = sc_time_stamp().to_double() / 1000.0;
 
+	INST = instIn.read();
+
+	I = INST.I;
+
 	if (rst.read()) {
 
 		// NOP
 		INST = createNOP();
-		instOut.write(INST);
 
 	}
 	else {

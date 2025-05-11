@@ -10,6 +10,7 @@
 #include "mem.h"
 #include "mul.h"
 #include "structsRV.h"
+#include "pf_float.h"
 
 SC_MODULE(coreRiscV) {
 public:
@@ -30,6 +31,7 @@ public:
 		instAlu = new alu("instAlu");
 		instDataMem = new dataMem("instDataMem");
 		instMul = new mul("instMul");
+		instPF_float = new pf_float("instPF_float");
 
 
 		instFetch->clk(clk);
@@ -91,6 +93,12 @@ public:
 		instDecod->readyFenceAluIn(readyFenceAlu);
 		instDecod->readyFenceMemIn(readyFenceMem);
 
+		//PF_FLOAT
+		instPF_float->clk(clk);
+		instPF_float->rst(rst);
+		instPF_float->instIn(iDX); // Same entry as ALU
+
+
 
 		MEM = new mem; 
 		instFetch->MEM = MEM; 
@@ -106,6 +114,7 @@ public:
 	alu* instAlu;
 	dataMem* instDataMem;
 	mul* instMul;
+	pf_float* instPF_float;
 
 	mem* MEM; 
 
