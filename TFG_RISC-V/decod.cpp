@@ -20,7 +20,7 @@ void decod::registros(){		// este método implementa el banco de registros
 			if (target) {
 				regs[target] = backInst.dataOut;
 			}
-		} else {
+		} else {// aï¿½adir salida pf_float
 			backInst = fbWB.read();
 
 			if (backInst.wReg) {
