@@ -64,24 +64,12 @@ void decod::decoding() {
 	INST = inst.read();
 
 	I = INST.I;
-
-	// REV A MELLORAR
-	// SI É UNHA INS INMD
-	if (I(6, 2) == 28 && I(14, 12) > 4) {
-		INST.rs1 = I(19, 15);
-		INST.rs2 = I(11, 7); // en verdad rd
-		rs1 = INST.rs1;
-	}
-	else {
-		INST.rs1 = I(19, 15);
-		INST.rs2 = I(24, 20);
-		rs1 = regs[I(19, 15)];
-		rs2 = regs[I(24, 20)];
-	}
-
-	// Hazard Detection with MUL module
-	rs1Out.write(INST.rs1);
-	rs2Out.write(INST.rs2);
+	
+	// Assumes this, not correct in all instructions
+	INST.rs1 = I(19, 15);
+	INST.rs2 = I(24, 20);
+	rs1 = regs[I(19, 15)];
+	rs2 = regs[I(24, 20)];
 
 	jump = false; 
 	C_rs2 = rs2;
@@ -259,8 +247,6 @@ void decod::decoding() {
 			rd = I(11, 7);
 			csr = I(31, 27);
 
-			printf("Hola caracola\n");
-
 			regs[rd] = regs[csr];
 			regs[csr] = rs1;
 
@@ -269,8 +255,6 @@ void decod::decoding() {
 			rd = I(11, 7);
 			csr = I(31, 27);
 
-			printf("Hola caracola1\n");
-
 			regs[rd] = regs[csr];
 			regs[csr] = (rs1 | regs[csr]);
 			break;
@@ -278,45 +262,48 @@ void decod::decoding() {
 			rd = I(11, 7);
 			csr = I(31, 27);
 
-			printf("Hola caracola2\n");
-
 			regs[rd] = regs[csr];
 			regs[csr] = (rs1 & (~regs[csr]));
 			break;
 		case 5: // CSRRWi
+			INST.rs1 = I(19, 15);
+			INST.rs2 = I(11, 7); // rd, used for hazard detection
+			rs1 = INST.rs1;
+
 			rd = I(11, 7);
 			csr = I(31, 27);
-
-			printf("Hola caracola3\n");
 
 			regs[rd] = regs[csr];
 			regs[csr] = rs1;
 			break;
 		case 6: // CSRRSi
+			INST.rs1 = I(19, 15);
+			INST.rs2 = I(11, 7); // rd, used for hazard detection
+			rs1 = INST.rs1;
+
 			rd = I(11, 7);
 			csr = I(31, 27);
-
-			printf("Hola caracola4\n");
 
 			regs[rd] = regs[csr];
 			regs[csr] = (rs1 | regs[csr]);
 			break;
 		case 7: // CSRRCi
+			INST.rs1 = I(19, 15);
+			INST.rs2 = I(11, 7); // rd, used for hazard detection
+			rs1 = INST.rs1;
+
 			rd = I(11, 7);
 			csr = I(31, 27);
-
-			printf("Hola caracola5\n");
 
 			regs[rd] = regs[csr];
 			regs[csr] = (rs1 & (~regs[csr]));
 			break;
+
 		default:
 			rd = csr = 0;
-			
 			break;
 		}
 
-		// REV - Aqui??
 		preAlu = 0; preMem = 15;
 		INST.rs1 = INST.rs2 = C_rd = 0x1f; C_wReg = false;
 		INST.opA = INST.opB = INST.val2 = INST.aluOut = INST.dataOut = 0x0000dead;
@@ -329,6 +316,10 @@ void decod::decoding() {
 		cerr << "Error, opCode " << opCode << " not supported" << endl;
 		cerr << "    ERROR AT: " << INST << endl; 
 	};
+
+	// Hazard Detection with MUL module
+	rs1Out.write(INST.rs1);
+	rs2Out.write(INST.rs2);
 
 
 	instruction iDX, iXM, iMU, iMW;
