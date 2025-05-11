@@ -11,6 +11,8 @@ public:
 	sc_in<bool> clk, rst;
 	sc_in<instruction> instIn;
 
+	sc_out<instruction> instOut;
+
 
 	void pf();
 
@@ -35,7 +37,7 @@ private:
 	instruction INST;
 	sc_uint<32> I;
 
-	sc_int<32> regsFloat[32]; // rev float
+	float regsFloat[32]; // rev float
 
 };
 

@@ -1,6 +1,7 @@
 #include "decod.h"
 #include "alu.h"			// alu opCodes are defined there
 #include "config.h"
+#include "auxFuncs.h"
 
 
 void decod::registros(){		// este método implementa el banco de registros
@@ -20,7 +21,7 @@ void decod::registros(){		// este método implementa el banco de registros
 			if (target) {
 				regs[target] = backInst.dataOut;
 			}
-		} else {// aï¿½adir salida pf_float
+		} else {// añadir salida pf_float
 			backInst = fbWB.read();
 
 			if (backInst.wReg) {
@@ -312,19 +313,34 @@ void decod::decoding() {
 
 		break;
 
-	case 22: // EXTENSION RV32F - Floating point to integer
+	case 20: // EXTENSION RV32F - Floating point to integer - Floats only
 
 		rd = I(11, 7);
 		rs1 = I(19,15);
 
 		C_rd = rd;
-		C_opA = rs1;
+		C_opA = regs[rs1];
+		C_wReg = true;
 
 		preWrite = true;
 		uRs1 = true;
+		INST.aluOp = 0;		INST.aluOut = 0x0000dead;
 
 		strcpy(INST.desc, "pf_float");
 
+		break;
+
+
+	case 9: 
+		printf("FSW - not implemented\n");
+		preWrite = false;
+		INST = createNOP();
+		break;
+
+	case 1:
+		printf("FLW - not implemented\n");
+		preWrite = false;
+		INST = createNOP();
 		break;
 
 	default:
