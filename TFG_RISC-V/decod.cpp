@@ -13,6 +13,9 @@ void decod::registros(){		// este método implementa el banco de registros
 		for(int i=0; i<32; ++i)	regs[i] = 0;
 	}else{
 
+		//REV
+
+		// MUL 
 		backInst = fbMul.read();
 
 		if (backInst.wReg) {
@@ -21,17 +24,36 @@ void decod::registros(){		// este método implementa el banco de registros
 			if (target) {
 				regs[target] = backInst.dataOut;
 			}
-		} else {// añadir salida pf_float
-			backInst = fbWB.read();
+		} 
 
-			if (backInst.wReg) {
-				int target = backInst.rd;
+		// WB
+		backInst = fbWB.read();
 
-				if (target) {
+		if (backInst.wReg) {
+			int target = backInst.rd;
+
+			if (target) {
+				regs[target] = backInst.dataOut;
+			}
+		}
+
+		// PF_float
+		backInst = fbPF_float.read();
+
+		if (backInst.wReg) {
+			int target = backInst.rd;
+
+			if (target) {
+				// REV
+				if (backInst.I(20, 20)) {
+					regs[target] = (uint32_t)backInst.dataOut;
+				}
+				else {
 					regs[target] = backInst.dataOut;
 				}
 			}
 		}
+		
 		INST.rd = C_rd;			INST.wReg = C_wReg;
 		INST.opA = C_opA;		INST.opB = C_opB;
 		INST.val2 = C_rs2;
