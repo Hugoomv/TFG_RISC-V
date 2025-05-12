@@ -106,11 +106,11 @@ public:
 		// Hazard PF_float
 		instPF_float->rs1In(rs1);
 		instPF_float->rs2In(rs2);
-		instPF_float->hzrdPF_floatOut(hzrdPF_float);
+		instPF_float->hzrdRs1Out(hzrdPF_floatRs1);
+		instPF_float->hzrdRs2Out(hzrdPF_floatRs2);
 
-		instDecod->hzrdPF_floatIn(hzrdPF_float);
-
-
+		instDecod->hzrdPF_floatRs1In(hzrdPF_floatRs1);
+		instDecod->hzrdPF_floatRs2In(hzrdPF_floatRs2);
 
 		MEM = new mem; 
 		instFetch->MEM = MEM; 
@@ -136,7 +136,7 @@ public:
 	sc_signal < instruction >	iFD, iDX, iXM, iMW, iMul, iPF_float;
 
 	sc_signal < sc_uint<5> >	rs1, rs2;
-	sc_signal < bool >			hzrdRs1, hzrdRs2, hzrdPF_float;
+	sc_signal < bool >			hzrdRs1, hzrdRs2, hzrdPF_floatRs1, hzrdPF_floatRs2;
 	sc_signal < bool >			readyFenceMul,readyFenceAlu,readyFenceMem;
 
 /*	sc_signal< sc_int<32> >		wbValue, opA, opB, rs2_DescodAlu, rs2_AluDataMem;

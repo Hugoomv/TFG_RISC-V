@@ -33,7 +33,7 @@ public:
 		SC_METHOD(registersFloat);
 		sensitive << clk.pos();
 
-		SC_METHOD(registersFloat);
+		SC_METHOD(hzrdDetection);
 		sensitive << rs1In << rs2In << fire;
 
 		fire.write(true);

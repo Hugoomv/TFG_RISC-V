@@ -53,6 +53,8 @@ void pf_float::pf() {
 			out.wReg = true;
 			out.dataOut = regsFloat[rs1];
 			out.rd = rd;
+			strcpy(out.desc, "fcvtws");
+
 			break;
 
 		case 26: // fcvt.s.w[u] - fcvt.s.x REV
@@ -67,14 +69,17 @@ void pf_float::pf() {
 			}
 
 			out.wReg = false;
+			strcpy(out.desc, "fcvtsw");
+
 			break;
 
 		case 28: // fmv.x.s 
 			// no cast - exact same binary sequence
 
-			out.dataOut = regsFloat[rs1];
+			out.dataOut = (float) regsFloat[rs1];
 			out.wReg = true;
 			out.rd = rd;
+			strcpy(out.desc, "fmvxs");
 
 			break;
 
@@ -83,6 +88,8 @@ void pf_float::pf() {
 
 			regsFloat[rd] = INST.opA;
 			out.wReg = false;
+			strcpy(out.desc, "fmvsx");
+
 			break;
 
 		default:
@@ -105,7 +112,7 @@ void pf_float::hzrdDetection() {
 		aux2 = false;
 
 	// Input instruction
-	if (instIn.read().address != 0xffffffff) { // Not a NOP
+	if (instIn.read().wReg) { 
 
 		if (rs1 == instIn.read().rd) {
 			aux1 = true;
@@ -117,7 +124,7 @@ void pf_float::hzrdDetection() {
 	}
 
 	// Exit instruction
-	if (instOut.read().address != 0xffffffff) { // Not a NOP
+	if (instOut.read().memOp != 15) { // Not a NOP
 
 		if (rs1 == instOut.read().rd) {
 			aux1 = true;
