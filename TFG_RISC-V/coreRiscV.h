@@ -85,10 +85,12 @@ public:
 
 		instMul->hzrdRs1Out(hzrdRs1);
 		instMul->hzrdRs2Out(hzrdRs2);
-		instMul->readyFenceMulOut(readyFenceMul);
 
 		instDecod->hzrdRs1In(hzrdRs1);
 		instDecod->hzrdRs2In(hzrdRs2);
+
+		// Preparation for fence instruction
+		instMul->readyFenceMulOut(readyFenceMul);
 		instDecod->readyFenceMulIn(readyFenceMul);
 		instDecod->readyFenceAluIn(readyFenceAlu);
 		instDecod->readyFenceMemIn(readyFenceMem);
@@ -100,6 +102,15 @@ public:
 		instPF_float->instOut(iPF_float);
 		
 		instDecod->fbPF_float(iPF_float);
+
+		// Hazard PF_float
+		instPF_float->rs1In(rs1);
+		instPF_float->rs2In(rs2);
+		instPF_float->hzrdPF_floatOut(hzrdPF_float);
+
+		instDecod->hzrdPF_floatIn(hzrdPF_float);
+
+
 
 		MEM = new mem; 
 		instFetch->MEM = MEM; 
@@ -125,7 +136,7 @@ public:
 	sc_signal < instruction >	iFD, iDX, iXM, iMW, iMul, iPF_float;
 
 	sc_signal < sc_uint<5> >	rs1, rs2;
-	sc_signal < bool >			hzrdRs1, hzrdRs2;
+	sc_signal < bool >			hzrdRs1, hzrdRs2, hzrdPF_float;
 	sc_signal < bool >			readyFenceMul,readyFenceAlu,readyFenceMem;
 
 /*	sc_signal< sc_int<32> >		wbValue, opA, opB, rs2_DescodAlu, rs2_AluDataMem;

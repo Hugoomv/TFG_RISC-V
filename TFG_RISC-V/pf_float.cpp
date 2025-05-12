@@ -1,6 +1,6 @@
 #include "pf_float.h"
 
-void pf_float::registrosFloat() {
+void pf_float::registersFloat() {
 
 	double tiempo = sc_time_stamp().to_double() / 1000.0;
 
@@ -33,6 +33,7 @@ void pf_float::pf() {
 
 	}
 	else {
+
 		// fmv.x.s rd, fs1 R Move from floating - point to integer register
 		// fmv.s.x fd, rs1 R Move from integer to floating - point register
 
@@ -89,6 +90,45 @@ void pf_float::pf() {
 		}
 	}
 
+	fire.write(!fire.read());
 
 	instOut.write(out);
 }
+
+
+void pf_float::hzrdDetection() {
+
+	int rs1 = rs1In.read();
+	int rs2 = rs2In.read();
+
+	bool aux1 = false,
+		aux2 = false;
+
+	// Input instruction
+	if (instIn.read().address != 0xffffffff) { // Not a NOP
+
+		if (rs1 == instIn.read().rd) {
+			aux1 = true;
+		}
+
+		if (rs2 == instIn.read().rd) {
+			aux2 = true;
+		}
+	}
+
+	// Exit instruction
+	if (instOut.read().address != 0xffffffff) { // Not a NOP
+
+		if (rs1 == instOut.read().rd) {
+			aux1 = true;
+		}
+
+		if (rs2 == instOut.read().rd) {
+			aux2 = true;
+		}
+	}
+
+	hzrdRs1Out.write(aux1);
+	hzrdRs2Out.write(aux2);
+}
+

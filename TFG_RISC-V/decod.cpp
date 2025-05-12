@@ -80,7 +80,7 @@ void decod::decoding() {
 		rs2 = regs[I(24, 20)];
 	}
 
-	// Hazard Detection with MUL module
+	// Hazard Detection with MUL and PF_float module
 	rs1Out.write(INST.rs1);
 	rs2Out.write(INST.rs2);
 
@@ -373,12 +373,12 @@ void decod::decoding() {
 	if (!INST.rs1)
 		hRs1 = false;
 	else
-		hRs1 = idx_rs1 || ixm_rs1 || imw_rs1 || imu_rs1 || hzrdRs1In.read();
+		hRs1 = idx_rs1 || ixm_rs1 || imw_rs1 || imu_rs1 || hzrdRs1In.read() || hzrdPF_floatRs1In.read();
 
 	if (!INST.rs2)
 		hRs2 = false;
 	else
-		hRs2 = idx_rs2 || ixm_rs2 || imw_rs2 || imu_rs2 || hzrdRs2In.read();
+		hRs2 = idx_rs2 || ixm_rs2 || imw_rs2 || imu_rs2 || hzrdRs2In.read() || hzrdPF_floatRs2In.read();
 
 	if ((uRs1 && hRs1) || (uRs2 && hRs2) || (flagFence && !emptyPipeline)) {		// hazard
 		hazard.write(true);

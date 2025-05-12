@@ -10,13 +10,15 @@ public:
 
 	sc_in<bool> clk, rst;
 	sc_in<instruction> instIn;
+	sc_in< sc_uint<5> > rs1In, rs2In;
 
 	sc_out<instruction> instOut;
+	sc_out<bool> hzrdRs1Out, hzrdRs2Out;
 
 
 	void pf();
-
-	void registrosFloat();
+	void registersFloat();
+	void hzrdDetection();
 
 
 	SC_CTOR(pf_float) {
@@ -28,15 +30,22 @@ public:
 		SC_METHOD(pf);
 		sensitive << clk.pos();
 
-		SC_METHOD(registrosFloat);
+		SC_METHOD(registersFloat);
 		sensitive << clk.pos();
+
+		SC_METHOD(registersFloat);
+		sensitive << rs1In << rs2In << fire;
+
+		fire.write(true);
 
 	}
 
 private:
 	instruction INST;
 	sc_uint<32> I;
+	sc_signal < bool > fire;
 
+	bool flagEmpty = false;
 	float regsFloat[32]; // rev float
 
 };
