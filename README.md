@@ -20,4 +20,24 @@ A modular RISC-V simulator built using **SystemC** (C++) at RTL level. This proj
 
 - C++17 or later
 - SystemC
-- Visul Studio (optional but recommended)
+- Visual Studio (optional but recommended)
+
+## Instruction Set
+- RV32I:
+  - Arithmetic: ADD, SUB, AND, OR, XOR, SLL, SRL, SRA
+  - Comparison: SLT, SLTU
+  - Memory access: LW, SW
+  - Control flow: BEQ, BNE, JAL, JALR
+ 
+- RV32M:
+  - Arithmetic: MUL, MULH, MULHU, MULHSU, DIV, DIVU, REM, REMU
+
+- RV32F:
+  - Conversion and moves: FMV.X.S, FMV.S.X, FCVT.X.S, FCVT.S.X
+    
+
+## License
+This project is licensed under the MIT License. See LICENSE for more details.
+
+## Acknowledgments
+- [RISC-V ISA](https://riscv.org/specifications/ratified/)
