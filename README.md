@@ -1,4 +1,4 @@
-TFG: RISC-V Simulator using System-C (C++)
+TFG: RISC-V Simulator using SystemC (C++)
 
 # RISC-V Simulator in SystemC
 
