@@ -103,6 +103,12 @@ public:
 		
 		instDecod->fbPF_float(iPF_float);
 
+		// FSW & FLW
+		instPF_float->dataMemIn(iMW);
+		instPF_float->decodIn(iDX); 
+		instDataMem->pfFloatIn(iPF_float);
+
+
 		// Hazard PF_float
 		instPF_float->rs1In(rs1);
 		instPF_float->rs2In(rs2);

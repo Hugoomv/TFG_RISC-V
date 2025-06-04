@@ -87,6 +87,7 @@ void decod::decoding() {
 	INST = inst.read();
 
 	I = INST.I;
+	INST.target = 0; 
 
 	// REV A MELLORAR
 	// SI É UNHA INS INMD
@@ -353,16 +354,18 @@ void decod::decoding() {
 		break;
 
 
-	case 9: 
-		printf("FSW - not implemented\n");
-		preWrite = false;
-		INST = createNOP();
+	case 9: // FSW
+		INST.target = 1;
+		preMem = I(14, 12) | 8; // write a word
+
+		preWrite = true;
 		break;
 
-	case 1:
-		printf("FLW - not implemented\n");
+	case 1: // FLW
+		INST.target = 1;
+		preMem = I(14, 12); // read a word
+
 		preWrite = false;
-		INST = createNOP();
 		break;
 
 	default:

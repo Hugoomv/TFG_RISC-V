@@ -32,6 +32,7 @@ public:
 	sc_uint<4> memOp;
 	bool wReg; 
 	sc_int<32> opA, opB, val2, aluOut, dataOut;
+	sc_uint<4> target; // 0000 -> int, 0001 -> pf_float
 	char desc[8]; 
 	inline bool operator ==(const instruction& inst) const {
 		return ( (inst.address == address) && (inst.I == I) && (inst.wReg == wReg) && (!strcmp(inst.desc, desc)) );

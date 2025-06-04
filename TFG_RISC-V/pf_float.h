@@ -9,7 +9,7 @@ SC_MODULE(pf_float) {
 public:
 
 	sc_in<bool> clk, rst;
-	sc_in<instruction> instIn;
+	sc_in<instruction> instIn, dataMemIn, decodIn;
 	sc_in< sc_uint<5> > rs1In, rs2In;
 
 	sc_out<instruction> instOut;
