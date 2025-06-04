@@ -1,18 +1,54 @@
 \chapter{Introdución}
 \label{chap:introducion}
 
-\lettrine{P}{rimer} capítulo da memoria, onde xeralmente se exporán as
-liñas mestras do traballo, os obxectivos, etc. Incluimos un par de
-exemplos de citas~\cite{ErlangBook,ErlangWebBook} e de referencias
-internas (sección \ref{sec:mostra}, páxina \pageref{sec:mostra}).
+\lettrine{E}{ste} proxecto busca crear un simulador de RISC-V empregando a librería SystemC en C++. Ao longo desta memoria describiranse as etapas de execución, os distintos módulos e a motivación destes así como as extensións.
 
-\Blindtext
 
-\section{Sección de mostra}
-\label{sec:mostra}
+%%citas~\cite{ErlangBook,ErlangWebBook} e de referencias
+%%internas (sección \ref{sec:mostra}, páxina \pageref{sec:mostra}).
 
-\Blindtext
 
-\subsection{Subsección de mostra}
+\section{Motivación}
+\label{sec:motivación}
+RISC-V apunta a ser unha das arquitecturas máis empregadas nun futuro, xa que é libre, permitindo aforrar o custo de licenzas. Grazas a que se pode modificar, engadindo ou eliminando funcionalidades, isto permite que abarque múltiples sectores, dende chips máis sinxelos orientados a IoT, ata competir con ARM en sistemas embebidos. REFES AQUI\\
+Durante o proceso de deseño, unha parte clave é a verificación do correcto funcionamento. REFES AQUI Se ben é posible crear un chip con cada versión, na práctica, debido aos longos tempos e altos custos, é inviable. Ahí é onde un simulador toma protagonismo, xa que permite probar de forma rápida, simple e barata os deseños creados. 
 
-\Blindtext
+\section{Obxectivos}
+\label{sec:obxectivos}
+Os obxectivos deste proxecto son modelar e simular, usando SystemC, as seguintes extensións da arquitectura RV32I: 
+
+\begin{itemize}
+    \item multiplicación e división por números enteiros (extensión M).
+    \item aritmética en punto flotante de simple (extensión F).
+    \item  operacións atómicas  (extensión A).
+    \item  xestión de rexistros de control e estado (extensión Zicsr).
+    \item sincronización de escritura de instrucións (extensión Zifencei).
+\end{itemize}
+
+O modelado será totalmente parametrizable, permitindo especificar a latencia das diferentes instrucións. Tamén permitirá especificar o número de canles de execución para as unidades de enteiros a punto flotante, e se estes están ou non totalmente segmentados. 
+
+Desta maneira, a simulación permitirá comparar o rendemento de, por exemplo, unha implementación na que multiplicador e divisor comparten circuítos, cunha na que ambos son independentes, e tamén comparar un divisor totalmente segmentado con un que non o sexa. 
+
+Os resultados do modelado e a simulación son dous: verificar o correcto funcionamento da arquitectura, e comprobar o seu rendemento. 
+
+
+\section{Metodoloxía}
+\label{sec:metodoloxía}
+O método de traballo será incremental, dividindo as tarefas en partes independentes que van ser implementadas, simuladas e verificadas por orde de complexidade antes de proceder coa seguinte. \\
+O procedemento habitual é unha reunión semanal na que se revisa o feito na semana anterior, acompañado de probas cos tests correspondentes para esa parte. Despois, decídese cal é o seguinte paso, podendo ser a implementación dunha nova extensión ou modificar un módulo do simulador.
+
+\subsection{Fases principais}
+\begin{itemize}
+    \item Estudio da documentación existente sobre RISC-V.
+    \item Familiarización coa implementación base de RV32I en SystemC. 
+    \item Modelado e simulación do multiplicador e divisor de enteiros. 
+    \item Modelado e simulación das extensións de punto flotante F e D. 
+    \item Modelado e simulación de extensións Zicsr e  Zifencei.
+    \item Empaquetamento do software. 
+
+\end{itemize}
+
+\section{Contida da memoria}
+\label{sec:contido_memoria}
+Texto aquí :)
+
