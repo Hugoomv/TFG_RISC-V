@@ -120,7 +120,9 @@ void pf_float::pf() {
 
 				tmp = regsFloat[rs1];
 
-				out.dataOut = *puntInt;
+				//out.dataOut = *puntInt;
+
+				out.dataOut = (int)tmp;
 
 				out.wReg = true;
 				out.rd = rd;

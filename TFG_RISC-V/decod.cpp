@@ -356,16 +356,26 @@ void decod::decoding() {
 
 	case 9: // FSW
 		INST.target = 1;
-		preMem = I(14, 12) | 8; // write a word
+		strcpy(INST.desc,"FSW");
+		inm12(11, 5) = I(31, 25);	inm12(4, 0) = I(11, 7);
+		C_opA = (rs1);
+		C_opB = (inm12);
+		C_rd = (I(11, 7));		preWrite = false;
 
-		preWrite = true;
+		preAlu = ADD;
+		preMem = I(14, 12) | 8; // write a word
+		uRs1 = true;	uRs2 = true;
 		break;
 
 	case 1: // FLW
 		INST.target = 1;
+		strcpy(INST.desc, "FLW");
 		preMem = I(14, 12); // read a word
-
-		preWrite = false;
+		inm12 = I(31, 20);
+		C_opA = rs1;
+		C_opB = inm12;
+		C_rd = I(11, 7);	preWrite = true;
+		uRs1 = true;
 		break;
 
 	default:
