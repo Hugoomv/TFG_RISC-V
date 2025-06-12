@@ -1,7 +1,9 @@
 \chapter{Introdución}
 \label{chap:introducion}
 
-\lettrine{E}{ste} proxecto busca crear un simulador de RISC-V empregando a librería SystemC en C++. Ao longo desta memoria describiranse as etapas de execución, os distintos módulos e a motivación destes así como as extensións.
+\lettrine{E}{ste} proxecto busca crear un simulador de RISC-V empregando a libraría SystemC en C++. Ao longo desta memoria describiranse as etapas de execución, as extensións e os distintos módulos, así como a motivación destes.
+
+ REVISAR PREGUNTAS DESPOIS DE GUIA TFG
 
 
 %%citas~\cite{ErlangBook,ErlangWebBook} e de referencias
@@ -10,8 +12,11 @@
 
 \section{Motivación}
 \label{sec:motivación}
-RISC-V apunta a ser unha das arquitecturas máis empregadas nun futuro, xa que é libre, permitindo aforrar o custo de licenzas. Grazas a que se pode modificar, engadindo ou eliminando funcionalidades, isto permite que abarque múltiples sectores, dende chips máis sinxelos orientados a IoT, ata competir con ARM en sistemas embebidos. REFES AQUI\\
-Durante o proceso de deseño, unha parte clave é a verificación do correcto funcionamento. REFES AQUI Se ben é posible crear un chip con cada versión, na práctica, debido aos longos tempos e altos custos, é inviable. Ahí é onde un simulador toma protagonismo, xa que permite probar de forma rápida, simple e barata os deseños creados. 
+RISC-V apunta a ser unha das arquitecturas máis empregadas nun futuro, xa que é libre, permitindo aforrar o custo de licenzas. Grazas a que se pode modificar, engadindo ou eliminando funcionalidades, isto permite que abarque múltiples sectores, dende \gls{chips} máis sinxelos orientados a IoT, ata competir con \acrfull{arm} en sistemas embebidos ~\cite{RISCV_IoT,RISCV_vsARM}. Co nacemento da nova \acrfull{isa} debido á necesidade dun conxunto de instrucións máis sinxelo e sen custos por licenzas, nace a necesidade de crear un simulador adaptado tanto a esta \acrshort{isa} como á arquitectura RISC-V.
+
+
+
+Durante o proceso de deseño, unha parte clave é a verificación do correcto funcionamento ~\cite{ChipVerify_verification,RISCV_verification}. Se ben é posible crear un chip con cada versión, na práctica, debido aos longos tempos e altos prezos, é inviable. Ahí é onde un simulador toma protagonismo, xa que permite probar de forma rápida, sinxela e barata os deseños creados. 
 
 \section{Obxectivos}
 \label{sec:obxectivos}
@@ -20,8 +25,8 @@ Os obxectivos deste proxecto son modelar e simular, usando SystemC, as seguintes
 \begin{itemize}
     \item multiplicación e división por números enteiros (extensión M).
     \item aritmética en punto flotante de simple (extensión F).
-    \item  operacións atómicas  (extensión A).
-    \item  xestión de rexistros de control e estado (extensión Zicsr).
+    \item operacións atómicas  (extensión A).
+    \item xestión de rexistros de control e estado (extensión Zicsr).
     \item sincronización de escritura de instrucións (extensión Zifencei).
 \end{itemize}
 
@@ -34,8 +39,8 @@ Os resultados do modelado e a simulación son dous: verificar o correcto funcion
 
 \section{Metodoloxía}
 \label{sec:metodoloxía}
-O método de traballo será incremental, dividindo as tarefas en partes independentes que van ser implementadas, simuladas e verificadas por orde de complexidade antes de proceder coa seguinte. \\
-O procedemento habitual é unha reunión semanal na que se revisa o feito na semana anterior, acompañado de probas cos tests correspondentes para esa parte. Despois, decídese cal é o seguinte paso, podendo ser a implementación dunha nova extensión ou modificar un módulo do simulador.
+O método de traballo será incremental, dividindo as tarefas en partes independentes que van ser implementadas, simuladas e verificadas por orde de complexidade antes de proceder co seguinte. \\
+O procedemento habitual é unha reunión semanal na que se revisa o feito anteriormente, acompañado de comprobación cos tests correspondentes para esa parte. Despois, decídese cal é o seguinte paso, podendo ser a implementación dunha nova extensión ou modificar un módulo do simulador.
 
 \subsection{Fases principais}
 \begin{itemize}
@@ -50,5 +55,17 @@ O procedemento habitual é unha reunión semanal na que se revisa o feito na sem
 
 \section{Contida da memoria}
 \label{sec:contido_memoria}
-Texto aquí :)
+Nesta sección describirase brevemente os capítulos desta memoria e o seu contido: 
+\begin{itemize}
+    \item \textbf{Capítulo 1: Introducción.}  O primeiro capítulo inclúe unha descrición sobre o proxecto, cal foi a motivación deste, os obxectivos propostos para este traballo e a metodoloxía empregada.
+    \item \textbf{Capítulo 2: RISC-V.} Aqui falarase sobre a arquitectura, explicando as súas características máis interesantes, as extensións e outros datos relevantes.
+    \item \textbf{Capítulo 3: Deseño do simulador.} Neste capítulo tratarase os distintos módulos creados, o por qué e as decisións de deseño detrás destas.
+    \item \textbf{Capítulo 4: Implementación.} Explicarase as ferramentas empregadas, como se aplicou a metodoloxía e o proceso de engadir as extensións.
+    \item \textbf{Capítulo 5: Probas.} Neste quinto apartado detallase o procedemento para comprobar o correcto funcionamento do simulador, como se elaboraron os tests, unha breve explicación de como funcionan e os programas empregados para a depuración.
+    \item \textbf{Capítulo 6: Uso do simulador.} Contén unhas breves indicacións de como empregar o software.
+    \item \textbf{Capítulo 7: Conclusións.}
+    \item \textbf{Apéndices. }
+    \item \textbf{Bibliografía. }
+    
+\end{itemize}
 

@@ -1,0 +1,28 @@
+\chapter{RISC-V}
+\label{chap:riscv}
+
+\lettrine{C}{o} paso do tempo, nacen novas arquitecturas buscando ofrecer algo innovador no mundo tecnolóxico. RISC-V é unha destas novidades, nacida en 2010 na Universidade de Berkeley ~\cite{WikipediaRISCV}, foi crecendo pouco a pouco, incluso con axuda de voluntarios fóra do ámbito académico. Os puntos fortes desta arquitectura son a súa aposta por unha \acrfull{isa} libre e modificable, permitindo eliminar ou engadir instrucións según cada caso. Ademais, non é necesario pagar licenzas, polo que o fai un bo candidato para ser empregado en dispositivos \acrfull{iot} ~\cite{RISCV_IoT}. Non se trata do primeiro proxecto deste tipo, pero sí dun dos máis relevantes. 
+
+Se ben xa existen \acrshort{isa}s moito máis populares e amplamente estendidas, como por exemplo a ARMv7 ~\cite{Waterman:EECS-2016-1}, si que existen varios motivos para crear un novo conxunto de instrucións. Un dos principais é que a maioría das xa existentes requiren de licencia para o seu uso. Ademais, é necesaria unha \acrshort{isa} máis sinxela de cara á implementación e a modificación. REV Debido a isto, nace a necesidade de crear un simulador adaptado tanto á esta \acrshort{isa} como á arquitectura RISC-V.
+
+REESCRIBIR -- Cada conxunto de instrucións que realizan funcionalidades similares ou relacionadas agrúpanse habitualmente en extensións. As máis básicas son fáciles de atopar en Internet REFES AQUI, xa que se empregan na inmensa maioría de deseños. Ademais, cada extensión traballa sobre unha base determinada, que determina algunhas das instrucións, a codificación, tamaño, rexistros\dots. Ademais, este deseño modular permite traballar con bases enteiras de 32, 64 e inclusive 128-bits. As máis típicas son: 
+MELLOR TABOA??
+\begin{itemize}
+    \item RV32I: Conxunto de instrucións de base enteira de 32-bits.
+    \item RV32E: Conxunto de instrucións de base enteira (embebida, é dicir, con 16 rexistros) de 32-bits.
+    \item RV64I: Conxunto de instrucións de base enteira de 64-bits.
+    \item RV128I: Conxunto de instrucións de base enteira de 128-bits.
+\end{itemize}
+
+En canto as extensións: 
+\begin{itemize}
+    \item M: Extensión estándar para multiplicación de enteiros, divisións e resto.
+    \item A: Extensión estándar para operación atómicas.
+    \item F: Extensión estándar para punto flotante de precisión simple.
+    \item D: Extensión estándar para punto flotante de precisión doble.
+    \item G: Abreviatura empregada para o conxunto de extensións "IMAFDZicsr\_Zifencei".
+    \item L: Extensión estándar para punto flotante decimal.
+    \item P: Extensión estándar para instrucións de Packed-SIMD REV.
+    \item Zicsr: Extensión estándar para a xestión de rexistros de control e estado (\acrfull{csr} Instructions).
+    \item Zifencei: Extensión para instrucións para a sincronización de escritura de instrucións (Fetch e Fence).
+\end{itemize}

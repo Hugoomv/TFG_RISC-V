@@ -1,0 +1,27 @@
+\chapter{Probas}
+\label{chap:probas}
+
+\lettrine{U}{nha} parte imprescindible de calquera proxecto é o período de probas ou testing, durante o cal se busca atopar bugs e comprobar que o funcionamento é o esperado e correcto. Ao longo deste capítulo explicaránse os distintos exames aos que se someteu o simulador, o seu obxectivo, orixe e diferencias fundamentais.
+
+\section{Benchmarks}\label{sec:benchmarks}
+Unha vez implementada unha nova instrución, ou un pipeline é necesario comprobar que o funcionamento é o esperado. Para iso, empréganse diferentes métodos. Un deles son os benchmarks, diferentes probas que buscar crear casos habituais e incluso os máis edge cases. A fonte destos benchmarks son  é o repositorio de RISC-V test [REFES AQUI]. Aquí existen diferentes programas orientados a probar determinadas funcións, como a multiplicación con SPMV. Os benchmarks empregados durante o traballo son os seguintes:
+\begin{table}[hp!]
+  \centering
+  \rowcolors{2}{white}{udcgray!25}
+  \begin{tabular}{c|c}
+    \rowcolor{udcpink!25}
+    \textbf{Nome do benchmark} & \textbf{Obxectivo} \\\hline
+    \textit{SPMV} & Multiplicacións \\
+    \textit{Título de fila} & Contido de celda \\
+  \end{tabular}
+  \caption{Benchmarks empregadas e con que fin}
+  \label{tab:benchmarks}
+\end{table}
+
+\section{Tests propios}\label{sec:tests}
+Ademais de empregar os benchmarks, créaronse varios exames buscando probar especificamente certas funcionalidades según fose necesario. O concepto básico foi imitar algún benchmark de instrución, coa mesma orixe ca os benchmarks REFES AQUI. Como se ve no apendice REFE AQUI, consiste en empregar ASM REFE AQUI embebido para integrar ?¿¿ a instruccion no codigo resultante. Ademais, compróbase o resultado da operación gardando o que devolve e comparando co resultado esperado. Na súa maioría son bastante sinxelos e non proban moitos casos, sen embargo, tendo en conta determinados casos que poderían ser problemáticos, serven para determinar se unha instrución está ben implementada.
+
+
+\section{Depuración}\label{sec:depuración}
+Calquera software durante o proceso de desevolvemento sofre varias revisións, tipicamente empregando o IDE. Este permite parar o programa en determinada instrución, imprimir o valor dunha variable antes e despois dun cambio, etc. Para este punto, tanto Segger e Visual Studio foron moi útiles, xa que proporcionan varias ferramentas perfectamente integradas.
+
