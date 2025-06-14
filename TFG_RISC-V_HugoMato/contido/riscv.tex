@@ -1,8 +1,12 @@
 \chapter{RISC-V}
 \label{chap:riscv}
 
-\lettrine{C}{o} paso do tempo, nacen novas arquitecturas buscando ofrecer algo innovador no mundo tecnolóxico. RISC-V é unha destas novidades, nacida en 2010 na Universidade de Berkeley ~\cite{WikipediaRISCV}, foi crecendo pouco a pouco, incluso con axuda de voluntarios fóra do ámbito académico. Os puntos fortes desta arquitectura son a súa aposta por unha \acrfull{isa} libre e modificable, permitindo eliminar ou engadir instrucións según cada caso. Ademais, non é necesario pagar licenzas, polo que o fai un bo candidato para ser empregado en dispositivos \acrfull{iot} ~\cite{RISCV_IoT}. Non se trata do primeiro proxecto deste tipo, pero sí dun dos máis relevantes. 
+\lettrine{A}{o} longo deste capítulo detallarase en qué consiste RISC-V, a estrutura básica, por qué é interesante e cales foron os motivos de que fose empregado como obxectivo deste proxecto.
 
+\section{Que é RISC-V?}\label{sec:que_riscv}
+Co paso do tempo, nacen novas arquitecturas buscando ofrecer algo innovador no mundo tecnolóxico. RISC-V é unha destas novidades, nacida en 2010 na Universidade de Berkeley ~\cite{WikipediaRISCV}, foi crecendo pouco a pouco, incluso con axuda de voluntarios fóra do ámbito académico. Os puntos fortes desta arquitectura son a súa aposta por unha \acrfull{isa} libre e modificable, permitindo eliminar ou engadir instrucións segundo cada caso. Ademais, non é necesario pagar licenzas, polo que o fai un bo candidato para ser empregado en dispositivos \acrfull{iot} ~\cite{RISCV_IoT}. Non se trata do primeiro proxecto deste tipo, pero sí dun dos máis relevantes. 
+
+\section{Por que é importante?}\label{sec:imp_riscv}
 Se ben xa existen \acrshort{isa}s moito máis populares e amplamente estendidas, como por exemplo a ARMv7 ~\cite{Waterman:EECS-2016-1}, si que existen varios motivos para crear un novo conxunto de instrucións. Un dos principais é que a maioría das xa existentes requiren de licencia para o seu uso. Ademais, é necesaria unha \acrshort{isa} máis sinxela de cara á implementación e a modificación. REV Debido a isto, nace a necesidade de crear un simulador adaptado tanto á esta \acrshort{isa} como á arquitectura RISC-V.
 
 REESCRIBIR -- Cada conxunto de instrucións que realizan funcionalidades similares ou relacionadas agrúpanse habitualmente en extensións. As máis básicas son fáciles de atopar en Internet REFES AQUI, xa que se empregan na inmensa maioría de deseños. Ademais, cada extensión traballa sobre unha base determinada, que determina algunhas das instrucións, a codificación, tamaño, rexistros\dots. Ademais, este deseño modular permite traballar con bases enteiras de 32, 64 e inclusive 128-bits. As máis típicas son: 

@@ -2,10 +2,34 @@
 \label{chap:conclusions}
 
 \lettrine{D}{erradeiro} capítulo da memoria, onde se presentará a
-situación final do traballo, as leccións aprendidas, a relación coas
-competencias da titulación en xeral e a mención en particular,
+situación final do traballo, as leccións aprendidas, a relación coas competencias da titulación en xeral e a mención en particular,
 posibles liñas futuras,\dots
 
+\section{Resultados}\label{chap:resultados}
+Tras finalizar o proxecto, pódese garantir que engadir novas extensións coas súas correspondentes novas instrucións non comprometen o traballo anterior. O funcionamento do resto de módulos segue sendo correcto, o rendemento non se viu deteriorado en ningún momento.
+
+Por outra parte, a posibilidade de modificar as latencias dalgunhas instrucións grazas á parametrización engadida, mostra como cambia o rendemento no conxunto dun programa. Por exemplo, á hora de executar o benchmark SPMV para que realice multiplicación de enteiros, obtemos resultados moi interesantes segundo as latencias. Como vemos na táboa \ref{tab:rendemento_spmv}, 
+
+\begin{table}[hp!]
+    \centering
+    \rowcolors{2}{white}{udcgray!25}
+    \begin{tabular}{c|c|c}
+    \rowcolor{udcpink!25}
+    \textbf{Modificacións realizadas} & \textbf{Número de instrucións}  & \textbf{Tempo} 
+    \\\hline
+    \textit{SPMV base} & a & a \\
+    \textit{Latencia de mul = 5} & a & b\\
+    \textit{Latencia de mul = 10} & a & b\\
+    \textit{Latencia de mulh = 5} & a & b\\
+    \textit{Latencia de mul = 5 e mulh = 5} & a & b\\
+    \end{tabular}
+    \caption{Rendemento do benchmarks SPMV segundo as latencia de distintas operacións.}
+    \label{tab:rendemento_spmv}
+\end{table}
+
+Finalmente, destacar que a velocidade de simulación deste proxecto en comparación coa que se podería obter se VHDL ou Verilog fose empregado é moi superior.
+
 \section{Traballo futuro}\label{chap:traballo_futuro}
+Agora mesmo, o simulador inclúe todas as instrucións implementadas ata o que é conecido como extensión 'G'. Poderíanse engadir máis extensións, así como unha memoria ¿? ou incluir soporte para 64bits.
 
 

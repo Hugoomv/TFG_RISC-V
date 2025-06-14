@@ -4,11 +4,11 @@
 \lettrine{D}{erradeiro} 
 
 \section{Decisións á hora de implementar}\label{sec:decisions}
-Unha vez deseñado o proxecto, o seguinte paso é a implementación. Durante este proceso, buscaránse aproximacións á problemas que non se enfretaron na etapa de deseño. Por exemplo, para a implementación da instrución Fence, da extensión Zifencei, introducíronse sinais no módulo Decod conectadas con todos os módulos. Grazas a isto, pódese saber se había algunha instrución executándose en algún módulo, o que permite retrasar a execución da seguinte instrución. Así, asegúrase que todas as instrucións acabaron, simulando a barreira.
+Unha vez deseñado o proxecto, o seguinte paso é a implementación. Durante este proceso, buscaranse aproximacións a problemas que non se afrontaron na etapa de deseño. Por exemplo, para a implementación da instrución Fence, da extensión Zifencei, introducíronse sinais no módulo Decod conectadas con todos os módulos. Grazas a isto, pódese saber se había algunha instrución executándose nalgún módulo, o que permite retrasar a execución da seguinte instrución. Así, garántese que todas as instrucións acabaron, simulando a barreira.
 
 
 \section{Instrucións implementadas}\label{sec:intrucions_implt}
-Como se comentou no capítulo REFE AQUI, neste proxecto implementáronse todas as extensións ata a G. Isto inclúe as funcionalidades da base RV32I, extensión M, F, A, Zifencei, Zicsr. Implementáronse todas as instrucións destas extensións. A continuación unha lista das instrucións implementadas e a que extensión pertencen:
+Como se comentou no capítulo REFE AQUI, neste proxecto implementáronse todas as extensións ata a G. Isto inclúe as funcionalidades da base RV32I, extensión M, F, A, Zifencei, Zicsr. Implementáronse todas as instrucións destas extensións. A continuación, unha lista das instrucións implementadas e a extensión á que pertencen:
 \begin{table}[hp!]
   \centering
   \rowcolors{2}{white}{udcgray!25}
@@ -29,28 +29,31 @@ Como se comentou no capítulo REFE AQUI, neste proxecto implementáronse todas a
 
 
 \section{Implementacións dos pipelines}\label{sec:implt_pipelines}
-En todo o proxecto decidiuse empregar pipelines como unha solución práctica a varios dos problemas atopas. Un deles é simular a latencia de instrucións de multiplicación ou división no seu módulo. Para isto, creouse un array dentro do que as instrución avanzaban. O ciclos necesarios para salir do array son a latencia, e unha vez fóra as instrucións son procesadas. Adicionalmente, se nun ciclo a instrución que saliu é un \acrfull{nop}, búscase a anterior para que sexa executada. 
+En todo o proxecto decidiuse empregar pipelines como unha solución práctica a varios dos problemas atopados. Un deles é simular a latencia de instrucións de multiplicación ou división no seu módulo. Para isto, creouse un array dentro do que as instrucións avanzaban. Os ciclos necesarios para saír do array son a latencia, e unha vez fora, as instrucións son procesadas. Adicionalmente, se nun ciclo a instrución que saiu é un \acrfull{nop}, búscase a anterior para que sexa executada. 
 
 REV
 
 \section{Ferramentas empregadas}\label{sec:ferramentas}
-Durante o proxecto emprégaronse 5 ferramentas: Segger, Visual Studio 2022, Git, GTK Wave e SystemC. A continuación unha breve explicación do seu funcionamento, alternativas dispoñibles e comparativas explicando o por qué desta elección.
+Durante o proxecto empregáronse 5 ferramentas: Segger, Visual Studio 2022, Git, GTK Wave e SystemC. A continuación, unha breve explicación do seu funcionamento, alternativas dispoñibles e comparativas explicando o porqué desta elección.
 
 \subsection{Segger Embedded Studio for RISC-V}\label{sec:segger}
-Segger Embedded Studio for RISC-V é un IDE que permite compilar para RISC-V, incluindo obxectivos concretos como RV32, producir arquivos .elf e ver o código ensamblador. Foi principalmente empregado á hora de escribir código en C para \gls{tests} ou \gls{benchmarks}. Ademais, o depurador permite ver código ensamblador coa direccións, polo que foi realmente útil á hora de encontrar bugs. Se ben existen alternativas populares, como CLion de JetBrains co Toolchain de RISC-V, Visual Studio Code ou Eclipse. No caso de CLion é de pago, polo que é un gran punto en contra. Se ben a universidade ofrece claves, sería necesario engadir o toolchain de RISC-V para poder compilar código para RISC-V, facendo o proceso máis complexo. Visual Studio Code tampouco inclúe ferramentas de base, polo que sería necesario buscar plugins e configurar todo para que sexa apto. Por último, Eclipse con un plugin podería ser apto. Se ben o proceso de instalación non é complexo, non inclúe obxectivos determinados. Ademais, estos IDEs non permiten depurar SystemC, solamente C++. Todo isto fai que Segger sexa a mellor alternativa xa que inclúe configuracións xa feitas, todas as ferramentas necesarias sen apenas configuración.
+Segger Embedded Studio for RISC-V é un IDE que permite compilar para RISC-V, incluindo obxectivos concretos como RV32, producir arquivos .elf e ver o código ensamblador. Foi principalmente empregado á hora de escribir código en C para \gls{tests} ou \gls{benchmarks}. Ademais, o depurador permite ver código ensamblador coas direccións, polo que foi realmente útil á hora de encontrar bugs. Se ben existen alternativas populares, como CLion de JetBrains co Toolchain de RISC-V, Visual Studio Code ou Eclipse. No caso de CLion é de pago, polo que é un gran punto en contra. Se ben a universidade ofrece claves, sería necesario engadir o toolchain de RISC-V para poder compilar código para RISC-V, facendo o proceso máis complexo. Visual Studio Code tampouco inclúe ferramentas de base, polo que sería necesario buscar plugins e configurar todo para que sexa apto. Por último, Eclipse cun plugin podería ser apto. Se ben o proceso de instalación non é complexo, non inclúe obxectivos determinados. Ademais, estes IDEs non permiten depurar SystemC, soamente C++. Todo isto fai que Segger sexa a mellor alternativa xa que inclúe configuracións xa feitas, todas as ferramentas necesarias sen apenas configuración.
 
 \subsection{Visual Studio 2022}\label{sec:visual_studio}
-Á hora de traballar no simulador con C++, o IDE elixido foi Visual Studio 2022. Entre as características máis destacables están integración con Git, depuración con opcións avanzadas, bo funcionamento con GTK Wave e SystemC, \dots Existen infinidades de alternativas, como se mencionou no apartado anterior, este foi o empregado por ser o máis empregado para este tipo de proxectos polo estudante. Ademais, xa fora empregado na asinatura de Codeseño \gls{Hardware}/\gls{Software} xunto SystemC. 
+Á hora de traballar no simulador con C++, o IDE elixido foi Visual Studio 2022. Entre as características máis destacables están: integración con Git, depuración con opcións avanzadas, bo funcionamento con GTK Wave e SystemC, \dots Existen infinidades de alternativas, como se mencionou no apartado anterior, este foi o elixido por ser o máis habitual para este tipo de proxectos polo estudante. Ademais, xa fora empregado na asinatura de Codeseño \gls{hardware}/\gls{software} xunto a SystemC. 
 
 \subsection{GTK Wave}\label{sec:gtkwave}
-Para solventar algúns dos problemas máis complexos, como se mencionou no capítulo REFE AQUI, foi necesario empregar esta ferramenta. Este software permite, unha vez engadidas trazas no código, rexistrar os cambios de valor de sinais e variables para despois mostralo nun gráfico de ondas. Se ben non é moi popular, xa foi empregada nalgunha asinatura, polo que xa coñecela previamente foi imprescidible para elixila.
+Para solventar algúns dos problemas máis complexos, como se mencionou no capítulo REFE AQUI, foi necesario empregar esta ferramenta. Este software permite, unha vez engadidas trazas no código, rexistrar os cambios de valor de sinais e variables para despois mostralas nun gráfico de ondas. Se ben non é moi popular, xa foi empregada nalgunha asinatura, polo que  coñecela previamente foi imprescindible para elixila.
 
 \subsection{Git}\label{sec:git}
 Unha das ferramentas máis empregadas en todos os proxectos é Git. É un sistema de control de versións, polo que mediante repositorios crea un ficheiro onde se almacenan todos os cambios en distintos arquivos. Isto axuda a volver a versións anteriores en caso de erros nas modificacións máis recentes ou evitar perder o traballo en caso de fallo do equipo de traballo.
 
 
 \subsection{SystemC}\label{sec:systemc}
-Trátase dunha meta-linguaxe (unha libraría e un conxunto de macros) creada en C++ empregada para Codeseño. Contén soporte para dataflow e permite engadir código en C++ sen problema, polo que se pode traballar con clases, facilitando un deseño modular. Ademais engade funcionalidades similares ás de Verilog ou \acrshort{vhdl}. O que fai que sexa unha alternativa á estas dúas linguaxe é que permite misturar deseño \acrshort{rtl} con código C++ para imprimir por pantalla ou leer arquivos. C tamén podería ser outra opción, sen embargo a falta de datos públicos e privados, non existe a mesma facilidade para organizar todo en módulos e hai poucos tipos de datos aptos e crealos implica empregar funcións sempre.
+Trátase dunha meta-linguaxe (unha libraría e un conxunto de macros) creada en C++ empregada para Codeseño. Contén soporte para dataflow e permite engadir código en C++ sen problema, polo que se pode traballar con clases, facilitando un deseño modular. Ademais engade funcionalidades similares ás de Verilog ou \acrshort{vhdl}. O que fai que sexa unha alternativa a estas dúas linguaxes é que permite misturar deseño \acrshort{rtl} con código C++ para imprimir por pantalla ou ler arquivos. C tamén podería ser outra opción; sen embargo, a falta de datos públicos e privados, non existe a mesma facilidade para organizar todo en módulos e hai poucos tipos de datos aptos, e crealos implica empregar funcións sempre.
 
+
+-- Que se pode facer coa versión normal
+-- Inst
 
 

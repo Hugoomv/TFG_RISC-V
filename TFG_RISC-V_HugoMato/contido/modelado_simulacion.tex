@@ -1,0 +1,16 @@
+\chapter{Modelado e simulación}
+\label{chap:mod_sim}
+
+\lettrine{N}{este} apartado explicaránse os fundamentos dun simulador, os motivos para crear un e o funcionamento típico. Ademais, indicaránse as linguaxes máis habituais destes casos, as diferenzas e o motivo da elección de SystemC. 
+
+\section{Por que é importante o modelado e a simulación?}\label{sec:mod_sim}
+Durante o proceso de creación de calquera compoñente electrónico minimamente complexo, é necesario revisar que o deseño realiza as funcións esperadas e de forma correcta. Isto é, que garante resultados correctos, dentro dun tempo razoable e cun emprego de recursos limitado. Unha opción é encargar un novo modelo cada vez que se crea un deseño que se necesita revisar. Se ben é posible, os longos períodos de tempo de creación e os altos custos son un impedimento enorme. No seu lugar, créase unha versión dixital mediante \gls{software}. Este é o modelado, mentres que se queremos que o deseño imite o comportamento real para poder ver os erros, é necesario un simulador. En moitos casos, estas ferramentas están xuntas, facendo máis sinxelo o traballo.
+Grazas á existencia destos programas, o deseño e creación de compoñentes electrónicos é moito máis veloz e barato, permitindo que un avance tecnolóxico con menos limitacións.¿?s
+
+\section{VHDL e Verilog}\label{sec:vhdl_verilog}
+Estas linguaxes son empregadas principalmente para describir circuítos de forma moi precisa, permitindo incluso diferenciar que é unha simple conexión dun rexistro. Ademais, os compiladores para \acrfull{hdl} son capaces de xerar circuítos de alta calidade, imposibles de realizar para un ser humano. Á hora de modelar e simular, son as máis empregadas. Coñecidas por ser o estándar na industria, permiten traballar a baixo nivel. Isto garante unha gran eficiencia e rendemento, ademais de ofrecer flexibilidade. Da mesma forma que a cercanía ao hardware ofrece algunhas melloras, tamén ten desvantaxes, como a maior complexidade á hora de escribir código, falta de características típicas de \acrfull{oop}, \dots
+
+A elección de SystemC antes que VHDL ou Verilog foi debido a que permite traballar a un nivel máis, a simulación é moito máis rápida e ademais a base do proxecto inicial sobre o que se traballou xa estaba feita empregando esta libraría.
+
+\section{SystemC}\label{sec:systemc}
+Trátase dunha meta-linguaxe (unha libraría e un conxunto de macros) creada en C++ empregada para Codeseño. Contén soporte para dataflow e permite engadir código en C++ sen problema, polo que se pode traballar con clases, facilitando un deseño modular. Ademais engade funcionalidades similares ás de Verilog ou \acrshort{vhdl}. O que fai que sexa unha alternativa a estas dúas linguaxes é que permite misturar deseño \acrshort{rtl} con código C++ para imprimir por pantalla ou ler arquivos. C tamén podería ser outra opción, sen embargo, a falta de datos públicos e privados, non existe a mesma facilidade para organizar todo en módulos e hai poucos tipos de datos aptos, e crealos implicaría empregar funcións sempre.
