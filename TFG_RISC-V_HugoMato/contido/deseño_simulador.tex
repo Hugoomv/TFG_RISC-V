@@ -4,25 +4,21 @@
 \lettrine{P}{reviamente} a crear calquera programa é necesario un deseño. Durante este capítulo explicaranse as distintas decisións tomadas ao longo do traballo, a súa motivación e alternativas. Ademais, falarase sobre características deste, como a parametrización ou o nivel de funcionamento.
 
 \section{RTL}\label{sec:rtl}
-O nivel de simulación é o seguinte paso despois de decidir que arquitectura modelar. Neste caso, decidiuse que o simulador traballe \acrfull{rtl} debido ao interese en reflexar todas as operacións, a actualización de valores nos rexistros ou non omitir a implementación da conexión dos módulos (unhas das partes máis interesantes neste traballo) ~\cite{rtl_wikipedia}.
+O nivel de simulación é o seguinte paso despois de decidir que arquitectura modelar. Neste caso, decidiuse que o simulador traballe a \acrfull{rtl} debido ao interese en reflexar todas as operacións, a actualización de valores nos rexistros ou non omitir a implementación da conexión dos módulos (unhas das partes máis interesantes neste traballo) ~\cite{rtl_wikipedia}.
 
 Se ben unha alternativa interesante sería \acrfull{tlm}, que sería o seguinte nivel de deseño electrónico, a abstracción que proporciona neste caso é demasiado alta para os detalles nos que se considera traballar neste proxecto.  
 
-Tipicamente, para este nivel tan baixo, o habitual é empregar VHDL ou Verilog. Como se comentou anteriormente, SystemC foi elixido por ser máis rápido para simulación, permite traballar a máis nivel e a base do proxecto sobre a que se traballa xa estaba feita con esta libraría.
-
-
+Tipicamente, para este nivel tan baixo, o habitual é empregar VHDL ou Verilog. Como se comentou no capítulo \ref{sec:motivación} e en \ref{sec:systemc}, SystemC foi elixido por ser máis rápido para simulación, permite traballar a máis nivel e a base do proxecto sobre a que se traballa xa estaba feita con esta libraría.
 
 \section{Pipeline de 5 etapas}\label{sec:pipeline_5etapas}
 A división do pipeline comeza co nacemento dos primeiros ordenadores superescalares en REFES AQUI. A idea é aumentar o rendemento ao permitir que o procesador execute máis dunha instrución por ciclo. Para iso, divídese a execución en 5 etapas, habitualmente Fetch, Decode, Execute, Memory e Write Back.
 
-
 En Fetch obténse a instrución de memoria. Durante Decode procésase a instrución obtida, analizando que tipo de operación se realizará, cales son os rexistros empregados, se hai algunha dependencia, etc. En Execute realízase a operación determinada, como pode ser un cálculo na \acrfull{alu}. En Memory, se é necesario, escríbese ou léese en memoria. Finalmente, en Write Back actualízanse os rexistros.
-
 
 O procesador RISC-V emprega un pipeline deste tipo, polo que ao deseñar o simulador hai que ter en conta as 5 etapas. A aproximación realizada foi dividir cada etapa en un módulo do simulador, salvando Decod e Write Back que se uniron por comodidade.
 
-\section{Módulos do simulador}\label{sec:modulso_sim}
-Os módulos principais, como se comentou no apartado anterior, son cada unha das 5 etapas, fusionando Decod e Write Back. No caso da etapa Execute, simplemente se creou unha \acrshort{alu}, encargada de realizar operacións de suma, resta e outras operacións lóxicas. Ademais, engadíronse varios módulos ao longo do proxecto. Para as operacións de multiplicación e división da extensión M, creouse un novo módulo. Separar estas funcionalidades permite organizar o traballo, ademais de simplificalo e facerlo máis sinxelo de depurar. Para a extensión F, de forma análoga, existe un compoñente encargado de realizar todas as operacións de punto flotante simple. Estos dous últimos módulos inclúen a posibilidade de parametrizar as súas instrucións, como se detallaba no capítulo[REFE AQUI], concretamente no apartado [REFE AQUI]
+\section{Módulos do simulador}\label{sec:modulo_sim}
+Os módulos principais, como se comentou no apartado anterior, son cada unha das 5 etapas, fusionando Decod e Write Back. No caso da etapa Execute, simplemente se creou unha \acrshort{alu}, encargada de realizar operacións de suma, resta e outras operacións lóxicas. Ademais, engadíronse varios módulos ao longo do proxecto. Para as operacións de multiplicación e división da extensión M, creouse un novo módulo. Separar estas funcionalidades permite organizar o traballo, ademais de simplificalo e facerlo máis sinxelo de depurar. Para a extensión F, de forma análoga, existe un compoñente encargado de realizar todas as operacións de punto flotante simple. Estes dous últimos módulos inclúen a posibilidade de parametrizar as súas instrucións. 
 
 \section{Modos de operación}\label{sec:modos_op}
 Coa fin de mellorar a calidade da simulación, decidíuse engadir no módulo de multiplicación a posibilidade de elixir entre dous modos de funcionamento. O primeiro limita de forma que, se hai unha multiplicación executándose, non se pode realizar ningunha outra operación no módulo. Isto pretende semellarse a un caso real, no que, por limitacións físicas, se empregan os mesmos circuítos para ambas operacións. O segundo modo permite que se executen todas as multiplicacións necesarias, pero só unha división ao mesmo tempo.
@@ -43,9 +39,9 @@ Coa fin de mellorar a calidade da simulación, decidíuse engadir no módulo de 
     \item FSUB.S
     \item FMUL.S
 \end{itemize}
-Isto permite unha representación máis realista, xa que por defecto todas as instrucións no simulador teñen unha latencia dun ciclo. Sen embargo, na realidade, operacións máis complexas como as multiplicacións ou división levan varios ciclos.
+Isto permite unha representación máis realista, xa que por defecto todas as instrucións no simulador teñen unha latencia dun ciclo. Sen embargo, na realidade, operacións máis complexas como as multiplicacións ou divisións levan varios ciclos.
 
 \section{Sinais de hazard}\label{sec:hazards}
-Como sucede en moitas \gls{arquitecturas}, a execución de instrucións moitas veces vese limitada por dependencias. Isto é, non se pode continuar co programa porque a seguinte instrución emprega algún rexistro que debe ser actualizado previamente, pero non isto aínda non sucedeu porque algunha instrución previa non acabou a súa execución. Para evitar esta situación, en moitos casos engádense burbullas, o que son ciclos nos que non se fai ningún traballo. O simulador replica este funcionamento, polo que para detectar estas dependencias emprega sinais de \gls{hazards}.
+Como sucede en moitas \gls{arquitecturas}, a execución de instrucións moitas veces vese limitada por dependencias. Isto é, non se pode continuar co programa porque a seguinte instrución emprega algún rexistro que debe ser actualizado previamente, pero aínda non sucedeu porque algunha instrución previa non acabou a súa execución. Para evitar esta situación, en moitos casos engádense burbullas, ciclos nos que non se fai ningún traballo para permitir que o resto de instrucións acaben. O simulador replica este funcionamento, polo que para detectar estas dependencias emprega sinais de \gls{hazards}.
 
-Chámase hazard a calquera perigo que poidese causar un risco \acrfull{raw}, \acrfull{war} ou \acrfull{waw}. Polo que, para evitar un hazard, débese detectar unha dependencia con suficiente antelación. A nosa elixida neste caso foron empregar sinais nos módulos de punto-flotante, multiplicación e \acrshort{alu} conectados co módulo de decodificación. Se foi detectada unha dependencia, o sinal enviará un alertará ao módulo e este creará burbullas ata que non exista a dependencia.
+Chámase hazard a calquera perigo que poidese causar un risco \acrfull{raw}, \acrfull{war} ou \acrfull{waw}. Polo que, para evitar un hazard, débese detectar unha dependencia con suficiente antelación. A nosa solución elixida neste caso foi empregar sinais nos módulos de punto-flotante, multiplicación e \acrshort{alu} conectados co módulo de decodificación. Se foi detectada unha dependencia, o sinal enviará unha alerta ao módulo e este creará burbullas ata que non exista a dependencia.

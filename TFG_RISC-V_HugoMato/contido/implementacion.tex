@@ -1,14 +1,14 @@
 \chapter{Implementación}
 \label{chap:implementacion}
 
-\lettrine{D}{erradeiro} 
+\lettrine{T}{ras} haber creado o deseño, é necesario realizar a implementación. Neste capítulo, trataranse os problemas afrontados, as solucións elixidas e as ferramentas empregadas.
 
 \section{Decisións á hora de implementar}\label{sec:decisions}
 Unha vez deseñado o proxecto, o seguinte paso é a implementación. Durante este proceso, buscaranse aproximacións a problemas que non se afrontaron na etapa de deseño. Por exemplo, para a implementación da instrución Fence, da extensión Zifencei, introducíronse sinais no módulo Decod conectadas con todos os módulos. Grazas a isto, pódese saber se había algunha instrución executándose nalgún módulo, o que permite retrasar a execución da seguinte instrución. Así, garántese que todas as instrucións acabaron, simulando a barreira.
 
 
 \section{Instrucións implementadas}\label{sec:intrucions_implt}
-Como se comentou no capítulo REFE AQUI, neste proxecto implementáronse todas as extensións ata a G. Isto inclúe as funcionalidades da base RV32I, extensión M, F, A, Zifencei, Zicsr. Implementáronse todas as instrucións destas extensións. A continuación, unha lista das instrucións implementadas e a extensión á que pertencen:
+Como se comentou no capítulo \ref{sec:obxectivos}, neste proxecto implementáronse todas as extensións ata a G. Isto inclúe as funcionalidades da base RV32I, extensión M, F, A, Zifencei, Zicsr. Implementáronse todas as instrucións destas extensións. A continuación, unha lista das instrucións implementadas e a extensión á que pertencen:
 \begin{table}[hp!]
   \centering
   \rowcolors{2}{white}{udcgray!25}
@@ -49,7 +49,8 @@ Para solventar algúns dos problemas máis complexos, como se mencionou no capí
 Unha das ferramentas máis empregadas en todos os proxectos é Git. É un sistema de control de versións, polo que mediante repositorios crea un ficheiro onde se almacenan todos os cambios en distintos arquivos. Isto axuda a volver a versións anteriores en caso de erros nas modificacións máis recentes ou evitar perder o traballo en caso de fallo do equipo de traballo.
 
 
-\subsection{SystemC}\label{sec:systemc}
+\subsection{SystemC}\label{sec:imp_systemC}
+-- IGUAL que en modelado simulacion
 Trátase dunha meta-linguaxe (unha libraría e un conxunto de macros) creada en C++ empregada para Codeseño. Contén soporte para dataflow e permite engadir código en C++ sen problema, polo que se pode traballar con clases, facilitando un deseño modular. Ademais engade funcionalidades similares ás de Verilog ou \acrshort{vhdl}. O que fai que sexa unha alternativa a estas dúas linguaxes é que permite misturar deseño \acrshort{rtl} con código C++ para imprimir por pantalla ou ler arquivos. C tamén podería ser outra opción; sen embargo, a falta de datos públicos e privados, non existe a mesma facilidade para organizar todo en módulos e hai poucos tipos de datos aptos, e crealos implica empregar funcións sempre.
 
 
