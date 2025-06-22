@@ -1,25 +1,24 @@
+\appendix
 \chapter{Material adicional}
 \label{chap:adicional}
 
-\lettrine{E}{xemplo} de capítulo con formato de apéndice, onde se pode
-incluír material adicional que non teña cabida no corpo principal do
-documento, suxeito á limitación de 80 páxinas establecida no
-regulamento de TFGs.
+\lettrine{E}{ste} capítulo ten formato de apéndice, inclúe material adicional que non ten cabida no corpo principal do documento, como código de tests.
 
-Exemplo de código de proba
+\section{Exemplo de código de probas}
+\label{cod_test}
 
 \begin{lstlisting}[language=C]
 #include <stdio.h>
 #include <stdint.h>
 
-// Función para emular la operación div en RISC-V
+// Función para emular la operación remu en RISC-V
 int32_t remu(int32_t a, int32_t b) {
     int32_t result = 0;
     asm volatile ("remu %0, %1, %2" : "=r"(result) : "r"(a), "r"(b));
     return result;
 }
 
-// Func de prueba
+// Funcion de prueba
 void TEST_REMU(int id, int32_t expected, int32_t a, int32_t b, int32_t *res) {
     int32_t result = remu(a, b); 
     if (result != expected) {

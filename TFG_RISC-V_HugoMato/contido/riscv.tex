@@ -4,7 +4,7 @@
 \lettrine{A}{o} longo deste capítulo detallarase en qué consiste RISC-V, a estrutura básica, por qué é interesante e cales foron os motivos de que fose empregado como obxectivo deste proxecto.
 
 \section{Que é RISC-V?}\label{sec:que_riscv}
-Co paso do tempo, nacen novasarquitecturas buscando ofrecer algo innovador no mundo tecnolóxico. RISC-V é unha destas novidades, nacida en 2010 na Universidade de Berkeley ~\cite{WikipediaRISCV}, foi crecendo pouco a pouco, incluso con axuda de voluntarios fóra do ámbito académico. Os puntos fortes desta arquitectura son a súa aposta por unha \acrfull{isa} libre e modificable, permitindo eliminar ou engadir instrucións segundo cada caso. ~\cite{RISCV_IoT}. Non se trata do primeiro proxecto deste tipo, pero sí dun dos máis relevantes. 
+Co paso do tempo, nacen novas arquitecturas buscando ofrecer algo innovador no mundo tecnolóxico. RISC-V é unha destas novidades, nacida en 2010 na Universidade de Berkeley ~\cite{WikipediaRISCV}, foi crecendo pouco a pouco, incluso con axuda de voluntarios fóra do ámbito académico. Os puntos fortes desta arquitectura son a súa aposta por unha \acrfull{isa} libre e modificable, permitindo eliminar ou engadir instrucións segundo cada caso. ~\cite{RISCV_IoT}. Non se trata do primeiro proxecto deste tipo, pero sí dun dos máis relevantes. 
 
 \section{Por que é importante?}\label{sec:imp_riscv}
 Unha nova arquitectura acompañada dunha \acrshort{isa} libre permite reducir custos, polo que o fai un bo candidato para ser empregado en dispositivos \acrshort{iot}.Se ben xa existen \acrshort{isa}s moito máis populares e amplamente estendidas, como por exemplo a ARMv7 ~\cite{Waterman:EECS-2016-1}, si que existen varios motivos para crear un novo conxunto de instrucións. Un dos principais é que a maioría das xa existentes requiren de licencia para o seu uso. Ademais, é necesaria unha \acrshort{isa} máis sinxela de cara á implementación e a modificación. 
@@ -18,16 +18,26 @@ Cada conxunto de instrucións que realizan funcionalidades básicas e que é imp
 \end{itemize}
 
 Por outra parte, as instrucións similares ou relacionadas agrúpanse habitualmente en extensións. As extensións máis habituais contan cunha versión validada ~\cite{ratified_extensions}, xa que se empregan na inmensa maioría de deseños. Cada extensión traballa sobre unha base determinada, engadindo funcionalidades adicionais, creando un deseño modular. 
-MELLOR TABOA??
-En canto as extensións: 
-\begin{itemize}
-    \item M: Extensión estándar para multiplicación de enteiros, divisións e resto.
-    \item A: Extensión estándar para operación atómicas.
-    \item F: Extensión estándar para punto flotante de precisión simple.
-    \item D: Extensión estándar para punto flotante de precisión doble.
-    \item G: Abreviatura empregada para o conxunto de extensións "IMAFDZicsr\_Zifencei".
-    \item L: Extensión estándar para punto flotante decimal.
-    \item P: Extensión estándar para instrucións de Packed-SIMD REV.
-    \item Zicsr: Extensión estándar para a xestión de rexistros de control e estado (\acrfull{csr} Instructions).
-    \item Zifencei: Extensión para instrucións para a sincronización de escritura de instrucións (Fetch e Fence).
-\end{itemize}
+En canto ás extensións: 
+
+\begin{table}[hp!]
+  \centering
+  \rowcolors{2}{white}{udcgray!25}
+  \begin{tabular}{|p{5cm}|p{7cm}|}
+    \rowcolor{udcpink!25}
+    \textbf{Nome da extensión} & \textbf{Descripción} \\\hline
+    \textit{M} & Extensión estándar para multiplicación de enteiros, divisións e resto \\
+    \textit{A} & Extensión estándar para operación atómicas \\
+    \textit{F} & Extensión estándar para punto flotante de precisión simple \\
+    \textit{D} & Extensión estándar para punto flotante de precisión doble \\
+    \textit{G} & Abreviatura empregada para o conxunto de extensións "IMAFDZicsr\_Zifencei" \\
+    \textit{L} & Extensión estándar para punto flotante decimal \\
+    \textit{P} & Extensión estándar para instrucións de Packed-SIMD \\
+    \textit{Zicsr} & Extensión estándar para a xestión de rexistros de control e estado (\acrfull{csr} Instructions) \\
+    \textit{Zifencei} &  Extensión para instrucións para a sincronización de escritura de instrucións (Fetch e Fence) \\
+  \end{tabular}
+  \caption{Nome e descripcións das extensións}
+  \label{tab:extensiones}
+\end{table}
+
+

@@ -9,35 +9,25 @@ Unha vez deseñado o proxecto, o seguinte paso é a implementación. Durante est
 
 \section{Instrucións implementadas}\label{sec:intrucions_implt}
 Como se comentou no capítulo \ref{sec:obxectivos}, neste proxecto implementáronse todas as extensións ata a G. Isto inclúe as funcionalidades da base RV32I, extensión M, F, A, Zifencei, Zicsr. Implementáronse todas as instrucións destas extensións. A continuación, unha lista das instrucións implementadas e a extensión á que pertencen:
-\begin{table}[hp!]
-  \centering
-  \rowcolors{2}{white}{udcgray!25}
-  \begin{tabular}{c|c}
-    \rowcolor{udcpink!25}
-    \textbf{Nome da operación} & \textbf{Estado da implementación} \\\hline
-    \textit{Add} & Implementada \\
-    \textit{Sub} & Contido de celda \\
-    \multicolumn{2}{c}{\textbf{Esta fila ocupa ambas columnas}} \\
-    \textit{Título de fila} & Contido de celda \\
-    \textit{Título de fila} & Contido de celda \\
-    \textit{Título de fila} & Contido de celda \\
-    \textit{Título de fila} & Contido de celda \\
-  \end{tabular}
-  \caption{Extensións e as instrucións implementadas}
-  \label{tab:intrucions_implementadas}
-\end{table}
 
+\input{contido/instruciones_implementadas}
 
 \section{Implementacións dos pipelines}\label{sec:implt_pipelines}
-En todo o proxecto decidiuse empregar pipelines como unha solución práctica a varios dos problemas atopados. Un deles é simular a latencia de instrucións de multiplicación ou división no seu módulo. Para isto, creouse un array dentro do que as instrucións avanzaban. Os ciclos necesarios para saír do array son a latencia, e unha vez fora, as instrucións son procesadas. Adicionalmente, se nun ciclo a instrución que saiu é un \acrfull{nop}, búscase a anterior para que sexa executada. 
+Neste simulador non se implementaron as unidades funcionais que están segmentadas como tal, polo que á hora de simular o retardo das instrucións, decidiuse empregar arrays para simular o proceso dunha instrución atravesando o pipeline. Os ciclos necesarios para saír do array son a latencia, e unha vez fóra, as instrucións son procesadas. Adicionalmente, se nun ciclo a instrución que saiu é un \acrfull{nop}, búscase a anterior para que sexa executada. 
 
-REV
+\section{Funcionalidades do simulador}\label{sec:func_sim}
+Antes de comezar este proxecto, xa existía un estrutura base deste simulador, implementando todas as funcionalidades básicas recollidas na base RV32I. Isto inclúe todas as instrucións de lectura e escritura de datos en memoria e rexistros, suma e resta (incluso con operandos inmediatos), operacións lóxicas, saltos e ramas. Esta primeira versión podía executar programas relativamente sinxelos.
+
+Unha vez comezado o proxecto, engadíronse o módulo de multiplicación para a extensión M, o módulo de operación de punto flotante simple para a extensión F e algunhas instrucións adicionais para as extensións A, Zicsr e Zifencei. Agora, permite a execución de multiplicacións, divisións e operacións con datos de tipo float.
+
+\section{Instrución: tipo de dato}\label{sec:inst}
+Todo programa executado neste simulador está feito a base de instrucións. Por iso, a importancia de traballar correctamente - REV
 
 \section{Ferramentas empregadas}\label{sec:ferramentas}
 Durante o proxecto empregáronse 5 ferramentas: Segger, Visual Studio 2022, Git, GTK Wave e SystemC. A continuación, unha breve explicación do seu funcionamento, alternativas dispoñibles e comparativas explicando o porqué desta elección.
 
 \subsection{Segger Embedded Studio for RISC-V}\label{sec:segger}
-Segger Embedded Studio for RISC-V é un IDE que permite compilar para RISC-V, incluindo obxectivos concretos como RV32, producir arquivos .elf e ver o código ensamblador. Foi principalmente empregado á hora de escribir código en C para \gls{tests} ou \gls{benchmarks}. Ademais, o depurador permite ver código ensamblador coas direccións, polo que foi realmente útil á hora de encontrar bugs. Se ben existen alternativas populares, como CLion de JetBrains co Toolchain de RISC-V, Visual Studio Code ou Eclipse. No caso de CLion é de pago, polo que é un gran punto en contra. Se ben a universidade ofrece claves, sería necesario engadir o toolchain de RISC-V para poder compilar código para RISC-V, facendo o proceso máis complexo. Visual Studio Code tampouco inclúe ferramentas de base, polo que sería necesario buscar plugins e configurar todo para que sexa apto. Por último, Eclipse cun plugin podería ser apto. Se ben o proceso de instalación non é complexo, non inclúe obxectivos determinados. Ademais, estes IDEs non permiten depurar SystemC, soamente C++. Todo isto fai que Segger sexa a mellor alternativa xa que inclúe configuracións xa feitas, todas as ferramentas necesarias sen apenas configuración.
+Segger Embedded Studio for RISC-V é un IDE que permite compilar para RISC-V, incluindo obxectivos concretos como RV32, producir arquivos .elf e ver o código ensamblador. Foi principalmente empregado á hora de escribir código en C para \gls{tests} ou \gls{benchmarks}. Ademais, o depurador permite ver código ensamblador coas direccións, polo que foi realmente útil á hora de encontrar bugs. Se ben existen alternativas populares, como CLion de JetBrains co Toolchain de RISC-V, Visual Studio Code ou Eclipse. No caso de CLion é de pago, polo que é un gran punto en contra. Se ben a universidade ofrece claves, sería necesario engadir o toolchain de RISC-V para poder compilar código para RISC-V, facendo o proceso máis complexo. Visual Studio Code tampouco inclúe ferramentas de base, polo que sería necesario buscar plugins e configurar todo para que sexa apto. Por último, Eclipse cun plugin podería ser apto. Se ben o proceso de instalación non é complexo, non inclúe obxectivos determinados. Todo isto fai que Segger sexa a mellor alternativa, xa que inclúe configuracións xa feitas, todas as ferramentas necesarias sen apenas configuración.
 
 \subsection{Visual Studio 2022}\label{sec:visual_studio}
 Á hora de traballar no simulador con C++, o IDE elixido foi Visual Studio 2022. Entre as características máis destacables están: integración con Git, depuración con opcións avanzadas, bo funcionamento con GTK Wave e SystemC, \dots Existen infinidades de alternativas, como se mencionou no apartado anterior, este foi o elixido por ser o máis habitual para este tipo de proxectos polo estudante. Ademais, xa fora empregado na asinatura de Codeseño \gls{hardware}/\gls{software} xunto a SystemC. 
@@ -53,8 +43,5 @@ Unha das ferramentas máis empregadas en todos os proxectos é Git. É un sistem
 -- IGUAL que en modelado simulacion
 Trátase dunha meta-linguaxe (unha libraría e un conxunto de macros) creada en C++ empregada para Codeseño. Contén soporte para dataflow e permite engadir código en C++ sen problema, polo que se pode traballar con clases, facilitando un deseño modular. Ademais engade funcionalidades similares ás de Verilog ou \acrshort{vhdl}. O que fai que sexa unha alternativa a estas dúas linguaxes é que permite misturar deseño \acrshort{rtl} con código C++ para imprimir por pantalla ou ler arquivos. C tamén podería ser outra opción; sen embargo, a falta de datos públicos e privados, non existe a mesma facilidade para organizar todo en módulos e hai poucos tipos de datos aptos, e crealos implica empregar funcións sempre.
 
-
--- Que se pode facer coa versión normal
--- Inst
 
 
