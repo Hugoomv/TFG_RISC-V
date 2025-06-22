@@ -11,14 +11,27 @@
 
 
 // MUL MODULE
-#define latencyMUL		2
-#define latencyMULH		2
+#define latencyMUL		5
+#define latencyMULH		1
 #define latencyMULHU	1
 #define latencyMULHSU	1
-#define latencyDIV		12
+#define latencyDIV		1
+
+constexpr int pipelineSizeMul = std::max({ latencyMUL,latencyMULH,latencyMULHU,latencyMULHSU, latencyDIV});
 
 
-constexpr int pipelineSizeMul = std::max({latencyMUL,latencyMULH,latencyMULHU,latencyMULHSU, latencyDIV});
+
+// PF_float MODULE
+#define latencyFCVTWS	2
+#define latencyFCVTSW   2
+#define latencyFADDS	2
+#define latencyFSUBS	2
+#define latencyFMULS	1
+
+
+constexpr int pipelineSizePF_float = std::max({ latencyFCVTWS, latencyFCVTSW, latencyFADDS,latencyFSUBS,latencyFMULS });
+
+
 
 /* Si 1 -> Solo puede estar ejecutandose una division/multiplicacion 
 * y no puede entrar ninguna otra op
