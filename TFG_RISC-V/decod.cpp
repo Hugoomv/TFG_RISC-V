@@ -350,6 +350,7 @@ void decod::decoding() {
 		INST.aluOp = 0;		INST.aluOut = 0x0000dead;
 
 		strcpy(INST.desc, "pf_float");
+		INST.target = 1;
 
 		break;
 
