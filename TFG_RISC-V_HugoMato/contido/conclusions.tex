@@ -6,11 +6,7 @@
 \section{Resultados}\label{chap:resultados}
 Tras finalizar o proxecto, pódese garantir que engadir novas extensións coas súas correspondentes novas instrucións non compromete o traballo anterior. O funcionamento do resto de módulos segue sendo correcto e o rendemento non se viu deteriorado en ningún momento.
 
-Por outra parte, a posibilidade de modificar as latencias dalgunhas instrucións grazas á parametrización engadida, mostra como cambia o rendemento no conxunto dun programa. Por exemplo, á hora de executar o benchmark SPMV que realiza multiplicación de enteiros, obtemos resultados moi interesantes segundo as latencias. 
-
-Como vemos na táboa \ref{tab:rendemento_spmv}, o número de instrucións non varía, o que é lóxico xa que só se modifica a súa latencia. Un cambio na cantidade de operacións realizadas implicaría engadir novas instrucións dependendo da latencia de determinadas instrucións. Se ben se emiten instrucións NOP durante cando se detectan hazards, estas fan a función de burbullas, non se fai nada salvo pasar ao seguinte ciclo. 
-
-Por outra parte, o tempo, isto é, o número de ciclos necesarios para executar o programa aumenta notablemente. Comparando o aumento de ciclos para a mesma latencia en mul e mulhu, dedúcese que se executan máis instrucións mul. O cal é razoable, xa que revisando o binario, vese que é correcto. Ademais, o test realiza multiplicacións de enteiros, e mul é imprescindible para isto, mentres que mulh encárgase da parte superior da multiplicación, innecesaria cando se empregan números pequenos.
+Por outra parte, a posibilidade de modificar as latencias dalgunhas instrucións grazas á parametrización engadida, mostra como cambia o rendemento no conxunto dun programa. Por exemplo, á hora de executar o benchmark SPMV que realiza multiplicación de enteiros, obtemos resultados moi interesantes segundo as latencias. Como vemos na táboa \ref{tab:rendemento_spmv}, o número de instrucións non varía, o que é lóxico xa que só se modifica a súa latencia. Un cambio na cantidade de operacións realizadas implicaría engadir novas instrucións dependendo da latencia de determinadas instrucións. Se ben se emiten instrucións \acrshort{nop} cando se detectan hazards, estas fan a función de burbullas, non se fai nada salvo pasar ao seguinte ciclo. Sen embargo, o tempo, isto é, o número de ciclos necesarios para executar o programa aumenta notablemente. Comparando o aumento de ciclos para a mesma latencia en mul e mulhu, dedúcese que se executan máis instrucións mul. O cal é razoable, xa que revisando o binario, vese que é correcto. Ademais, o test realiza multiplicacións de enteiros, e a operación mul é imprescindible para isto, mentres que mulhu encárgase da parte superior da multiplicación, innecesaria cando se empregan números pequenos.
 
 \begin{table}[hp!]
     \centering
@@ -30,9 +26,9 @@ Por outra parte, o tempo, isto é, o número de ciclos necesarios para executar 
     \label{tab:rendemento_spmv}
 \end{table}
 
-Finalmente, destacar que a velocidade de simulación deste proxecto en comparación coa que se podería obter se VHDL ou Verilog fose empregado é moi superior. Por exemplo, o benchmark SPMV execútase en apenas 30 segundos.
+Finalmente, destacar que a velocidade de simulación deste proxecto en comparación coa que se podería obter se \acrshort{vhdl} ou Verilog fose empregado é moi superior. Por exemplo, o benchmark SPMV execútase en apenas 30 segundos.
 
 \section{Traballo futuro}\label{chap:traballo_futuro}
-Agora mesmo, o simulador inclúe todas as instrucións implementadas ata o que é coñecido como extensión G. Poderíanse engadir máis extensións, como a D. Da mesma forma, sería interesante simular un de memoria e a súa xerarquía. A implementación actual non é moi realista. Trátase dun sinxelo módulo que sempre escribe ou lee nun só ciclo. Tamén sería interesante incluir soporte para 64-bits, coa posibilidade de seguir parametrizando o simulador, polo que, por exemplo, o tamaño dos rexistros ou o funcionamento do módulo de decodificación veríanse afectados segundo a base empregada.
+Agora mesmo, o simulador inclúe todas as instrucións implementadas ata o que é coñecido como extensión G (excepto a extensión D). Poderíanse engadir máis extensións, como a D ou L. Da mesma forma, sería interesante simular a memoria e a súa xerarquía. A implementación actual non é moi realista xa que se trata dun sinxelo módulo que sempre escribe ou lee nun só ciclo. Tamén sería interesante incluir soporte para 64-bits, coa posibilidade de seguir parametrizando o simulador, polo que, por exemplo, o tamaño dos rexistros ou o funcionamento do módulo de decodificación veríanse afectados segundo a base empregada.
 
 

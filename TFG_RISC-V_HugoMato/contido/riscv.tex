@@ -4,12 +4,12 @@
 \lettrine{A}{o} longo deste capítulo detallarase en qué consiste RISC-V, a estrutura básica, por qué é interesante e cales foron os motivos de que fose empregado como obxectivo deste proxecto.
 
 \section{Que é RISC-V?}\label{sec:que_riscv}
-Co paso do tempo, nacen novas arquitecturas buscando ofrecer algo innovador no mundo tecnolóxico. RISC-V é unha destas novidades, nacida en 2010 na Universidade de Berkeley ~\cite{WikipediaRISCV}, foi crecendo pouco a pouco, incluso con axuda de voluntarios fóra do ámbito académico. Os puntos fortes desta arquitectura son a súa aposta por unha \acrfull{isa} libre e modificable, permitindo eliminar ou engadir instrucións segundo cada caso. ~\cite{RISCV_IoT}. Non se trata do primeiro proxecto deste tipo, pero sí dun dos máis relevantes. 
+Co paso do tempo, nacen novas arquitecturas buscando ofrecer algo innovador no mundo tecnolóxico. RISC-V é unha destas novidades, nacida en 2010 na Universidade de Berkeley ~\cite{WikipediaRISCV}, foi crecendo pouco a pouco, incluso con axuda de voluntarios fóra do ámbito académico. Os puntos fortes desta arquitectura son a súa aposta por unha \acrshort{isa} libre e modificable, permitindo eliminar ou engadir instrucións segundo cada caso. ~\cite{RISCV_IoT}. Non se trata do primeiro proxecto deste tipo, pero sí dun dos máis relevantes. 
 
 \section{Por que é importante?}\label{sec:imp_riscv}
-Unha nova arquitectura acompañada dunha \acrshort{isa} libre permite reducir custos, polo que o fai un bo candidato para ser empregado en dispositivos \acrshort{iot}.Se ben xa existen \acrshort{isa}s moito máis populares e amplamente estendidas, como por exemplo a ARMv7 ~\cite{Waterman:EECS-2016-1}, si que existen varios motivos para crear un novo conxunto de instrucións. Un dos principais é que a maioría das xa existentes requiren de licencia para o seu uso. Ademais, é necesaria unha \acrshort{isa} máis sinxela de cara á implementación e a modificación. 
+Unha nova arquitectura acompañada dunha \acrshort{isa} libre permite reducir custos, polo que a fai unha boa candidata para ser empregada en dispositivos \acrshort{iot}. Se ben xa existen \acrshort{isa}s moito máis populares e amplamente estendidas, como por exemplo a ARMv7 ~\cite{Waterman:EECS-2016-1}, si que hai varios motivos para crear un novo conxunto de instrucións. Un dos principais é que a maioría das xa existentes requiren de licencia para o seu uso. Ademais, é necesaria unha \acrshort{isa} máis sinxela de cara á implementación e á modificación. 
 
-Cada conxunto de instrucións que realizan funcionalidades básicas e que é imprescindible implementar recibe o nome de base. O habitual son as bases que traballan con enteiros de 32 ou 64 bits. Tamén determinan algunhas a codificación, tamaño de rexistros ou instrucións,\dots. As máis típicas son: 
+Cada conxunto de instrucións que realizan funcionalidades básicas e que é imprescindible implementar recibe o nome de base. O habitual son as bases que traballan con enteiros de 32 ou 64 \gls{bits}. Tamén determinan algunhas a codificación, tamaño de rexistros ou instrucións,\dots. As máis típicas son: 
 \begin{itemize}
     \item RV32I: Conxunto de instrucións de base enteira de 32-bits.
     \item RV32E: Conxunto de instrucións de base enteira (embebida, é dicir, con 16 rexistros) de 32-bits.
@@ -17,7 +17,7 @@ Cada conxunto de instrucións que realizan funcionalidades básicas e que é imp
     \item RV128I: Conxunto de instrucións de base enteira de 128-bits.
 \end{itemize}
 
-Por outra parte, as instrucións similares ou relacionadas agrúpanse habitualmente en extensións. As extensións máis habituais contan cunha versión validada ~\cite{ratified_extensions}, xa que se empregan na inmensa maioría de deseños. Cada extensión traballa sobre unha base determinada, engadindo funcionalidades adicionais, creando un deseño modular. 
+Por outra parte, as instrucións similares ou relacionadas agrúpanse habitualmente en extensións. As máis habituais contan cunha versión validada ~\cite{ratified_extensions}, xa que se empregan na inmensa maioría de deseños. Cada unha traballa sobre unha base determinada, engadindo funcionalidades adicionais, creando un deseño modular. 
 En canto ás extensións: 
 
 \begin{table}[hp!]

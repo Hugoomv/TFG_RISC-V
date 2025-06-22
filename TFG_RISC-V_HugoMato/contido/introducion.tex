@@ -7,7 +7,7 @@
 
 \section{Motivación}
 \label{sec:motivación}
-RISC-V apunta a ser unha das arquitecturas máis empregadas nun futuro, xa que é libre, permitindo aforrar o custo de licenzas. Grazas a que se pode modificar, engadindo ou eliminando funcionalidades, isto permite que abarque múltiples sectores, dende \gls{chips} máis sinxelos orientados a \acrfull{iot}, ata competir con \acrfull{arm} en sistemas embebidos ~\cite{RISCV_IoT,RISCV_vsARM}. Co nacemento da nova \acrfull{isa} debido á necesidade dun conxunto de instrucións máis sinxelo e sen custos por licenzas, nace a necesidade de crear un simulador adaptado tanto a esta \acrshort{isa} como á arquitectura RISC-V. Se ben xa existe un simulador~\cite{sim_spike}, Spike funciona a nivel de instrución, polo que faltarían detalles como pipelines, \gls{hazards} ou a posibilidade de ver como cambian os rexistros con cada ciclo.
+RISC-V apunta a ser unha das arquitecturas máis empregadas nun futuro, xa que é libre, permitindo aforrar o custo de licenzas. Grazas a que se pode modificar, engadindo ou eliminando funcionalidades, isto permite que abarque múltiples sectores, dende \gls{chips} máis sinxelos orientados a \acrfull{iot}, ata competir con \acrshort{arm} en sistemas embebidos ~\cite{RISCV_IoT,RISCV_vsARM}. Co nacemento da nova \acrfull{isa} debido á necesidade dun conxunto de instrucións máis sinxelo e sen custos por licenzas, nace a necesidade de crear un simulador adaptado tanto a esta \acrshort{isa} como á arquitectura RISC-V. Se ben xa existe un simulador~\cite{sim_spike}, Spike funciona a nivel de instrución, polo que faltarían detalles como pipelines, \gls{hazards} ou a posibilidade de ver como cambian os \gls{rexistros} con cada ciclo.
 
 Durante o proceso de deseño, unha parte clave é a verificación do correcto funcionamento ~\cite{ChipVerify_verification,RISCV_verification}. Se ben é posible crear un chip con cada versión, na práctica, debido aos longos tempos e altos prezos, é inviable. Ahí é onde un simulador toma protagonismo, xa que permite probar de forma rápida, sinxela e barata os deseños creados. Ademais, é unha ferramenta moi interesante para as investigacións da comunidade científica e incluso para entornos educativos.
 
@@ -25,14 +25,14 @@ Os obxectivos deste proxecto son modelar e simular, usando SystemC, as seguintes
 
 O modelado será totalmente parametrizable, permitindo especificar a latencia das diferentes instrucións. Tamén permitirá especificar o número de canles de execución para as unidades de enteiros a punto flotante, e se estes están ou non totalmente segmentados. 
 
-Desta maneira, a simulación permitirá comparar o rendemento de, por exemplo, unha implementación na que multiplicador e divisor comparten circuítos, cunha na que ambos son independentes, e tamén comparar un divisor totalmente segmentado con un que non o sexa. 
+Desta maneira, a simulación permitirá comparar o rendemento de, por exemplo, unha implementación na que o multiplicador e o divisor comparten circuítos, cunha na que ambos son independentes, e tamén comparar un divisor totalmente segmentado cun que non o sexa. 
 
-Os resultados do modelado e a simulación son dous: verificar o correcto funcionamento da arquitectura, e comprobar o seu rendemento. 
+Os resultados do modelado e a simulación son dous: verificar o correcto funcionamento da arquitectura e comprobar o seu rendemento. 
 
 
 \section{Metodoloxía}
 \label{sec:metodoloxía}
-O método de traballo será incremental, dividindo as tarefas en partes independentes que van ser implementadas, simuladas e verificadas por orde de complexidade antes de proceder co seguinte.
+O método de traballo será incremental, dividindo as tarefas en partes independentes que van a ser implementadas, simuladas e verificadas por orde de complexidade antes de proceder co seguinte.
 
 O procedemento habitual é unha reunión semanal na que se revisa o feito anteriormente, acompañado de comprobación cos tests correspondentes para esa parte. Despois, decídese cal é o seguinte paso, podendo ser a implementación dunha nova extensión ou modificar un módulo do simulador.
 

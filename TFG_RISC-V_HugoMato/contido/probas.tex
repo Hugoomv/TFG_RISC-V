@@ -1,10 +1,10 @@
 \chapter{Probas}
 \label{chap:probas}
 
-\lettrine{U}{nha} parte imprescindible de calquera proxecto é o período de probas ou testing, durante o cal se busca atopar bugs e comprobar que o funcionamento é o esperado e correcto. Ao longo deste capítulo explicaránse os distintos exames aos que se someteu o simulador, o seu obxectivo, orixe e diferenzas fundamentais.
+\lettrine{U}{nha} parte imprescindible de calquera proxecto é o período de probas ou testing, durante o cal se busca atopar bugs e comprobar que o funcionamento é o esperado e é correcto. Ao longo deste capítulo explicaránse os distintos exames aos que se someteu o simulador, o seu obxectivo, orixe e diferenzas fundamentais.
 
 \section{Benchmarks}\label{sec:benchmarks}
-Unha vez implementada unha nova instrución, ou un pipeline, é necesario comprobar que o funcionamento é o esperado. Para iso, empréganse diferentes métodos. Un deles son os benchmarks, diferentes probas que buscan crear casos habituais e incluso os máis edge cases. A fonte destes benchmarks  é o repositorio de RISC-V test ~\cite{riscv_tests}. Aquí existen diferentes programas orientados a probar determinadas funcións, como a multiplicación con SPMV. Os benchmarks empregados durante o traballo son os seguintes:
+Unha vez implementada unha nova instrución, ou un pipeline, é necesario comprobar que o funcionamento é o esperado. Para iso, empréganse diferentes métodos. Un deles son os benchmarks, diferentes probas que buscan crear casos habituais e incluso os máis extremos ou menos frecuentes. A fonte destes benchmarks é o repositorio de RISC-V ~\cite{riscv_tests}. Aquí existen diferentes programas orientados a probar determinadas funcións, como a multiplicación con SPMV. Os benchmarks empregados durante o traballo son os seguintes:
 \begin{table}[hp!]
   \centering
   \rowcolors{2}{white}{udcgray!25}
@@ -23,9 +23,9 @@ Unha vez implementada unha nova instrución, ou un pipeline, é necesario compro
 \end{table}
 
 \section{Tests propios}\label{sec:tests}
-Ademais de empregar os benchmarks, créaronse varios exames buscando probar especificamente certas funcionalidades segundo fose necesario. O concepto básico foi imitar algún benchmark de instrución atopado no repositorio oficial ~\cite{riscv_tests}. Como se ve no apéndice \ref{cod_test} , consiste en empregar código ensamblador embebido ~\cite{asm_emb} para integrar a instrución no código en C. Ademais, compróbase o resultado da operación gardando o que devolve e comparando co resultado esperado. Na súa maioría son bastante sinxelos; sen embargo, tendo en conta determinados casos que poderían ser problemáticos, serven para determinar se unha instrución está ben implementada.
+Ademais de empregar os benchmarks, foron creados varios exames buscando probar especificamente certas funcionalidades segundo fose necesario. O concepto básico foi imitar algún benchmark de instrución atopado no repositorio oficial ~\cite{riscv_tests}. Como se ve no apéndice \ref{cod_test} , consiste en empregar código ensamblador embebido ~\cite{asm_emb} para integrar a instrución no código en C. Ademais, compróbase o resultado da operación gardando o que devolve e comparando co resultado esperado. Na súa maioría son bastante sinxelos; sen embargo, tendo en conta determinados casos que poderían ser problemáticos, serven para determinar se unha instrución está ben implementada.
 
 
 \section{Depuración}\label{sec:depuración}
-Chámase depuración ao proceso de revisión exhaustiva do software en busca de erros. Calquera programa durante o proceso de desenvolvemento sofre varias revisións, tipicamente empregando o IDE. Este permite deterse en determinada instrución, imprimir o valor dunha variable antes e despois dun cambio, etc. Para este punto, tanto Segger como Visual Studio foron moi útiles, xa que proporcionan incluían ferramentas perfectamente integradas.
+Chámase depuración ao proceso de revisión exhaustiva do software en busca de erros. Calquera programa durante o proceso de desenvolvemento sofre varias revisións, tipicamente empregando o \acrshort{ide}. Este permite deterse en determinada instrución, imprimir o valor dunha variable antes e despois dun cambio, etc. Para este punto, tanto Segger como Visual Studio foron moi útiles, xa que proporcionan ferramentas perfectamente integradas.
 
