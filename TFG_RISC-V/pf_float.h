@@ -4,6 +4,7 @@
 #include "systemc.h"
 #include "structsRV.h"
 #include "auxFuncs.h"
+#include "config.h"
 
 SC_MODULE(pf_float) {
 public:
@@ -46,9 +47,19 @@ private:
 	sc_signal < bool > fire;
 
 	bool flagEmpty = false;
-	float regsFloat[32]; // rev float
+	float regsFloat[32]; 
+
+	instruction pipeline[pipelineSizePF_float];
 
 };
+
+#define FADDS	0
+#define FSUBS	1
+#define FMULS	2
+#define FCVTWS	24
+#define FCVTSW	26
+#define FMVXS	28
+#define FMVSX	30
 
 #endif
 
