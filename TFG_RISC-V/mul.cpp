@@ -42,7 +42,7 @@ void mul::multiplication() {
 
 			cyclesInPipeline = pipelineSizeMul - i;
 
-			if (pipeline[i].wReg && getLatencyOp(pipeline[i].aluOp) <= cyclesInPipeline) {
+			if (pipeline[i].wReg && getLatencyOp(pipeline[i].aluOp,pipeline[i].target) <= cyclesInPipeline) {
 
 				output = pipeline[i];
 				pipeline[i] = createNOP();
