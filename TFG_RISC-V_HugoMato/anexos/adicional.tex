@@ -2,7 +2,7 @@
 \chapter{Material adicional}
 \label{chap:adicional}
 
-\lettrine{E}{ste} capítulo ten formato de apéndice, inclúe material adicional que non ten cabida no corpo principal do documento, como código de tests.
+\lettrine{E}{ste} capítulo ten formato de apéndice, inclúe material adicional que non ten cabida no corpo principal do documento, como código de tests ou exemplos de módulos.
 
 \section{Exemplo de código de probas}
 \label{cod_test}
@@ -38,5 +38,322 @@ int main(){
   TEST_REMU( 6, -1<<31, -1<<31, -1, &res );
 
   return res;
+}
+\end{lstlisting}
+
+\section{Módulo de multiplicación}
+\label{mul_module}
+A continuación móstrase o código do módulo de multiplicación, composto polo ficheiro de cabeceira e o correspondente corpo. 
+
+\begin{lstlisting}[language=C++]
+#ifndef MUL_H
+#define MUL_H
+
+#include "systemc.h"
+#include "structsRV.h"
+#include "config.h"
+#include "auxFuncs.h"
+
+
+SC_MODULE(mul) {
+public:
+
+	sc_in <bool> clk, rst;
+	sc_in <instruction> I;
+
+	// Hazard detection from Decod
+	sc_in <sc_uint<5>> rs1In, rs2In;
+	sc_out <bool> hzrdRs1Out, hzrdRs2Out;
+
+	sc_out <bool> readyFenceMulOut;
+
+	sc_out <instruction> instOut;
+
+
+	void multiplication();
+
+	void hazardDetection();
+
+	SC_CTOR(mul) {
+		cout << "mul: " << name() << endl;
+
+		// NOP
+		INST = createNOP();
+
+		SC_METHOD(multiplication);
+		sensitive << clk.pos();
+
+		SC_METHOD(hazardDetection);
+		sensitive << rs1In << rs2In << fire;
+
+		fire.write(true);
+
+	}
+
+private:
+
+	instruction INST;
+	sc_signal <bool> fire;
+
+	instruction pipeline[pipelineSizeMul];
+
+	bool pipelineFull = false;
+	bool flagDiv = false;
+
+};
+
+#define MUL 16
+#define MULH 17
+#define MULHSU 18
+#define MULHU 19
+#define DIV 20
+#define DIVU 21
+#define REM 22
+#define REMU 23
+
+#endif
+\end{lstlisting}
+
+\begin{lstlisting}[language=C++]
+#include "mul.h"
+#include "alu.h"
+
+
+// COMPLETELY SEGMENTED
+void mul::multiplication() { 
+
+	sc_int <32> A, B, res;
+	sc_uint <5> opCode;
+	short target;
+	double tiempo;
+
+	tiempo = sc_time_stamp().to_double() / 1000.0;
+
+	if (rst.read()) {
+
+		// NOP
+		INST = createNOP();
+		instOut.write(INST); 
+
+		// empty pipeline
+		for (int i = 0; i < pipelineSizeMul; i++) {
+			pipeline[i] = createNOP();
+		}
+
+
+	} else {
+		
+		// Get data
+		INST = I.read();
+
+		A = INST.opA;
+		B = INST.opB;
+		target = INST.rd;
+		opCode = INST.aluOp;
+
+		// Independant pipeline for each instruction 
+		int cyclesInPipeline = 0;
+		instruction output = pipeline[0];
+
+		for (int i = 0; i < pipelineSizeMul - 1; i++) {
+
+			cyclesInPipeline = pipelineSizeMul - i;
+
+			if (pipeline[i].wReg && getLatencyOp(pipeline[i].aluOp,pipeline[i].target) <= cyclesInPipeline) {
+
+				output = pipeline[i];
+				pipeline[i] = createNOP();
+
+				// Div in output
+				if (pipeline[i].aluOp == DIV || pipeline[i].aluOp == DIVU || 
+					pipeline[i].aluOp == REM || pipeline[i].aluOp == REMU ) {
+					flagDiv = false;
+					pipelineFull = false;
+				}
+				break;
+			}
+		}
+
+		if (output.aluOp != 0) {
+			pipelineFull = false;
+		}
+
+		instOut.write(output);
+
+		// Loop to shift pipeline content
+		// Pos 0: exit
+		// Pos latencyMUL-1: newElement
+		for (int i = 0; i < pipelineSizeMul - 1; i++) {
+			pipeline[i] = pipeline[i + 1];
+		}
+
+		sc_int<64> tmp = 0;
+
+		// Operate
+		switch (opCode)
+		{
+		case MUL: 
+			tmp = ((sc_int<32>)A) * ((sc_int<32>)B);
+			INST.aluOut = INST.dataOut = tmp(31,0);
+			strcpy(INST.desc, "mul");
+			break;
+
+		case MULH: 
+			tmp = ((sc_int<32>)A) * ((sc_int<32>)B);
+			INST.aluOut = INST.dataOut = tmp(63,32);
+			strcpy(INST.desc, "mulh");
+			break;
+
+		case MULHU:
+			tmp = ((sc_uint<32>)A) * ((sc_uint<32>)B);
+			INST.aluOut = INST.dataOut = tmp(63, 32);
+			strcpy(INST.desc, "mulhu");
+			break;
+
+		case MULHSU:
+			tmp = ((sc_int<32>)A) * ((sc_uint<32>)B);
+			INST.aluOut = INST.dataOut = tmp(63, 32);
+			strcpy(INST.desc, "mulhsu");
+			break;
+
+		case DIV:
+			if (B == 0) {
+				cerr << "Divider can't be 0 " << endl;
+			}
+			INST.aluOut = INST.dataOut = ((sc_int<32>)A) / ((sc_int<32>)B);
+			strcpy(INST.desc, "div");
+			flagDiv = true;
+			break;
+
+		case DIVU:
+			if (B == 0) {
+				cerr << "Divider can't be 0 " << endl;
+			}
+			INST.aluOut = INST.dataOut =((sc_uint<32>)A) / ((sc_uint<32>)B);
+			strcpy(INST.desc, "divu");
+			flagDiv = true;
+			break;
+
+		case REM:
+			if (B == 0) {
+				cerr << "Divider can't be 0 " << endl;
+			}
+			INST.aluOut = INST.dataOut = ((sc_int<32>)A) % ((sc_int<32>)B);
+			strcpy(INST.desc, "rem");
+			flagDiv = true;
+			break;
+
+		case REMU:
+			if (B == 0) {
+				cerr << "Divider can't be 0 " << endl;
+			}
+			INST.aluOut = INST.dataOut =  ((sc_uint<32>)A) % ((sc_uint<32>)B);
+			strcpy(INST.desc, "remu");
+			flagDiv = true;
+			break;
+
+		default:
+			INST = createNOP();
+			break;
+		}
+
+		// New instruction
+		pipeline[pipelineSizeMul - 1] = INST;
+
+	} 
+	fire.write(!fire.read());
+}
+
+void mul::hazardDetection() {
+
+	int rs1 = rs1In.read();
+	int rs2 = rs2In.read();
+
+
+	bool aux1 = false, 
+		 aux2 = false;
+
+	int cont = 0;
+	bool emptyPipeline = false;
+
+	// Prevents RAW
+	for (int i = 0; i < pipelineSizeMul; i++) {
+
+		if (pipeline[i].wReg) {
+
+			if (rs1 == pipeline[i].rd) {
+				aux1 = true;
+			}
+
+			if (rs2 == pipeline[i].rd) {
+				aux2 = true;
+			}
+		}
+		else {
+			cont++;
+		}
+	}
+
+	if (instOut.read().wReg) {
+
+		if (rs1 == instOut.read().rd) {
+			aux1 = true;
+		}
+
+		if (rs2 == instOut.read().rd) {
+			aux2 = true;
+		}
+	}
+	else {
+		emptyPipeline = true;
+	}
+
+#if SOLO_1OP
+
+	if (I.read().wReg) {
+		int opCode = I.read().aluOp;
+
+		if (isMulModuleOp(opCode)) {
+			aux1 = aux2 = true;
+			pipelineFull = true;
+		}
+		else if (!pipelineFull) {
+			aux1 = aux2 = false;
+		}
+	}
+	else {
+		emptyPipeline = emptyPipeline && true;
+	}
+	
+	
+#else
+
+	if (I.read().wReg) {
+		int opCode = I.read().aluOp;
+
+		if (flagDiv && isMulModuleOp(opCode)) {
+			if (opCode == DIV || opCode == DIVU || opCode == REM || opCode == REMU) {
+				aux1 = aux2 = true;
+			}
+			else {
+				aux1 = aux2 = false;
+			}
+		}
+	}
+	else {
+		aux1 = aux2 = false;
+		emptyPipeline = emptyPipeline && true;
+	}
+#endif
+	
+	if (cont == pipelineSizeMul && emptyPipeline) {
+		readyFenceMulOut.write(true);
+	}
+	else {
+		readyFenceMulOut.write(false);
+	}
+
+	hzrdRs1Out.write(aux1);
+	hzrdRs2Out.write(aux2);
 }
 \end{lstlisting}

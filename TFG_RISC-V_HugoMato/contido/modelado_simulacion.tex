@@ -16,6 +16,17 @@ SystemC foi creada en C++ e é habitualmente empregada para codeseño. O feito d
 Para o modelado e a simulación, a escolla habitual, como se comentaba na sección anterior (\ref{sec:vhdl_verilog}), é \acrshort{vhdl} ou Verilog. Sen embargo, a elección de SystemC antes que \acrfull{vhdl} ou Verilog foi debido a que permite traballar a un nivel máis alto, a simulación é moito máis rápida e, ademais, a base do proxecto inicial sobre o que se traballou xa estaba feita empregando esta \gls{meta-linguaxe}.
 
 
+SystemC é unha meta-linguaxe creada en C++, empregada principalmente para codeseño. Permite traballar en \acrshort{rtl} e \acrshort{tlm},  con dataflow, engadir código en C/C++, \dots  Ademais, implementa funcionalidades similares ás de \acrshort{vhdl} e Verilog, pero proporcionando unha maior velocidade de simulación. Tamén destacar que o feito de que empregue C++ ofrece a posibilidade de organizar o proxecto en clases e módulos, imprimir variables ou ler arquivos. Isto sería moito máis complexo noutras linguaxes de baixo nivel, xa que non ofrecen funcións de alto nivel nin tanta flexibilidade. Por último destacar características varias como: \begin{itemize}
+    \item Inicialización automática de datos internos
+    \item Funcionalidades de linguaxes orientados a obxectos
+    \item Xestión de eventos
+    \item Datos públicos e privados
+    \item Tipos de datos xa definidos (máis sinxelos para traballar con eles)
+    \item Precisión de ciclo de reloxo
+    \item Permite implementacións con lóxica combinacional e secuencial
+\end{itemize} 
+
+
 \section{Spike}\label{sec:spike}
 A propia organización de RISC-V xa ofrece un simulador ~\cite{sim_spike}, pero seguen existindo motivos para crear unha alternativa. Non simula cada ciclo, senón que é un \acrfull{iss}. Spike é parametrizable, xa que permite cambiar o número de ciclos, núcleos, modificar a memoria, que extensións emprega, \dots. Está escrito en C/C++ polo que ofrece unha boa velocidade de simulación. Ademais, trátase dun proxecto open-source, polo que calquera pode colaborar e  avanza de forma constante. Funciona coa base RV32I, RV64I, RV32E, RV64E. Tamén a gran maioría de extensións na versión v1.0, e nas últimas versións as extensións M (multiplicación/división), A (atómicas), F/D (punto flotante simple/dobre precisión), C (instrucións comprimidas) e V (vectorial). Inclúe soporte para debug, simula diferentes niveis de privilexio e ofrece compatibilidade con binarios .elf. 
 

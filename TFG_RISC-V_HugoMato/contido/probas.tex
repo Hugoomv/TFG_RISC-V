@@ -29,3 +29,28 @@ Ademais de empregar os benchmarks, foron creados varios exames buscando probar e
 \section{Depuración}\label{sec:depuración}
 Chámase depuración ao proceso de revisión exhaustiva do software en busca de erros. Calquera programa durante o proceso de desenvolvemento sofre varias revisións, tipicamente empregando o \acrshort{ide}. Este permite deterse en determinada instrución, imprimir o valor dunha variable antes e despois dun cambio, etc. Para este punto, tanto Segger como Visual Studio foron moi útiles, xa que proporcionan ferramentas perfectamente integradas.
 
+\section{Resultados}\label{chap:resultados}
+Tras finalizar o proxecto, pódese garantir que engadir novas extensións coas súas correspondentes novas instrucións non compromete o traballo anterior. O funcionamento do resto de módulos segue sendo correcto e o rendemento non se viu deteriorado en ningún momento.
+
+Por outra parte, a posibilidade de modificar as latencias dalgunhas instrucións grazas á parametrización engadida, mostra como cambia o rendemento no conxunto dun programa. Por exemplo, á hora de executar o benchmark SPMV que realiza multiplicación de enteiros, obtemos resultados moi interesantes segundo as latencias. Como vemos na táboa \ref{tab:rendemento_spmv}, o número de instrucións non varía, o que é lóxico xa que só se modifica a súa latencia. Un cambio na cantidade de operacións realizadas implicaría engadir novas instrucións dependendo da latencia de determinadas instrucións. Se ben se emiten instrucións \acrshort{nop} cando se detectan hazards, estas fan a función de burbullas, non se fai nada salvo pasar ao seguinte ciclo. Sen embargo, o tempo, isto é, o número de ciclos necesarios para executar o programa aumenta notablemente. Comparando o aumento de ciclos para a mesma latencia en mul e mulhu, dedúcese que se executan máis instrucións mul. O cal é razoable, xa que revisando o binario, vese que é correcto. Ademais, o test realiza multiplicacións de enteiros, e a operación mul é imprescindible para isto, mentres que mulhu encárgase da parte superior da multiplicación, innecesaria cando se empregan números pequenos.
+
+\begin{table}[hp!]
+    \centering
+    \rowcolors{2}{white}{udcgray!25}
+    \begin{tabular}{c|c|c}
+    \rowcolor{udcpink!25}
+    \textbf{Modificacións realizadas} & \textbf{Número de instrucións}  & \textbf{Tempo} 
+    \\\hline
+    \textit{SPMV base} & 399515 & 955924 \\
+    \textit{Latencia de mul = 5} & 399515 & 984652\\
+    \textit{Latencia de mul = 10} & 399515 & 1020562\\
+     \textit{Latencia de mulhu = 5} & 399515 & 965500\\ 
+    \textit{Latencia de mulhu = 10} & 399515 & 940504\\ % REV ERROR
+    \textit{Latencia de mul = 5 e mulhu = 5} & 399515 & 984652\\
+    \end{tabular}
+    \caption{Rendemento do benchmarks SPMV segundo as latencia de distintas operacións.}
+    \label{tab:rendemento_spmv}
+\end{table}
+
+Finalmente, destacar que a velocidade de simulación deste proxecto en comparación coa que se podería obter se \acrshort{vhdl} ou Verilog fose empregado é moi superior. Por exemplo, o benchmark SPMV execútase en apenas 30 segundos.
+
