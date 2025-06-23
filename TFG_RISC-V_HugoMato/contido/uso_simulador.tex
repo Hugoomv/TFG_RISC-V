@@ -8,14 +8,14 @@ O primeiro paso é empregar Segger Embedded Studio for RISC-V, aquí escribirase
 \begin{figure}[hp!]
   \centering
   \includegraphics[width=\textwidth]{imaxes/Cap_1.jpg}
-  \caption{Opcións do proxecto}
+  \caption{Opcións do proxecto.}
   \label{fig:cap1}
 \end{figure}
 
 \begin{figure}[hp!]
   \centering
   \includegraphics[width=\textwidth]{imaxes/Cap_2.png}
-  \caption{Elección da extensión correcta}
+  \caption{Elección da extensión correcta.}
   \label{fig:cap2}
 \end{figure}
 
@@ -24,14 +24,14 @@ O primeiro paso é empregar Segger Embedded Studio for RISC-V, aquí escribirase
 \begin{figure}[hp!]
   \centering
   \includegraphics[width=\textwidth]{imaxes/Cap_3_Comp.png}
-  \caption{Compilación do proxecto}
+  \caption{Compilación do proxecto.}
   \label{fig:compilar}
 \end{figure}
 
 \begin{figure}[hp!]
   \centering
   \includegraphics[width=\textwidth]{imaxes/Cap_4_Debug.png}
-  \caption{Captura coas opcións de depuración de Segger}
+  \caption{Captura coas opcións de depuración de Segger.}
   \label{fig:cap3}
 \end{figure}
 
@@ -40,15 +40,23 @@ Para o axuste de parámetros debemos ir á Visual Studio 2022, no ficheiro confi
 \begin{figure}[hp!]
   \centering
   \includegraphics[width=\textwidth]{imaxes/Cap_5_Config.png}
-  \caption{Cambio de parámetros en Config.h}
+  \caption{Cambio de parámetros en Config.h.}
   \label{fig:parametros}
 \end{figure}
 
 \begin{figure}[hp!]
   \centering
   \includegraphics[width=\textwidth]{imaxes/Cap_res_final.png}
-  \caption{Resultados tras executar o benchmark SPMV}
+  \caption{Resultados tras executar o benchmark SPMV.}
   \label{fig:resultados}
 \end{figure}
 
+Para o proceso de depuración, como se comentou na sección \ref{sec:gtkwave} e \ref{sec:depuración}, GTK Wave foi empregada para mostrar de forma gráfica os cambios de valores dos distintos sinais. Tamén engadía a posibilidade de ver os cambios de valor segundo o ciclo como se mostra na figura \ref{fig:gtkwave}, o que fixo máis sinxelo solventar problemas de comunicación entre módulos ou de envío de alertas por hazards, por exemplo.
+
+\begin{figure}[hp!]
+  \centering
+  \includegraphics[width=\textwidth]{imaxes/Cap_gtkwave.png}
+  \caption{Captura de GTK Wave onde mostran varios sinais e o eixo temporal.}
+  \label{fig:gtkwave}
+\end{figure}
 

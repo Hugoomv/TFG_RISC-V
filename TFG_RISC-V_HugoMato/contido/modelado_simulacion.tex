@@ -4,27 +4,27 @@
 \lettrine{N}{este} apartado explicaránse os fundamentos dun simulador, os motivos para crear un e o funcionamento típico. Ademais, indicaránse as linguaxes máis habituais destes casos, as diferenzas e o motivo da elección de SystemC. 
 
 \section{Por que é importante o modelado e a simulación?}\label{sec:mod_sim}
-Durante o proceso de creación de calquera compoñente electrónico minimamente complexo, é necesario revisar que o deseño realiza as funcións esperadas e de forma correcta. Isto é, que garante os resultados esperados, dentro dun tempo razoable e cun emprego de recursos limitado. Unha opción é encargar un novo chip cada vez que se crea un deseño que se necesita revisar. Se ben é posible, os longos períodos de tempo de creación e os altos custos son un impedimento enorme. No seu lugar, créase unha versión dixital mediante \gls{software}. Este é o modelado, mentres que se queremos que o deseño imite o comportamento real para poder ver os erros, é necesario un simulador. En moitos casos, estas ferramentas están xuntas, facendo máis sinxelo o traballo.
-Grazas á existencia destes programas, o deseño e creación de compoñentes electrónicos é moito máis veloz e barato, permitindo un avance tecnolóxico con menos limitacións.
+Durante o proceso de creación de calquera compoñente electrónico minimamente complexo, é necesario revisar que o deseño realiza as funcións esperadas e de forma correcta. Isto é, que garante os resultados esperados, dentro dun tempo razoable e cun emprego de recursos limitado. O xeito máis económico de acadar isto é a creación dunha versión dixital mediante software. Idealmente, o modelo creado poder ser executado permitindo simular o sistema, e mesmo ter acceso aos detalles internos do funcionamento. A elección axeitada das ferramentas usadas para o modelado e a simulación é fundamental, xa que definen o tempo necesario para codificar o sistema, a posibilidade de cometer erros e maila capacidade para detectalos, o grao de detalle que se pode acadar, as distintas restricións e a velocidade de simulación. É por iso que existen distintas opcións, polo que neste traballo nos decidimos por usar SystemC.
 
 
 \section{VHDL e Verilog}\label{sec:vhdl_verilog}
-Estas linguaxes son empregadas principalmente para describir circuítos de forma moi precisa, permitindo incluso diferenciar unha simple conexión dun rexistro. Ademais, os compiladores para \acrfull{hdl} son capaces de xerar circuítos de alta calidade, imposibles de realizar para un ser humano. Á hora de modelar e simular, son as máis empregadas. Coñecidas por ser o estándar na industria, permiten traballar a baixo nivel. Isto garante unha gran eficiencia e rendemento, ademais de ofrecer flexibilidade. Da mesma forma que a cercanía ao hardware ofrece algunhas melloras, tamén ten desvantaxes, como a maior complexidade á hora de escribir código, falta de características típicas de \acrfull{oop}, \dots
+Estas linguaxes son o que coñecemos como \acrfull{hdl}. Verilog ~\cite{verilog} foi o pioneiro, e \acrfull{vhdl} ~\cite{vhdl} a resposta como estándar internacional. Ambas permiten describir circuítos de forma moi precisa, incluíndo todas as conexións e elementos de memoria. Ademais, existe software de síntese capaz de xerar circuítos de alta calidade a partir de Verilog ou \acrshort{vhdl}, imposibles de realizar para un ser humano. Ao ser o estándar na industria, son as máis empregadas para modelar e simular a baixo nivel. Pero esta flexibilidade implica tamén desvantaxes en termos de menor produtividade dos enxeñeiros e elevados tempos de simulación. Aínda que houbo intentos de mellorar estas linguaxes, como é o caso de SystemVerilog ~\cite{system_verilog}, non tiveron realmente éxito ó estar demasiado vencelladas á linguaxe orixinal.
 
 \section{SystemC}\label{sec:systemc}
-SystemC foi creada en C++ e é habitualmente empregada para codeseño. O feito de que sexa de alto nivel proporciona unha flexibilidade e sinxeleza á hora de traballar que carecen as alternativas máis próximas ao \gls{hardware}. Engade a posibilidade de ter datos públicos e privados, permite organizar todo en clases facilitando un deseño modular, xestionar eventos e modelar a varios niveis, como \acrfull{rtl} ou \acrfull{tlm}.
-Para o modelado e a simulación, a escolla habitual, como se comentaba na sección anterior (\ref{sec:vhdl_verilog}), é \acrshort{vhdl} ou Verilog. Sen embargo, a elección de SystemC antes que \acrfull{vhdl} ou Verilog foi debido a que permite traballar a un nivel máis alto, a simulación é moito máis rápida e, ademais, a base do proxecto inicial sobre o que se traballou xa estaba feita empregando esta \gls{meta-linguaxe}.
+SystemC ~\cite{systemc} é unha \gls{meta-linguaxe} implementada como unha biblioteca de C++ e é habitualmente empregada para codeseño. O feito de que sexa de alto nivel proporciona unha flexibilidade e sinxeleza á hora de traballar que carecen as alternativas máis próximas ao hardware. Algunhas das vantaxes de SystemC son as seguintes:
 
+\begin{itemize}
+    \item Inicialización automática de datos internos.
+    \item Funcionalidades de linguaxes orientados a obxectos.
+    \item Xestión automática de eventos.
+    \item Difrenciación entre datos públicos e privados.
+    \item Tipos de datos orientados ao modelado de hardware de aplicación específica.
+    \item Soporte específico para sinais de reloxo.
+    \item Sobrecarga de operadores que aumenta a produtividade e a claridade do código.
+    \item Benefíciase dos avances en depuradores para C++.
+\end{itemize}
 
-SystemC é unha meta-linguaxe creada en C++, empregada principalmente para codeseño. Permite traballar en \acrshort{rtl} e \acrshort{tlm},  con dataflow, engadir código en C/C++, \dots  Ademais, implementa funcionalidades similares ás de \acrshort{vhdl} e Verilog, pero proporcionando unha maior velocidade de simulación. Tamén destacar que o feito de que empregue C++ ofrece a posibilidade de organizar o proxecto en clases e módulos, imprimir variables ou ler arquivos. Isto sería moito máis complexo noutras linguaxes de baixo nivel, xa que non ofrecen funcións de alto nivel nin tanta flexibilidade. Por último destacar características varias como: \begin{itemize}
-    \item Inicialización automática de datos internos
-    \item Funcionalidades de linguaxes orientados a obxectos
-    \item Xestión de eventos
-    \item Datos públicos e privados
-    \item Tipos de datos xa definidos (máis sinxelos para traballar con eles)
-    \item Precisión de ciclo de reloxo
-    \item Permite implementacións con lóxica combinacional e secuencial
-\end{itemize} 
+SystemC soporta varios paradigmas de modelado, dos que os máis utilizados son, en orde crecente de abstracción: \acrfull{rtl}, Data Flow e \acrfull{tlm}. No noso caso, o modelado en \acrshort{rtl} permite acadar o mesmo nivel de detalle que \acrshort{vhdl} ou Verilog cunha produtividade e velocidade de simulación moi superiores.
 
 
 \section{Spike}\label{sec:spike}
