@@ -41,16 +41,33 @@ Por outra parte, a posibilidade de modificar as latencias dalgunhas instrucións
     \rowcolor{udcpink!25}
     \textbf{Modificacións realizadas} & \textbf{Número de instrucións}  & \textbf{Tempo} 
     \\\hline
+    \multicolumn{3}{c}{\textbf{Versión empregando int}} \\
+    \textit{SPMV base} & 85700 & 251557 \\
+    \textit{Latencia de mul = 5} & 85700 & 256355\\
+    \textit{Latencia de mul = 10} & 85700 & 268350\\
+     \textit{Latencia de mulhu = 5} & 85700 & 251557\\ % no ahy mulhu ops
+    \textit{Latencia de mulhu = 10} & 85700 & 251557\\ 
+    \textit{Latencia de mul = 5 e mulhu = 5} & 85700 & 256355\\
+    
+    \multicolumn{3}{c}{\textbf{Versión empregando float}} \\
+    \textit{SPMV base} & 285045 & 688817 \\
+    \textit{Latencia de mul = 5} & 285045 & 698393\\
+    \textit{Latencia de mul = 10} & 285045 & 710363\\
+     \textit{Latencia de mulhu = 5} & 285045 & 693605\\ 
+    \textit{Latencia de mulhu = 10} & 285045 & 705575\\ 
+    \textit{Latencia de mul = 5 e mulhu = 5} & 285045 & 698393\\
+
+    \multicolumn{3}{c}{\textbf{Versión empregando double}} \\
     \textit{SPMV base} & 399515 & 955924 \\
     \textit{Latencia de mul = 5} & 399515 & 984652\\
     \textit{Latencia de mul = 10} & 399515 & 1020562\\
      \textit{Latencia de mulhu = 5} & 399515 & 965500\\ 
-    \textit{Latencia de mulhu = 10} & 399515 & 940504\\ % REV ERROR
+    \textit{Latencia de mulhu = 10} & 399515 & 940504\\ 
     \textit{Latencia de mul = 5 e mulhu = 5} & 399515 & 984652\\
     \end{tabular}
-    \caption{Rendemento do benchmarks SPMV segundo as latencia de distintas operacións.}
+    \caption{Rendemento do benchmarks SPMV segundo as latencia de distintas operacións e o tipo de dato.}
     \label{tab:rendemento_spmv}
 \end{table}
 
-Finalmente, destacar que a velocidade de simulación deste proxecto en comparación coa que se podería obter se \acrshort{vhdl} ou Verilog fose empregado é moi superior. Por exemplo, o benchmark SPMV execútase en apenas 30 segundos.
+Finalmente, destacar que a velocidade de simulación deste proxecto en comparación coa que se podería obter se \acrshort{vhdl} ou Verilog fose empregado é moi superior. Por exemplo, o benchmark SPMV na versión que emprega enteiros execútase en apenas 10 segundos, mentres que a versión que emprega floats dura 30.
 

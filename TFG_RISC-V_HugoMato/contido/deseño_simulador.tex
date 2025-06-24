@@ -25,7 +25,7 @@ Ao deseñar o simulador elixiuse un pipeline de 5 etapas debido á súa sinxelez
 \end{figure}
 
 \section{Módulos do simulador}\label{sec:modulo_sim}
-Os módulos principais, como se comentou no apartado anterior, son cada unha das 5 etapas, fusionando Decod e Write Back. No caso da etapa Execute, simplemente se creou unha \acrshort{alu}, encargada de realizar operacións de suma, resta e outras operacións lóxicas. Ademais, engadíronse varios módulos ao longo do proxecto. Para as operacións de multiplicación e división da extensión M, creouse un novo módulo conectado directamente con Decod, como se pode ver na figura \ref{fig:pipelineMult}. Separar estas funcionalidades permite organizar o traballo, ademais de simplificalo e facerlo máis sinxelo de depurar. Para a extensión F, de forma análoga, existe un compoñente encargado de realizar todas as operacións de punto flotante simple. Estes dous últimos módulos inclúen a posibilidade de parametrizar as súas instrucións, podendo elixir a latencia de determinadas instrucións ou cambiar o funcionamento do módulo (ver \ref{sec:modos_op}).
+Os módulos principais, como se comentou no apartado anterior, son cada unha das 5 etapas, fusionando Decod e Write Back. No caso da etapa Execute, simplemente se creou unha \acrshort{alu}, encargada de realizar operacións de suma, resta e outras operacións lóxicas. Ademais, engadíronse varios módulos ao longo do proxecto. Para as operacións de multiplicación e división da extensión M, creouse un novo módulo conectado directamente con Decod, como se pode ver na figura \ref{fig:pipelineMult}. Separar estas funcionalidades permite organizar o traballo, ademais de simplificalo e facerlo máis sinxelo de depurar. Para a extensión F, de forma análoga, existe un compoñente encargado de realizar todas as operacións de punto flotante simple, co seu propio banco de rexistros e tamén está segmentado (ver \ref{fig:pipelinePF}). Estes dous últimos módulos inclúen a posibilidade de parametrizar as súas instrucións, podendo elixir a latencia de determinadas instrucións ou cambiar o funcionamento do módulo (ver \ref{sec:modos_op}) grazas á que implementan un pipeline de instrucións, tal e como mostran as figura \ref{fig:pipelineMultSegm} e \ref{fig:pipelinePF}
 
 \begin{figure}[hp!]
   \centering
@@ -34,12 +34,26 @@ Os módulos principais, como se comentou no apartado anterior, son cada unha das
   \label{fig:pipelineMult}
 \end{figure}
 
+\begin{figure}[hp!]
+  \centering
+  \includegraphics[width=\textwidth]{imaxes/pipelineMultSegm.EPS}
+  \caption{Figura onde se mostra a estrutura do pipeline do módulo de multiplicación segmentado.}
+  \label{fig:pipelineMultSegm}
+\end{figure}
+
+\begin{figure}[hp!]
+  \centering
+  \includegraphics[width=\textwidth]{imaxes/pipelinePF.EPS}
+  \caption{Esquema do sistema onde se ve o pipeline do módulo de punto flotante.}
+  \label{fig:pipelinePF}
+\end{figure}
+
 \section{Modos de operación}\label{sec:modos_op}
 Coa fin de mellorar a calidade da simulación, decidíuse engadir no módulo de multiplicación a posibilidade de elixir entre dous modos de funcionamento. O primeiro limita de forma que, se hai unha multiplicación executándose, non se pode realizar ningunha outra operación no módulo. Isto pretende semellarse a un caso real, no que, por limitacións físicas, se empregan os mesmos circuítos para ambas operacións. O segundo modo permite que se executen todas as multiplicacións necesarias, pero só unha división ao mesmo tempo, simulando que existe un circuíto para as divisións e que este só pode realizar unha á vez.
 
 
 \section{Simulación de latencias}\label{sec:sim_latencias}
-Á hora de executar código, existen varios axustes que se poden cambiar para simular distintos comportamentos típicos de RISC-V. Pódese modificar a latencia  das operacións do módulo de multiplicación, as cales son: 
+Á hora de executar código, existen varios axustes que se poden cambiar para simular distintos comportamentos típicos de RISC-V. Pódese modificar a latencia  das operacións do módulo de multiplicación e punto flotante simple, as cales son: 
 \begin{itemize}
     \item MUL
     \item MULH
@@ -53,7 +67,8 @@ Coa fin de mellorar a calidade da simulación, decidíuse engadir no módulo de 
     \item FSUB.S
     \item FMUL.S
 \end{itemize}
-Isto permite unha representación máis realista, xa que por defecto todas as instrucións no simulador teñen unha latencia dun ciclo durante a etapa de Execución. Sen embargo, na realidade, operacións máis complexas como as multiplicacións ou divisións levan varios ciclos.
+
+Isto permite unha representación máis realista, xa que por defecto todas as instrucións no simulador teñen unha latencia dun ciclo durante a etapa de Execución. Sen embargo, na realidade, operacións máis complexas como as multiplicacións ou divisións levan varios ciclos. Tal e como se mostra nas figuras \ref{fig:pipelineMultSegm} e \ref{fig:pipelinePF}, ambos os dous módulos que permiten a parametrización das instrucións implementan o seu propio pipeline.
 
 \section{Sinais de hazard}\label{sec:hazards}
 Como sucede en todas as \gls{arquitecturas} segmentadas, a execución de instrucións moitas veces vese limitada por dependencias. Isto é, non se pode continuar co programa porque a seguinte instrución emprega algún rexistro que debe ser actualizado previamente, pero aínda non sucedeu porque algunha instrución anterior non acabou a súa execución. Para evitar esta situación, en moitos casos engádense burbullas, ciclos nos que non se fai ningún traballo para permitir que o resto de instrucións finalicen. O simulador replica este funcionamento, polo que para detectar estas dependencias emprega sinais de \gls{hazards}.
