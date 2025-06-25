@@ -25,14 +25,7 @@ Ao deseñar o simulador elixiuse un pipeline de 5 etapas debido á súa sinxelez
 \end{figure}
 
 \section{Módulos do simulador}\label{sec:modulo_sim}
-Os módulos principais, como se comentou no apartado anterior, son cada unha das 5 etapas, fusionando Decod e Write Back. No caso da etapa Execute, simplemente se creou unha \acrshort{alu}, encargada de realizar operacións de suma, resta e outras operacións lóxicas. Ademais, engadíronse varios módulos ao longo do proxecto. Para as operacións de multiplicación e división da extensión M, creouse un novo módulo conectado directamente con Decod, como se pode ver na figura \ref{fig:pipelineMult}. Separar estas funcionalidades permite organizar o traballo, ademais de simplificalo e facerlo máis sinxelo de depurar. Para a extensión F, de forma análoga, existe un compoñente encargado de realizar todas as operacións de punto flotante simple, co seu propio banco de rexistros e tamén está segmentado (ver \ref{fig:pipelinePF}). Estes dous últimos módulos inclúen a posibilidade de parametrizar as súas instrucións, podendo elixir a latencia de determinadas instrucións ou cambiar o funcionamento do módulo (ver \ref{sec:modos_op}) grazas á que implementan un pipeline de instrucións, tal e como mostran as figura \ref{fig:pipelineMultSegm} e \ref{fig:pipelinePF}
-
-\begin{figure}[hp!]
-  \centering
-  \includegraphics[width=\textwidth]{imaxes/pipelineMult.EPS}
-  \caption{Esquema sobre o pipeline do módulo de multiplicación.}
-  \label{fig:pipelineMult}
-\end{figure}
+Os módulos principais, como se comentou no apartado anterior, son cada unha das 5 etapas, fusionando Decod e Write Back. No caso da etapa Execute, simplemente se creou unha \acrshort{alu}, encargada de realizar operacións de suma, resta e outras operacións lóxicas. Ademais, engadíronse varios módulos ao longo do proxecto. Para as operacións de multiplicación e división da extensión M, creouse un novo módulo conectado directamente con Decod, como se pode ver na figura \ref{fig:pipelineMultSegm}. Separar estas funcionalidades permite organizar o traballo, ademais de simplificalo e facerlo máis sinxelo de depurar. Para a extensión F, de forma análoga, existe un compoñente encargado de realizar todas as operacións de punto flotante simple, co seu propio banco de rexistros e tamén está segmentado (ver \ref{fig:pipelinePF}). Estes dous últimos módulos inclúen a posibilidade de parametrizar as súas instrucións, podendo elixir a latencia de determinadas instrucións ou cambiar o funcionamento do módulo (ver \ref{sec:modos_op}) grazas á que implementan un pipeline de instrucións, tal e como mostran as figura \ref{fig:pipelineMultSegm} e \ref{fig:pipelinePF}
 
 \begin{figure}[hp!]
   \centering

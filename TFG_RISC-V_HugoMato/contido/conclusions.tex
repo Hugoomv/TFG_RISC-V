@@ -5,39 +5,3 @@
 
 \section{Traballo futuro}\label{sec:traballo_futuro}
 Agora mesmo, o simulador ten implementadas todas as instrucións das extensións M (multiplicación/división), Zicsr, Zifencei e unha gran parte da extensión F (punto flotante simple). Poderíanse engadir máis extensións, como a A, D ou L. Da mesma forma, sería interesante simular a memoria e a súa xerarquía. A implementación actual non é moi realista xa que se trata dun sinxelo módulo que sempre escribe ou lee nun só ciclo. Tamén sería interesante incluir soporte para 64-bits, coa posibilidade de seguir parametrizando o simulador, polo que, por exemplo, o tamaño dos rexistros ou o funcionamento do módulo de decodificación veríanse afectados segundo a base empregada.
-
-
-\section{Presuposto}\label{sec:presuposto}
-Para determinar o custo do desenvolvemento do proxecto sería necesario calcular primeiro as horas dedicadas por parte do estudante e do titor e coñecer os prezos destas. Para iso, o BOE ~\cite{boe} establece uns valores mínimos que resultan en 15€/hora para o estudante e 19€/hora para o titor. Na táboa \ref{tab:salario} vése o resultado dos cálculos pertinentes.
-
-\begin{table}[hp!]
-    \centering
-    \rowcolors{2}{white}{udcgray!25}
-    \begin{tabular}{c|c|c|c}
-    \rowcolor{udcpink!25}
-    \textbf{Persoa} & \textbf{horas}  & \textbf{custo/h} & \textbf{total} 
-    \\\hline
-    \textit{Estudante} & 240 & 15€/h & 3.600€\\
-    \textit{Titor} & 35 & 19€/h & 665€\\
-    \multicolumn{3}{c|}{\textbf{Resultado}} & \textit{4.265€} \\
-    \end{tabular}
-    \caption{Táboa co custo/h e total dos traballadores implicados.}
-    \label{tab:salario}
-\end{table}
-
-Ademais, é necesario engadir os gastos en licenzas e materiais inventariables. Neste caso, todas as ferramentas empregadas foron gratuítas e non se empregaron materiais adicionais máis aló do portátil, cun valor de 600€. O resultado final móstrase na táboa \ref{tab:precio_final}, sendo de 4.865€.
-
-\begin{table}[hp!]
-    \centering
-    \rowcolors{2}{white}{udcgray!25}
-    \begin{tabular}{c|c}
-    \rowcolor{udcpink!25}
-    \textbf{Recurso} & \textbf{Prezo} 
-    \\\hline
-    \textit{Man de obra} & 4.265€\\
-    \textit{Materiais e licenzas} & 600€\\
-    \textbf{Resultado} & 4.865€ \\
-    \end{tabular}
-    \caption{Táboa co resultado do custo total do proxecto.}
-    \label{tab:precio_final}
-\end{table}
