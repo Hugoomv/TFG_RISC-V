@@ -1,7 +1,6 @@
 \chapter{Conclusións}
 \label{chap:conclusions}
+ 
+\lettrine{N}{este} traballo implementáronse novas extensións para a arquitectura RV32I de RISC-V. Agora mesmo, o simulador ten implementadas todas as instrucións das extensións M (multiplicación/división), Zicsr, Zifencei e unha gran parte da extensión F (punto flotante simple). O simulador é útil como ferramenta para guiar implementacións físicas da arquitectura. Durante a realización deste traballo validouse o correcto funcionamento do simulador para todas as instrucións implementadas, e fixéronse probas de rendemento para distintas configuracións do multiplicador.
 
-\lettrine{D}{erradeiro} capítulo da memoria, onde se presentará a situación final do traballo, as leccións aprendidas, a relación coas competencias da titulación en xeral e a mención en particular, posibles liñas futuras,\dots
-
-\section{Traballo futuro}\label{sec:traballo_futuro}
-Agora mesmo, o simulador ten implementadas todas as instrucións das extensións M (multiplicación/división), Zicsr, Zifencei e unha gran parte da extensión F (punto flotante simple). Poderíanse engadir máis extensións, como a A, D ou L. Da mesma forma, sería interesante simular a memoria e a súa xerarquía. A implementación actual non é moi realista xa que se trata dun sinxelo módulo que sempre escribe ou lee nun só ciclo. Tamén sería interesante incluir soporte para 64-bits, coa posibilidade de seguir parametrizando o simulador, polo que, por exemplo, o tamaño dos rexistros ou o funcionamento do módulo de decodificación veríanse afectados segundo a base empregada.
+Como traballo futuro sería interesante engadir máis extensións, particularmente A (instrucións atómicas) e D (punto flotante de dobre precisión). Da mesma forma, sería recomendable modelar unha xerarquía de memoria que inclúa memoria cache, xa que a implementación actual da memoria segue unha arquitectura Harvard con unha latencia de 1 ciclo. Tamén se podería incluír soporte para 64-bits e formato comprimido de instrucións. 
