@@ -46,13 +46,6 @@ void pf_float::pf() {
 			regsFloat[rd] = INST.dataOut; 
 
 		}
-		else if (decodIn.read().target) { // FSW from Decod
-			
-			rs2 = I(24, 20); 
-
-			out.val2 = regsFloat[rs2];
-			
-		}
 		else { // Normal PF ops
 
 			if (INST.target = 0) { // Not a PF_float op

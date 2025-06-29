@@ -10,7 +10,7 @@ SC_MODULE(pf_float) {
 public:
 
 	sc_in<bool> clk, rst;
-	sc_in<instruction> instIn, dataMemIn, decodIn;
+	sc_in<instruction> instIn, dataMemIn;
 	sc_in< sc_uint<5> > rs1In, rs2In;
 
 	sc_out<instruction> instOut;
@@ -56,6 +56,7 @@ private:
 #define FADDS	0
 #define FSUBS	1
 #define FMULS	2
+#define FEQS	20
 #define FCVTWS	24
 #define FCVTSW	26
 #define FMVXS	28
