@@ -13,8 +13,6 @@ void decod::registros(){		// este método implementa el banco de registros
 		for(int i=0; i<32; ++i)	regs[i] = 0;
 	}else{
 
-		//REV
-
 		// MUL 
 		backInst = fbMul.read();
 
@@ -25,6 +23,10 @@ void decod::registros(){		// este método implementa el banco de registros
 				regs[target] = backInst.dataOut;
 			}
 		} 
+
+		if (backInst.rd = 10) {
+			int i = 0;
+		}
 
 		// WB
 		backInst = fbWB.read();
@@ -37,6 +39,10 @@ void decod::registros(){		// este método implementa el banco de registros
 			}
 		}
 
+		if (backInst.rd = 10) {
+			int i = 0;
+		}
+
 		// PF_float
 		backInst = fbPF_float.read();
 
@@ -44,7 +50,7 @@ void decod::registros(){		// este método implementa el banco de registros
 			int target = backInst.rd;
 
 			if (target) {
-				// REV
+				
 				if (backInst.I(20, 20)) {
 					regs[target] = (uint32_t)backInst.dataOut;
 				}
@@ -53,6 +59,8 @@ void decod::registros(){		// este método implementa el banco de registros
 				}
 			}
 		}
+
+		
 		
 		INST.rd = C_rd;			INST.wReg = C_wReg;
 		INST.opA = C_opA;		INST.opB = C_opB;
@@ -350,13 +358,13 @@ void decod::decoding() {
 		INST.aluOp = 0;		INST.aluOut = 0x0000dead;
 
 		strcpy(INST.desc, "pf_float");
-		INST.target = 1;
+		INST.target = 0x01;
 
 		break;
 
 
 	case 9: // FSW
-		INST.target = 1;
+		INST.target = 0x01;
 		strcpy(INST.desc,"FSW");
 		inm12(11, 5) = I(31, 25);	inm12(4, 0) = I(11, 7);
 		C_opA = (rs1);
@@ -369,7 +377,7 @@ void decod::decoding() {
 		break;
 
 	case 1: // FLW
-		INST.target = 1;
+		INST.target = 0x01;
 		strcpy(INST.desc, "FLW");
 		preMem = I(14, 12); // read a word
 		inm12 = I(31, 20);
