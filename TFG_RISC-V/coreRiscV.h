@@ -104,8 +104,7 @@ public:
 		instDecod->fbPF_float(iPF_float);
 
 		// FSW & FLW
-		instPF_float->dataMemIn(iMW);
-		instPF_float->decodIn(iDX); 
+		instPF_float->dataMemIn(iMW); 
 		instDataMem->pfFloatIn(iPF_float);
 
 
