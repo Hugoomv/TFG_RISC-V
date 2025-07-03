@@ -29,7 +29,7 @@ void alu::registro(){
 		opCode = INST.aluOp;
 
 		// PF_Float ops - some op codes are the same
-		if (opCode = INST.I(6, 2) == 20) { 
+		if (INST.I(6, 2) == 20 || INST.I(6, 2) == 9) {
 			INST = createNOP();
 		}
 
