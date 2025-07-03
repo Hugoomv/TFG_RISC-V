@@ -121,6 +121,18 @@ void pf_float::pf() {
 						strcpy(out.desc, "fmuls");
 						break;
 
+					case FEQS:
+						rs1 = out.I(19,15);
+						rs2 = out.I(24,20);
+
+						rd = out.I(11,7);
+						out.rd = rd;
+
+						out.dataOut = (regsFloat[rs1] == regsFloat[rs2]);
+						out.wReg = true;
+
+						break;
+
 					case FCVTWS: // fcvt.w[u].s rd, fs1 R Convert to [un]signed 32-bit integer
 						// in decod_registers dataOut will be converted to unsigned if necessary
 
@@ -147,7 +159,7 @@ void pf_float::pf() {
 
 						break;
 
-					case FMVXS: // fmv.w.s / fmv.x.s rd, fs1 R Move from floating - point to integer register
+					case FMVXS: // fmv.x.w / fmv.x.s rd, fs1 R Move from floating - point to integer register
 						// no cast - exact same binary sequence
 
 						/*
