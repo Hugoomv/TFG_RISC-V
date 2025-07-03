@@ -383,7 +383,7 @@ void decod::decoding() {
 		inm12 = I(31, 20);
 		C_opA = rs1;
 		C_opB = inm12;
-		C_rd = I(11, 7);	preWrite = true;
+		C_rd = I(11, 7);	preWrite = false;
 		uRs1 = true;
 		break;
 
