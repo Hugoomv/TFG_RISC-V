@@ -42,7 +42,7 @@ void pf_float::pf() {
 
 		out = INST; // Solo sin pipeline
 
-		if (dataMemIn.read().target) { // FLW from Mem
+		if (dataMemIn.read().target && dataMemIn.read().I(6, 2) == 1) { // FLW from Mem
 			
 			INST = dataMemIn.read();
 			rd = I(11, 7);
@@ -88,6 +88,7 @@ void pf_float::pf() {
 					rs2 = I(24, 20);
 
 					out.val2 = regsFloat[rs2];
+					out.aluOut = out.opA + out.opB; // memory address
 				}
 				else {
 
