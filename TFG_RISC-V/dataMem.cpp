@@ -19,6 +19,10 @@ void dataMem::registro(){
 	}else{
 		INST = I.read();
 
+		if (INST.address == 0xffffffff) {
+			INST = pfFloatIn.read();
+		}
+
 		address = INST.aluOut;
 		BH = address & 3;		// byte or half-word
 		dataWrite = INST.val2;
