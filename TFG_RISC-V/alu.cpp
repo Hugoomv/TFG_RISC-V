@@ -28,6 +28,11 @@ void alu::registro(){
 		shamt = B(4, 0);
 		opCode = INST.aluOp;
 
+		// PF_Float ops - some op codes are the same
+		if (opCode = INST.I(6, 2) == 20) { 
+			INST = createNOP();
+		}
+
 		switch(opCode){
 		case ADD:		strcpy(nem, "add");
 						res = A + B;		
