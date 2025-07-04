@@ -42,13 +42,18 @@ void pf_float::pf() {
 
 		out = INST; // Solo sin pipeline
 
-		if (dataMemIn.read().target && dataMemIn.read().I(6, 2) == 1) { // FLW from Mem
+		if (INST.I(6, 2) == 1) {//FLW
+			out = INST;
+		}
+		else if (dataMemIn.read().target && dataMemIn.read().I(6, 2) == 1) { // FLW from Mem
 			
 			INST = dataMemIn.read();
-			rd = I(11, 7);
+			rd = INST.I(11, 7);
 
-			regsFloat[rd] = INST.dataOut; 
+			regsFloat[rd] = (float) INST.dataOut; 	
+
 			out = createNOP();
+			strcpy(out.desc,"flw");
 
 		}
 		else { // Normal PF ops
@@ -89,6 +94,7 @@ void pf_float::pf() {
 
 					out.val2 = regsFloat[rs2];
 					out.aluOut = out.opA + out.opB; // memory address
+					strcpy(out.desc,"fsw");
 				}
 				else {
 
@@ -96,7 +102,6 @@ void pf_float::pf() {
 					rd = out.I(11, 7);
 
 					switch (out.I(31, 27)) {
-
 					case FADDS:
 
 						rs2 = out.I(24, 20);
@@ -131,6 +136,7 @@ void pf_float::pf() {
 
 						out.dataOut = (regsFloat[rs1] == regsFloat[rs2]);
 						out.wReg = true;
+						strcpy(out.desc,"feqs");
 
 						break;
 
@@ -190,7 +196,7 @@ void pf_float::pf() {
 					case FMVSX: // fmv.w.x / fmv.s.x fd, rs1 R Move from integer to floating - point register
 						// no cast - exact same binary sequence
 
-						regsFloat[rd] = out.opA;
+						regsFloat[rd] = (float) INST.opA;
 						out = createNOP();
 						strcpy(out.desc, "fmvsx");
 
@@ -220,7 +226,7 @@ void pf_float::hzrdDetection() {
 		aux2 = false;
 
 	// Input instruction
-	if (instIn.read().target == 1 && instIn.read().wReg) {
+	if (instIn.read().target == 0x01) {
 
 		if (rs1 == instIn.read().rd) {
 			aux1 = true;
@@ -243,7 +249,6 @@ void pf_float::hzrdDetection() {
 			aux2 = true;
 		}
 	}
-
 	hzrdRs1Out.write(aux1);
 	hzrdRs2Out.write(aux2);
 }

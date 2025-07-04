@@ -24,10 +24,6 @@ void decod::registros(){		// este método implementa el banco de registros
 			}
 		} 
 
-		if (backInst.rd = 10) {
-			int i = 0;
-		}
-
 		// WB
 		backInst = fbWB.read();
 
@@ -37,10 +33,6 @@ void decod::registros(){		// este método implementa el banco de registros
 			if (target) {
 				regs[target] = backInst.dataOut;
 			}
-		}
-
-		if (backInst.rd = 10) {
-			int i = 0;
 		}
 
 		// PF_float
@@ -131,10 +123,12 @@ void decod::decoding() {
 		preAlu = ADD;			
 		preMem = I(14, 12);		
 		uRs1 = true; 
+
 		break;
 
 	case 8:		// Stores
 		strcpy(INST.desc, "store"); 
+
 		inm12(11, 5) = I(31, 25);	inm12(4, 0) = I(11, 7);
 		C_opA = (rs1);
 		C_opB = (inm12);
@@ -348,9 +342,11 @@ void decod::decoding() {
 
 		rd = I(11, 7);
 		rs1 = I(19,15);
+		rs2 = I(24,20);
 
 		C_rd = rd;
 		C_opA = regs[rs1];
+		C_opB = regs[rs2];
 		C_wReg = true;
 
 		preWrite = true;
@@ -374,6 +370,7 @@ void decod::decoding() {
 		preAlu = ADD;
 		preMem = I(14, 12) | 8; // write a word
 		uRs1 = true;	uRs2 = true;
+
 		break;
 
 	case 1: // FLW
@@ -385,6 +382,7 @@ void decod::decoding() {
 		C_opB = inm12;
 		C_rd = I(11, 7);	preWrite = false;
 		uRs1 = true;
+
 		break;
 
 	default:
@@ -424,7 +422,7 @@ void decod::decoding() {
 	else
 		hRs2 = idx_rs2 || ixm_rs2 || imw_rs2 || imu_rs2 || hzrdRs2In.read() || hzrdPF_floatRs2In.read();
 
-	if ((uRs1 && hRs1) || (uRs2 && hRs2) || (flagFence && !emptyPipeline)) {		// hazard
+	if ((uRs1 && hRs1) || (uRs2 && hRs2) || (flagFence && !emptyPipeline)) { // hazard
 		hazard.write(true);
 		bubble.write(false);
 		C_aluOp = (0);
