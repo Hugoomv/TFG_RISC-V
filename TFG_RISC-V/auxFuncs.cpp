@@ -39,6 +39,9 @@ int getLatencyOp(int op, int target) {
 		case MULHU:		return latencyMULHU;	break;
 		case MULHSU:	return latencyMULHSU;	break;
 		case DIV:		return latencyDIV;		break;
+		case DIVU:		return latencyDIVU;		break;
+		case REM:		return latencyREM;		break;
+		case REMU:		return latencyREMU;		break;
 		default:		return 1;				break;
 		}
 	}
