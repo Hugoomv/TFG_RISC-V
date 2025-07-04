@@ -1,0 +1,72 @@
+\chapter{Probas e resultados}
+
+\lettrine{U}{nha} parte imprescindible de calquera proxecto é o período de probas ou testing, durante o cal se busca atopar bugs e comprobar que o funcionamento é o esperado e é correcto. Ao longo deste capítulo explicaranse os distintos exames aos que se someteu o simulador, o seu obxectivo, orixe e diferenzas fundamentais.
+
+Asemade, a principal utilidade do simulador é guiar a implementación de arquitecturas RISC-V. Por este motivo, móstranse tamén como os resultados do simulador poden axudar a tomar, en pouco tempo, decisións vitais de cara á implementación. 
+
+\section{Benchmarks}\label{sec:benchmarks}
+Unha vez implementada unha nova instrución ou un pipeline, é necesario comprobar que o funcionamento é o esperado. Para iso, empréganse diferentes métodos. Un deles son os benchmarks, diferentes probas que buscan crear casos habituais e incluso os máis extremos ou menos frecuentes. A fonte destes benchmarks é o repositorio de RISC-V ~\cite{riscv_tests}. Aquí existen diferentes programas orientados a probar determinadas funcións, como a multiplicación con \acrfull{spmv}. Os benchmarks empregados durante o traballo son os que se mostran na táboa \ref{tab:benchmarks}.
+\begin{table}[hp!]
+  \centering
+  \rowcolors{2}{white}{udcgray!25}
+  \begin{tabular}{p{5cm}|p{8cm}}
+    \rowcolor{udcpink!25}
+    \textbf{Nome do benchmark} & \textbf{Obxectivo} \\\hline
+    \textit{SpMV (producto matriz-dispersa vector} & Multiplicacións \\
+    \textit{Median (mediana } & Suma, comparacións e desplazamentos de datos \\
+    \textit{Multiply (algoritmo de lapis e papel)} & Suma, resta, comparacións e desplazamentos de datos \\
+    \textit{Qsort (ordeamento)} & Suma e comparacións con operando inmediato e desplazamentos de datos \\
+    \textit{Rsort (ordeamento)} & Suma e comparacións con operando inmediato e desplazamentos de datos \\
+    \textit{Vvadd (suma de vectores)} & Sumas\\
+  \end{tabular}
+  \caption{Benchmarks empregados e con que fin.}
+  \label{tab:benchmarks}
+\end{table}
+
+\section{Tests propios}\label{sec:tests}
+Ademais de empregar os benchmarks, foron creados varios exames buscando probar especificamente certas funcionalidades segundo fose necesario. Por exemplo, ningún dos benchmarks oficiais calcula o resto dun cociente, polo que foi necesario crear un novo que comprobe o seu correcto funcionamento. O concepto básico foi imitar algún benchmark de instrución atopado no repositorio oficial ~\cite{riscv_tests}. Como se ve no apéndice \ref{cod_test} , consiste en empregar código ensamblador embebido ~\cite{asm_emb} para integrar a instrución no código en C. Ademais, compróbase o resultado da operación gardando o que devolve e comparando co resultado esperado. Na súa maioría son bastante sinxelos; sen embargo, tendo en conta determinados casos que poderían ser problemáticos, serven para determinar se unha instrución está ben implementada.
+
+
+\section{Depuración}\label{sec:depuración}
+
+Chámase depuración ao proceso de revisión exhaustiva do software na busca da fonte dun erro. Calquera programa ben deseñado debería permitir a validación do seu funcionamento en calquera momento do  proceso de desenvolvemento. No caso do noso simulador, a execución dos benchmarks non sempre foi satisfactoria. Os procesos de depuración necesarios foron de diversa complexidade. En ocasións, o depurador integrado no \acrshort{ide} de Visual Studio foi suficiente para detectar un resultado erróneo en pouco tempo. En outras ocasións, comprobar que un resultado era incorrecto non era inmediato, polo que era necesario comparar os resultados do simulador cos do depurador de Segger. Finalmente, algúns erros eran debidos a problemas de sincronización entre módulos, polo que visualizar as formas de onda era o único xeito de detectalos e resolvelos. Para isto, foi moi útil GTK Wave (ver \ref{sec:gtkwave}) que permite visualizar as trazas dos sinais máis relevantes, para así ver como varían ciclo a ciclo e poder comparar de forma visual e sinxela.
+
+Este procedemento non só é importante no sentido clásico de depuración, senón que engade un coñecemento moi valioso para a implementación. Por exemplo, no proceso preliminar de deseño podería pasar desapercibida unha dependencia de datos entre módulos. O simulador executaría os benchmarks de xeito defectuoso, e a depuración posterior desvelaría esa dependencia e melloraría o coñecemento da arquitectura. 
+
+\section{Resultados numéricos}\label{chap:resultados}
+Tras finalizar o proxecto, pódese garantir que engadir novas extensións coas súas correspondentes novas instrucións non compromete o traballo anterior. O funcionamento do resto de módulos segue sendo correcto e o rendemento non se viu deteriorado en ningún momento.
+
+Por outra parte, a posibilidade de modificar as latencias dalgunhas instrucións grazas á parametrización engadida, mostra como cambia o rendemento no conxunto dun programa. Por exemplo, á hora de executar o benchmark \acrshort{spmv} que realiza multiplicación de enteiros, obtemos resultados moi interesantes segundo as latencias. Isto é de gran importancia de cara á implementación, xa que os enxeñeiros teñen que tomar decisións razoadas sobre o rendemento da arquitectura e o custo de implementación. 
+
+Por exemplo, calcular unha multiplicación en 3 ciclos podería ser un 50\% máis caro que implementala en 4 ciclos. Se o simulador mostra que a primeira opción é significativamente máis rápida que a segunda, podería ser razoable asumir o custo engadido. Por outra banda, se a mellora de velocidade é despreciable, a segunda opción sería claramente máis atractiva. Este tipo de coñecemento non se pode obter de xeito analítico, senón coa execución de benchmarks, e o simulador permite tomar decisións antes do custoso proceso de implementación. 
+
+Como vemos na táboa \ref{tab:rendemento_spmv}, o número de ciclos de reloxo necesarios para executar o programa varía moito coa latencia das operacións. Nótese tamén que o número de instrucións é o mesmo en todos os casos. Un cambio na cantidade de operacións realizadas implicaría engadir novas instrucións dependendo da latencia de determinadas instrucións. Se ben se emiten instrucións \acrshort{nop} cando se detectan hazards, estas fan a función de burbullas, non se fai nada salvo pasar ao seguinte ciclo. Sen embargo, o tempo, isto é, o número de ciclos necesarios para executar o programa aumenta notablemente. Comparando o aumento de ciclos para a mesma latencia en mul e mulhu, dedúcese que se executan máis instrucións mul. O cal é razoable, xa que revisando o binario, vese que é correcto. Ademais, o test realiza multiplicacións de enteiros, e a operación mul é imprescindible para isto, mentres que mulhu encárgase da parte superior da multiplicación, innecesaria cando se empregan números pequenos.
+
+\begin{table}[hp!]
+    \centering
+    \rowcolors{2}{white}{udcgray!25}
+    \begin{tabular}{c|c|c}
+    \rowcolor{udcpink!25}
+    \textbf{Modificacións realizadas} & \textbf{Número de instrucións}  & \textbf{Tempo} 
+    \\\hline
+    \multicolumn{3}{c}{\textbf{Versión empregando int}} \\
+    \textit{SpMV base} & 85700 & 251557 \\
+    \textit{Latencia de mul = 5} & 85700 & 256355\\
+    \textit{Latencia de mul = 10} & 85700 & 268350\\
+     \textit{Latencia de mulhu = 5} & 85700 & 251557\\ % no ahy mulhu ops
+    \textit{Latencia de mulhu = 10} & 85700 & 251557\\ 
+    \textit{Latencia de mul = 5 e mulhu = 5} & 85700 & 256355\\
+    
+    \multicolumn{3}{c}{\textbf{Versión para float implementada en software con aritmética de enteiros}} \\
+    \textit{SpMV base} & 285045 & 688817 \\
+    \textit{Latencia de mul = 5} & 285045 & 698393\\
+    \textit{Latencia de mul = 10} & 285045 & 710363\\
+     \textit{Latencia de mulhu = 5} & 285045 & 693605\\ 
+    \textit{Latencia de mulhu = 10} & 285045 & 705575\\ 
+    \textit{Latencia de mul = 5 e mulhu = 5} & 285045 & 698393\\
+    \end{tabular}
+    \caption{Rendemento do benchmarks SpMV segundo as latencia de distintas operacións e o tipo de dato.}
+    \label{tab:rendemento_spmv}
+\end{table}
+
+Finalmente, destacar que a velocidade de simulación deste proxecto en comparación coa que se podería obter se \acrshort{vhdl} ou Verilog fose empregado é moi superior. Por exemplo, o benchmark \acrshort{spmv} na versión que emprega enteiros execútase en apenas 10 segundos, mentres que a versión que emprega floats dura 30. En comparación, unha versión de RISC-V en \acrshort{vhdl} necesita 10 veces máis tempo.

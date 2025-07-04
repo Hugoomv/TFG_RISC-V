@@ -1,0 +1,43 @@
+\chapter{Implementación}
+\label{chap:implementacion}
+
+\lettrine{T}{ras} haber creado o deseño, é necesario realizar a implementación. Neste capítulo, trataranse os problemas afrontados, as solucións elixidas e as ferramentas empregadas.
+
+\section{Decisións á hora de implementar}\label{sec:decisions}
+Unha vez deseñado o proxecto, o seguinte paso é a implementación. Durante este proceso, buscáronse aproximacións a problemas que non se afrontaron na etapa de deseño. Por exemplo, para a implementación da instrución Fence, da extensión Zifencei, introducíronse sinais no módulo Decod conectadas con todos os módulos. Grazas a isto, pódese saber se hai algunha instrución executándose nalgún compoñente, o que permite atrasar a execución da seguinte. Así, garántese que todas as instrucións acabaron, simulando a barreira.
+
+
+\section{Instrucións implementadas}\label{sec:intrucions_implt}
+Como se comentou no capítulo \ref{sec:obxectivos}, neste proxecto implementáronse as extensións M, F (parcialmente), Zifencei e Zicsr, ademais das funcionalidades da base RV32I. A continuación, unha lista das instrucións implementadas e a extensión á que pertencen:
+
+\input{contido/instruciones_implementadas}
+
+\section{Implementacións dos pipelines}\label{sec:implt_pipelines}
+Neste proxecto non se implementaron as unidades funcionais que están segmentadas como tal, polo que á hora de simular o retardo das instrucións, decidiuse empregar arrays para imitar o proceso dunha instrución atravesando o pipeline. Os ciclos necesarios para saír do array son a latencia, e unha vez fóra, as instrucións son procesadas. Adicionalmente, se nun ciclo a instrución que saiu é un \acrfull{nop}, búscase a anterior para que sexa executada. 
+
+\section{Funcionalidades do simulador}\label{sec:func_sim}
+Antes de comezar este proxecto, xa existía unha estrutura base deste simulador, implementando todas as funcionalidades básicas recollidas na base RV32I. Isto inclúe todas as instrucións de lectura e escritura de datos en memoria e rexistros, suma e resta (incluso con operandos inmediatos), operacións lóxicas, saltos e ramas. Esta primeira versión podía executar programas relativamente sinxelos.
+
+Ao finalizar este traballo, engadíronse o módulo de multiplicación para a extensión M, o módulo de punto flotante simple para a extensión F e algunhas instrucións adicionais para as extensións Zicsr e Zifencei. Agora, permite a execución de multiplicacións, divisións e operacións con datos de tipo float, xunto fence e instrucións de tipo \acrshort{csr}.
+
+\section{Ferramentas empregadas}\label{sec:ferramentas}
+Durante o proxecto empregáronse 5 ferramentas: Segger, Visual Studio 2022, Git, GTK Wave e SystemC. A continuación, unha breve explicación do seu funcionamento, alternativas dispoñibles e comparativas explicando o porqué desta elección.
+
+\subsection{Segger Embedded Studio for RISC-V}\label{sec:segger}
+Segger Embedded Studio for RISC-V é un \acrfull{ide} que permite compilar para RISC-V, incluindo obxectivos concretos como RV32, producir arquivos .elf e ver o código ensamblador. Foi principalmente empregado á hora de escribir código en C para \gls{tests} ou \gls{benchmarks}. Ademais, o depurador permite ver código ensamblador coas direccións, polo que foi realmente útil á hora de encontrar bugs. Existen alternativas populares, como CLion de JetBrains co Toolchain de RISC-V, Visual Studio Code ou Eclipse. No caso de CLion é de pago, polo que é un gran punto en contra. Se ben a universidade ofrece claves, sería necesario engadir o toolchain de RISC-V para poder compilar código para RISC-V, facendo o proceso máis complexo. Visual Studio Code tampouco inclúe ferramentas de base, polo que sería necesario buscar plugins e configurar todo para que sexa apto. Por último, Eclipse cunha configuración avanzada tamén podería ser unha alternativa. Se ben o proceso de instalación non é complicado, non inclúe obxectivos determinados. Todo isto fai que Segger sexa a mellor alternativa, xa que inclúe obxectivos xa feitos e todas as ferramentas necesarias sen apenas modificacións.
+
+\subsection{Visual Studio 2022}\label{sec:visual_studio}
+Á hora de traballar no simulador con C++, o \acrshort{ide} elixido foi Visual Studio 2022. Entre as características máis destacables están: integración con Git, depuración con opcións avanzadas, bo funcionamento con GTK Wave e SystemC, \dots{}  Existen infinidade de alternativas, pero este foi o elixido por ser a elección máis habitual para este tipo de proxectos polo estudante. Ademais, xa fora empregado na asinatura de Codeseño \gls{hardware}/\gls{software} xunto a SystemC. 
+
+\subsection{GTK Wave}\label{sec:gtkwave}
+Para solventar algúns dos problemas máis complexos, foi necesario empregar esta ferramenta. Este software permite, unha vez engadidas trazas no código, rexistrar os cambios de valor de sinais e variables para despois mostralas nun gráfico de ondas. Se ben non é moi popular, xa foi empregada nalgunha asinatura, polo que  coñecela previamente foi imprescindible para elixila.
+
+\subsection{Git}\label{sec:git}
+Unha das ferramentas máis empregadas en todos os proxectos é Git. É un sistema de control de versións, polo que mediante repositorios crea un ficheiro onde se almacenan todos os cambios en distintos arquivos. Isto axuda a volver a versións anteriores en caso de erros nas modificacións máis recentes ou evitar a perda do traballo en caso de fallo do equipo de traballo.
+
+
+\subsection{SystemC}\label{sec:imp_systemC}
+Ademais do xa mencionado na sección \ref{sec:systemc}, engadir que as bibliotecas de SystemC son gratuítas, e integralas con Visual Studio é relativamente doado. Sen embargo, non se ofrecen precompiladas, e o usuario debe compilar o código fonte para cada unha das configuracións: Debug e Release. A correcta preparación do proxecto de Visual Studio fai que o compilador alterne entre ámbalas dúas versións automaticamente.
+
+
+

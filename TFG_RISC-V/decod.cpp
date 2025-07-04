@@ -4,11 +4,11 @@
 #include "auxFuncs.h"
 
 
-void decod::registros(){		// este método implementa el banco de registros
+void decod::registros(){		// este mÃ©todo implementa el banco de registros
 
 	instruction backInst; 
 
-	tiempo = sc_time_stamp().to_double() / 1000.0;		// ayuda a depurar, nos dice en qué ciclo estamos
+	tiempo = sc_time_stamp().to_double() / 1000.0;		// ayuda a depurar, nos dice en quÃ© ciclo estamos
 	if (rst.read()) {
 		for(int i=0; i<32; ++i)	regs[i] = 0;
 	}else{
@@ -87,21 +87,14 @@ void decod::decoding() {
 	INST = inst.read();
 
 	I = INST.I;
-	INST.target = 0; 
 
-	// REV A MELLORAR
-	// SI É UNHA INS INMD
-	if (I(6, 2) == 28 && I(14, 12) > 4) {
-		INST.rs1 = I(19, 15);
-		INST.rs2 = I(11, 7); // en verdad rd
-		rs1 = INST.rs1;
-	}
-	else {
-		INST.rs1 = I(19, 15);
-		INST.rs2 = I(24, 20);
-		rs1 = regs[I(19, 15)];
-		rs2 = regs[I(24, 20)];
-	}
+	INST.target = 0; 
+  
+  // Assumes this, not correct in all instructions
+	INST.rs1 = I(19, 15);
+	INST.rs2 = I(24, 20);
+	rs1 = regs[I(19, 15)];
+	rs2 = regs[I(24, 20)];
 
 	// Hazard Detection with MUL and PF_float module
 	rs1Out.write(INST.rs1);
@@ -193,8 +186,8 @@ void decod::decoding() {
 		strcpy(INST.desc, "jal"); 
 
 //	puede ayudar a depurar	cout << INST << endl;
-		if (INST.I == 0x0000006f) {	// Saltar sobre la misma dirección es la forma de terminar el programa
-			jump = jump;			// este breakpoint para que la simulación no continue
+		if (INST.I == 0x0000006f) {	// Saltar sobre la misma direcciÃ³n es la forma de terminar el programa
+			jump = jump;			// este breakpoint para que la simulaciÃ³n no continue
 			printf("Tiempo: %.0lf\t Numero de instrucciones: %d\n", tiempo, *numInst);
 			printf("Valor de x10 = %d\n",(int)regs[10]);
 			if ((int)regs[10] == 0) printf("La ejecucion es correcta\n");
@@ -223,7 +216,7 @@ void decod::decoding() {
 		inm12 = I(31, 20);
 		PCout.write(rs1 + inm12); // inm12 will be sign-extended
 
-		jump = true; 		// hace falta algo más?
+		jump = true; 		// hace falta algo mÃ¡s?
 
 		C_opA = ((sc_int<32>)PCin.read());
 		C_opB = (4);  //OJO
@@ -304,6 +297,10 @@ void decod::decoding() {
 			regs[csr] = (rs1 & (~regs[csr]));
 			break;
 		case 5: // CSRRWi
+			INST.rs1 = I(19, 15);
+			INST.rs2 = I(11, 7); // rd, used for hazard detection
+			rs1 = INST.rs1;
+
 			rd = I(11, 7);
 			csr = I(31, 27);
 
@@ -311,6 +308,10 @@ void decod::decoding() {
 			regs[csr] = rs1;
 			break;
 		case 6: // CSRRSi
+			INST.rs1 = I(19, 15);
+			INST.rs2 = I(11, 7); // rd, used for hazard detection
+			rs1 = INST.rs1;
+
 			rd = I(11, 7);
 			csr = I(31, 27);
 
@@ -318,6 +319,10 @@ void decod::decoding() {
 			regs[csr] = (rs1 | regs[csr]);
 			break;
 		case 7: // CSRRCi
+			INST.rs1 = I(19, 15);
+			INST.rs2 = I(11, 7); // rd, used for hazard detection
+			rs1 = INST.rs1;
+
 			rd = I(11, 7);
 			csr = I(31, 27);
 
@@ -390,6 +395,10 @@ void decod::decoding() {
 		cerr << "Error, opCode " << opCode << " not supported" << endl;
 		cerr << "    ERROR AT: " << INST << endl; 
 	};
+
+	// Hazard Detection with MUL module
+	rs1Out.write(INST.rs1);
+	rs2Out.write(INST.rs2);
 
 
 	instruction iDX, iXM, iMU, iMW;

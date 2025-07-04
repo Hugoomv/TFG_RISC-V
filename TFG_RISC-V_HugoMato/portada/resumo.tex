@@ -2,13 +2,19 @@
 
 \pagestyle{empty}
 \begin{abstract}
-  \blindtext % substitúe este comando polo resumo do teu TFG
-             % na lingua principal do documento (tipicamente: galego)
+      RISC-V é unha nova arquitectura libre para procesadores programables. Está chamada a competir con outras arquitecturas máis establecidas como \acrfull{arm} en moitos ámbitos tecnolóxicos. Ademais de que as especificacións de RISC-V son abertas, a principal vantaxe desta arquitectura é que cubre desde as implementacións máis sinxelas para sistemas embarcados, ata as máis potentes para cálculo científico e multimedia. Todo isto é posible mediante a especificación de moitas das características máis avanzadas como extensións ás arquitecturas básicas. 
+
+A implementación dun procesador require previamente dun modelado e simulación que garantan que o funcionamento final vai ser o correcto. 
+
+Neste traballo, pártese dun modelo da versión básica RV32I realizada en SystemC. A única extensión implementada é a multiplicación para enteiros. O obxectivo deste proxecto é modelar e simular extensións adicionais ata chegar ao coñecido como nivel G. 
 
   \vspace*{25pt}
   \begin{segundoresumo}
-    \blindtext % substitúe este comando polo resumo do teu TFG
-               % na lingua secundaria do documento (tipicamente: inglés)
+    RISC-V is a new open-source architecture for programmable processors. It is destined to compete with more established architectures like \acrshort{arm} in a lot of technological fields. In addition to the fact that the RISC-V specifications are open, the main advantage of this architecture is that it spans from the simplest implementations for embedded systems to the most powerful ones for scientific computing and multimedia. All of this is possible through the specification of many of the most advanced features as extensions to the basic architectures.
+
+The implementation of a processor requires a previous modeling and simulation that ensures that its final operation will be correct.
+
+This work is based on a model of the basic RV32I implemented in SystemC. The only extension implemented is integer multiplication. The objective for this project is to model and simulate additional extensions up to what is known as the G level.
   \end{segundoresumo}
 \vspace*{25pt}
 \input{portada/palabras_chave}

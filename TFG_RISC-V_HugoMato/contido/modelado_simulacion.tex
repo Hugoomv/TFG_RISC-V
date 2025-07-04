@@ -1,0 +1,34 @@
+\chapter{Modelado e simulación}
+\label{chap:mod_sim}
+
+\lettrine{N}{este} apartado explicaranse os fundamentos dun simulador, os motivos para crear un e o funcionamento típico. Ademais, indicaranse as linguaxes máis habituais destes casos, as diferenzas e o motivo da elección de SystemC. 
+
+\section{Por que é importante o modelado e a simulación?}\label{sec:mod_sim}
+Durante o proceso de creación de calquera compoñente electrónico minimamente complexo, é necesario revisar que o deseño realiza as funcións esperadas e de forma correcta. Isto é, que garante os resultados esperados, dentro dun tempo razoable e cun emprego de recursos limitado. O xeito máis económico de acadar isto é a creación dunha versión dixital mediante software. Idealmente, o modelo creado pode ser executado permitindo simular o sistema, e mesmo ter acceso aos detalles internos do funcionamento. A elección axeitada das ferramentas usadas para o modelado e a simulación é fundamental, xa que definen o tempo necesario para codificar o sistema, a posibilidade de cometer erros e maila capacidade para detectalos, o grao de detalle que se pode acadar, as distintas restricións e a velocidade de simulación. É por iso que existen distintas opcións, polo que neste traballo elixiuse usar SystemC.
+
+
+\section{VHDL e Verilog}\label{sec:vhdl_verilog}
+Estas linguaxes son o que coñecemos como \acrfull{hdl}. Verilog ~\cite{vhdl_verilog} foi o pioneiro, e \acrfull{vhdl} ~\cite{vhdl_verilog} a resposta como estándar internacional. Ambas permiten describir circuítos de forma moi precisa, incluíndo todas as conexións e elementos da memoria. Ademais, existe software de síntese capaz de xerar circuítos de alta calidade a partir de Verilog ou \acrshort{vhdl}, imposibles de realizar para un ser humano. Ao ser o estándar na industria, son as máis empregadas para modelar e simular a baixo nivel. Pero esta flexibilidade implica tamén desvantaxes en termos de menor produtividade dos enxeñeiros e elevados tempos de simulación. Aínda que houbo intentos de mellorar estas linguaxes, como é o caso de SystemVerilog ~\cite{system_verilog}, non tiveron realmente éxito ó estar demasiado vencelladas á linguaxe orixinal.
+
+\section{SystemC}\label{sec:systemc}
+SystemC ~\cite{systemc} é unha \gls{meta-linguaxe} implementada como unha biblioteca de C++ e é habitualmente empregada para codeseño. O feito de que sexa de alto nivel proporciona unha flexibilidade e sinxeleza á hora de traballar que carecen as alternativas máis próximas ao hardware. Algunhas das vantaxes de SystemC son as seguintes:
+
+\begin{itemize}
+    \item Inicialización automática de datos internos.
+    \item Funcionalidades de linguaxes orientados a obxectos.
+    \item Xestión automática de eventos.
+    \item Diferenciación entre datos públicos e privados.
+    \item Tipos de datos orientados ao modelado de hardware de aplicación específica.
+    \item Soporte específico para sinais de reloxo.
+    \item Sobrecarga de operadores que aumenta a produtividade e a claridade do código.
+    \item Benefíciase dos avances en depuradores para C++.
+\end{itemize}
+
+SystemC soporta varios paradigmas de modelado, dos que os máis utilizados son, en orde crecente de abstracción: \acrfull{rtl}, Data Flow e \acrfull{tlm}. No noso caso, o modelado en \acrshort{rtl} permite acadar o mesmo nivel de detalle que \acrshort{vhdl} ou Verilog cunha produtividade e velocidade de simulación moi superiores.
+
+
+\section{Spike}\label{sec:spike}
+A propia organización de RISC-V xa ofrece un simulador ~\cite{sim_spike}, pero seguen existindo motivos para crear unha alternativa. Non simula cada ciclo, senón que é un \acrfull{iss}. Spike é parametrizable, xa que permite cambiar o número de ciclos, núcleos, modificar a memoria, que extensións emprega, \dots. Está escrito en C/C++ polo que ofrece unha boa velocidade de simulación. Ademais, trátase dun proxecto open-source, polo que calquera pode colaborar e  avanza de forma constante. Funciona coas bases RV32I, RV64I, RV32E e RV64E. Tamén a gran maioría de extensións na versión v1.0, e nas últimas versións as extensións M (multiplicación/división), A (atómicas), F/D (punto flotante simple/dobre precisión), C (instrucións comprimidas) e V (vectorial). Inclúe soporte para debug, simula diferentes niveis de privilexio e ofrece compatibilidade con binarios .elf. 
+
+Se ben é un bo simulador cunha ampla oferta de características, este proxecto busca ofrecer unha posibilidade que mostre o funcionamento dun programa de forma máis precisa e orientado a unha posterior implementación do deseño. Spike simula a nivel de instrución, polo que non se poden ver como cambian os valores dos rexistros con cada ciclo, hazards, pipelines ou sinais de comunicación entre módulos.
+
