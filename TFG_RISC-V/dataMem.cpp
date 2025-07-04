@@ -1,4 +1,5 @@
-#include"dataMem.h"
+#include "dataMem.h"
+#include "auxFuncs.h"
 
 
 
@@ -18,6 +19,15 @@ void dataMem::registro(){
 		instOut.write(INST);
 	}else{
 		INST = I.read();
+
+		if (INST.address == 0xffffffff) {
+			INST = pfFloatIn.read();
+
+			// Ignore pf_floats ops except fsw and flw
+			if (INST.I(6, 2) == 20) {
+				INST = createNOP();
+			}
+		}
 
 		address = INST.aluOut;
 		BH = address & 3;		// byte or half-word
@@ -82,7 +92,6 @@ void dataMem::registro(){
 		else {
 			readyFenceMemOut.write(false);
 		}
-
 
 		instOut.write(INST);
 

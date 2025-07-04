@@ -1,17 +1,19 @@
 #include "decod.h"
 #include "alu.h"			// alu opCodes are defined there
 #include "config.h"
+#include "auxFuncs.h"
 
 
-void decod::registros(){		// este método implementa el banco de registros
+void decod::registros(){		// este mÃ©todo implementa el banco de registros
 
 	instruction backInst; 
 
-	tiempo = sc_time_stamp().to_double() / 1000.0;		// ayuda a depurar, nos dice en qué ciclo estamos
+	tiempo = sc_time_stamp().to_double() / 1000.0;		// ayuda a depurar, nos dice en quÃ© ciclo estamos
 	if (rst.read()) {
 		for(int i=0; i<32; ++i)	regs[i] = 0;
 	}else{
 
+		// MUL 
 		backInst = fbMul.read();
 
 		if (backInst.wReg) {
@@ -20,17 +22,38 @@ void decod::registros(){		// este método implementa el banco de registros
 			if (target) {
 				regs[target] = backInst.dataOut;
 			}
-		} else {
-			backInst = fbWB.read();
+		} 
 
-			if (backInst.wReg) {
-				int target = backInst.rd;
+		// WB
+		backInst = fbWB.read();
 
-				if (target) {
+		if (backInst.wReg) {
+			int target = backInst.rd;
+
+			if (target) {
+				regs[target] = backInst.dataOut;
+			}
+		}
+
+		// PF_float
+		backInst = fbPF_float.read();
+
+		if (backInst.wReg) {
+			int target = backInst.rd;
+
+			if (target) {
+				
+				if (backInst.I(20, 20)) {
+					regs[target] = (uint32_t)backInst.dataOut;
+				}
+				else {
 					regs[target] = backInst.dataOut;
 				}
 			}
 		}
+
+		
+		
 		INST.rd = C_rd;			INST.wReg = C_wReg;
 		INST.opA = C_opA;		INST.opB = C_opB;
 		INST.val2 = C_rs2;
@@ -64,12 +87,18 @@ void decod::decoding() {
 	INST = inst.read();
 
 	I = INST.I;
-	
-	// Assumes this, not correct in all instructions
+
+	INST.target = 0; 
+  
+  // Assumes this, not correct in all instructions
 	INST.rs1 = I(19, 15);
 	INST.rs2 = I(24, 20);
 	rs1 = regs[I(19, 15)];
 	rs2 = regs[I(24, 20)];
+
+	// Hazard Detection with MUL and PF_float module
+	rs1Out.write(INST.rs1);
+	rs2Out.write(INST.rs2);
 
 	jump = false; 
 	C_rs2 = rs2;
@@ -87,10 +116,12 @@ void decod::decoding() {
 		preAlu = ADD;			
 		preMem = I(14, 12);		
 		uRs1 = true; 
+
 		break;
 
 	case 8:		// Stores
 		strcpy(INST.desc, "store"); 
+
 		inm12(11, 5) = I(31, 25);	inm12(4, 0) = I(11, 7);
 		C_opA = (rs1);
 		C_opB = (inm12);
@@ -155,8 +186,8 @@ void decod::decoding() {
 		strcpy(INST.desc, "jal"); 
 
 //	puede ayudar a depurar	cout << INST << endl;
-		if (INST.I == 0x0000006f) {	// Saltar sobre la misma dirección es la forma de terminar el programa
-			jump = jump;			// este breakpoint para que la simulación no continue
+		if (INST.I == 0x0000006f) {	// Saltar sobre la misma direcciÃ³n es la forma de terminar el programa
+			jump = jump;			// este breakpoint para que la simulaciÃ³n no continue
 			printf("Tiempo: %.0lf\t Numero de instrucciones: %d\n", tiempo, *numInst);
 			printf("Valor de x10 = %d\n",(int)regs[10]);
 			if ((int)regs[10] == 0) printf("La ejecucion es correcta\n");
@@ -185,7 +216,7 @@ void decod::decoding() {
 		inm12 = I(31, 20);
 		PCout.write(rs1 + inm12); // inm12 will be sign-extended
 
-		jump = true; 		// hace falta algo más?
+		jump = true; 		// hace falta algo mÃ¡s?
 
 		C_opA = ((sc_int<32>)PCin.read());
 		C_opB = (4);  //OJO
@@ -311,6 +342,54 @@ void decod::decoding() {
 		preWrite = false;
 
 		break;
+
+	case 20: // EXTENSION RV32F - Floating point to integer - Floats only
+
+		rd = I(11, 7);
+		rs1 = I(19,15);
+		rs2 = I(24,20);
+
+		C_rd = rd;
+		C_opA = regs[rs1];
+		C_opB = regs[rs2];
+		C_wReg = true;
+
+		preWrite = true;
+		uRs1 = true;
+		INST.aluOp = 0;		INST.aluOut = 0x0000dead;
+
+		strcpy(INST.desc, "pf_float");
+		INST.target = 0x01;
+
+		break;
+
+
+	case 9: // FSW
+		INST.target = 0x01;
+		strcpy(INST.desc,"FSW");
+		inm12(11, 5) = I(31, 25);	inm12(4, 0) = I(11, 7);
+		C_opA = (rs1);
+		C_opB = (inm12);
+		C_rd = (I(11, 7));		preWrite = false;
+
+		preAlu = ADD;
+		preMem = I(14, 12) | 8; // write a word
+		uRs1 = true;	uRs2 = true;
+
+		break;
+
+	case 1: // FLW
+		INST.target = 0x01;
+		strcpy(INST.desc, "FLW");
+		preMem = I(14, 12); // read a word
+		inm12 = I(31, 20);
+		C_opA = rs1;
+		C_opB = inm12;
+		C_rd = I(11, 7);	preWrite = false;
+		uRs1 = true;
+
+		break;
+
 	default:
 
 		cerr << "Error, opCode " << opCode << " not supported" << endl;
@@ -345,14 +424,14 @@ void decod::decoding() {
 	if (!INST.rs1)
 		hRs1 = false;
 	else
-		hRs1 = idx_rs1 || ixm_rs1 || imw_rs1 || imu_rs1 || hzrdRs1In.read();
+		hRs1 = idx_rs1 || ixm_rs1 || imw_rs1 || imu_rs1 || hzrdRs1In.read() || hzrdPF_floatRs1In.read();
 
 	if (!INST.rs2)
 		hRs2 = false;
 	else
-		hRs2 = idx_rs2 || ixm_rs2 || imw_rs2 || imu_rs2 || hzrdRs2In.read();
+		hRs2 = idx_rs2 || ixm_rs2 || imw_rs2 || imu_rs2 || hzrdRs2In.read() || hzrdPF_floatRs2In.read();
 
-	if ((uRs1 && hRs1) || (uRs2 && hRs2) || (flagFence && !emptyPipeline)) {		// hazard
+	if ((uRs1 && hRs1) || (uRs2 && hRs2) || (flagFence && !emptyPipeline)) { // hazard
 		hazard.write(true);
 		bubble.write(false);
 		C_aluOp = (0);

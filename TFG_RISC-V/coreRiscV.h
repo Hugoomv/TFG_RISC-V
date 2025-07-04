@@ -10,6 +10,7 @@
 #include "mem.h"
 #include "mul.h"
 #include "structsRV.h"
+#include "pf_float.h"
 
 SC_MODULE(coreRiscV) {
 public:
@@ -30,6 +31,7 @@ public:
 		instAlu = new alu("instAlu");
 		instDataMem = new dataMem("instDataMem");
 		instMul = new mul("instMul");
+		instPF_float = new pf_float("instPF_float");
 
 
 		instFetch->clk(clk);
@@ -83,14 +85,37 @@ public:
 
 		instMul->hzrdRs1Out(hzrdRs1);
 		instMul->hzrdRs2Out(hzrdRs2);
-		instMul->readyFenceMulOut(readyFenceMul);
 
 		instDecod->hzrdRs1In(hzrdRs1);
 		instDecod->hzrdRs2In(hzrdRs2);
+
+		// Preparation for fence instruction
+		instMul->readyFenceMulOut(readyFenceMul);
 		instDecod->readyFenceMulIn(readyFenceMul);
 		instDecod->readyFenceAluIn(readyFenceAlu);
 		instDecod->readyFenceMemIn(readyFenceMem);
 
+		//PF_FLOAT
+		instPF_float->clk(clk);
+		instPF_float->rst(rst);
+		instPF_float->instIn(iDX); // Same entry as ALU
+		instPF_float->instOut(iPF_float);
+		
+		instDecod->fbPF_float(iPF_float);
+
+		// FSW & FLW
+		instPF_float->dataMemIn(iMW); 
+		instDataMem->pfFloatIn(iPF_float);
+
+
+		// Hazard PF_float
+		instPF_float->rs1In(rs1);
+		instPF_float->rs2In(rs2);
+		instPF_float->hzrdRs1Out(hzrdPF_floatRs1);
+		instPF_float->hzrdRs2Out(hzrdPF_floatRs2);
+
+		instDecod->hzrdPF_floatRs1In(hzrdPF_floatRs1);
+		instDecod->hzrdPF_floatRs2In(hzrdPF_floatRs2);
 
 		MEM = new mem; 
 		instFetch->MEM = MEM; 
@@ -106,16 +131,17 @@ public:
 	alu* instAlu;
 	dataMem* instDataMem;
 	mul* instMul;
+	pf_float* instPF_float;
 
 	mem* MEM; 
 
 	sc_signal< sc_uint<32> >	PC_DecodFetch, PC_FetchDecod;
 	sc_signal< bool >			hazard, bubble;
 
-	sc_signal < instruction >	iFD, iDX, iXM, iMW, iMul;
+	sc_signal < instruction >	iFD, iDX, iXM, iMW, iMul, iPF_float;
 
 	sc_signal < sc_uint<5> >	rs1, rs2;
-	sc_signal < bool >			hzrdRs1, hzrdRs2;
+	sc_signal < bool >			hzrdRs1, hzrdRs2, hzrdPF_floatRs1, hzrdPF_floatRs2;
 	sc_signal < bool >			readyFenceMul,readyFenceAlu,readyFenceMem;
 
 /*	sc_signal< sc_int<32> >		wbValue, opA, opB, rs2_DescodAlu, rs2_AluDataMem;

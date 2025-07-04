@@ -5,7 +5,7 @@
 
 instruction createNOP();
 
-int getLatencyOp(int op);
+int getLatencyOp(int op, int target);
 
 //void swapVars(sc_int<32>* a, sc_int<32>* b);
 

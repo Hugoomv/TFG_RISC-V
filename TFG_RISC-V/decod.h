@@ -12,9 +12,9 @@ public:
 
 	sc_in< instruction >   	inst;
 	sc_in< sc_uint<32> >   	PCin;
-	sc_in< instruction >   	fbEx, fbMem, fbWB, fbMul;
+	sc_in< instruction >   	fbEx, fbMem, fbWB, fbMul, fbPF_float;
 
-	sc_in < bool >			hzrdRs1In, hzrdRs2In;
+	sc_in < bool >			hzrdRs1In, hzrdRs2In, hzrdPF_floatRs1In, hzrdPF_floatRs2In;
 	sc_in < bool >			readyFenceMulIn,readyFenceAluIn,readyFenceMemIn;
 
 	sc_out<instruction>		instOut; 

@@ -28,6 +28,11 @@ void alu::registro(){
 		shamt = B(4, 0);
 		opCode = INST.aluOp;
 
+		// PF_Float ops - some op codes are the same
+		if (INST.I(6, 2) == 20 || INST.I(6, 2) == 9) {
+			INST = createNOP();
+		}
+
 		switch(opCode){
 		case ADD:		strcpy(nem, "add");
 						res = A + B;		
@@ -98,7 +103,6 @@ void alu::registro(){
 			INST.aluOut = res;
 		}
 
-		//REV lugar
 		if (flagNOP || !(INST.wReg)){
 			readyFenceAluOut.write(true);
 		}
